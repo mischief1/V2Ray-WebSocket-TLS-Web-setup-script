@@ -14,6 +14,10 @@
 3.集成TLS配置多版本安装选项 
  
 4.集成删除防火墙、阿里云盾功能
+
+5.使用nginx作为网站服务
+
+6.使用acme.sh自动申请域名证书
  
 用法：
 1. apt update && apt install wget || yum install wget
