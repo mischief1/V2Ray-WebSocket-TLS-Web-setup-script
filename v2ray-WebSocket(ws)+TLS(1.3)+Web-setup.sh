@@ -467,7 +467,7 @@ install_v2ray_ws_tls()
     clear
     tyblue "****即将安装bbr加速，装完bbr加速后可能会重启，若重启，请再次运行此脚本完成剩余安装****"
     sleep 5s
-    wget --no-check-certificate https://github.com/teddysun/across/raw/master/bbr.sh                #安装bbr
+    wget --no-check-certificate https://github.com/xiya233/bbr2/raw/master/bbr2.sh                 #安装bbr2
     chmod 777 bbr.sh
     ./bbr.sh
     apt clean
@@ -609,7 +609,7 @@ start_menu()
     tyblue "*****************************************************"
     tyblue "v2ray  WebSocket(ws)+TLS(1.3)+Web  搭建脚本"
     tyblue "脚本特性："
-    tyblue "1.集成安装bbr加速"
+    tyblue "1.集成安装bbr2加速"
     tyblue "2.支持多种系统(ubuntu centos debian ...)"
     tyblue "3.集成TLS配置多版本安装选项"
     tyblue "4.集成删除防火墙、阿里云盾功能"
