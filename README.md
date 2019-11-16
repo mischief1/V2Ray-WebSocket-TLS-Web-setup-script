@@ -27,6 +27,7 @@
 5. 根据脚本提示完成安装
 
 注：
+
 1.参考教程：https://www.v2ray.com/
 
 2.Website-Template.zip作为网站模板，进行伪装，资源来自 https://github.com/designmodo/html-website-templates
