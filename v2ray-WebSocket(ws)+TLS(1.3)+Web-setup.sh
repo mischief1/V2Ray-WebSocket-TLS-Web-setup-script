@@ -468,8 +468,8 @@ install_v2ray_ws_tls()
     tyblue "****即将安装bbr加速，装完bbr加速后可能会重启，若重启，请再次运行此脚本完成剩余安装****"
     sleep 5s
     wget --no-check-certificate https://github.com/xiya233/bbr2/raw/master/bbr2.sh                 #安装bbr2
-    chmod 777 bbr.sh
-    ./bbr.sh
+    chmod 777 bbr2.sh
+    ./bbr2.sh
     apt clean
     yum clean all
     readDomain                                                                                      #读取域名
@@ -492,8 +492,8 @@ install_v2ray_ws_tls()
 ##清除垃圾
     cd ..
     rm -rf nginx-1.17.5
-    rm -rf bbr.sh
-    rm -rf bbr.sh*
+    rm -rf bbr2.sh
+    rm -rf bbr2.sh*
     rm -rf nginx-1.17.5.tar.gz
     rm -rf nginx-1.17.5.tar.gz*
     rm -rf openssl-1.1.1a.tar.gz
