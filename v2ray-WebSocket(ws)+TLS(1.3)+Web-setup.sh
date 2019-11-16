@@ -465,7 +465,7 @@ install_v2ray_ws_tls()
     yum install -y gperftools-devel libatomic_ops-devel pcre-devel zlib-devel libxslt-devel gd-devel perl-ExtUtils-Embed geoip-devel lksctp-tools-devel libxml2-devel gcc gcc-c++ wget unzip curl                  ##libxml2-devel非必须
     apt install -y libgoogle-perftools-dev libatomic-ops-dev libperl-dev libxslt-dev zlib1g-dev libpcre3-dev libgeoip-dev libgd-dev libxml2-dev libsctp-dev miredo g++ wget gcc unzip curl                                         ##libxml2-dev非必须,miredo非必须(装了可支持ipv6)
     clear
-    tyblue "****即将安装bbr加速，装完bbr加速后可能会重启，若重启，请再次运行此脚本完成剩余安装****"
+    tyblue "****即将安装bbr2加速，装完bbr2加速后系统将会重启，重启后，请再次运行此脚本完成剩余安装****"
     sleep 5s
     wget --no-check-certificate https://github.com/xiya233/bbr2/raw/master/bbr2.sh                 #安装bbr2
     chmod 777 bbr2.sh
