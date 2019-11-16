@@ -14,7 +14,7 @@ function yellow()                           #鸭屎黄
 {
     echo -e "\033[33;1m $1 \033[0m"
 }
-function red()                               #姨妈红
+function red()                              #姨妈红
 {
     echo -e "\033[31;1m $1 \033[0m"
 }
@@ -613,6 +613,7 @@ start_menu()
     tyblue "2.支持多种系统(ubuntu centos debian ...)"
     tyblue "3.集成TLS配置多版本安装选项"
     tyblue "4.集成删除防火墙、阿里云盾功能"
+    tyblue "官网：https://github.com/kirin10000/v2ray-WebSocket-TLS-Web-setup-script"
     tyblue "*****************************************************"
     echo
     tyblue "*****************************************************"
