@@ -613,6 +613,8 @@ start_menu()
     tyblue "2.支持多种系统(ubuntu centos debian ...)"
     tyblue "3.集成TLS配置多版本安装选项"
     tyblue "4.集成删除防火墙、阿里云盾功能"
+    tyblue "5.使用nginx作为网站服务"
+    tyblue "6.使用acme.sh自动申请域名证书"
     tyblue "官网：https://github.com/kirin10000/v2ray-WebSocket-TLS-Web-setup-script"
     tyblue "*****************************************************"
     echo
