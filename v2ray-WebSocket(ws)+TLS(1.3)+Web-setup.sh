@@ -465,11 +465,11 @@ install_v2ray_ws_tls()
     yum install -y gperftools-devel libatomic_ops-devel pcre-devel zlib-devel libxslt-devel gd-devel perl-ExtUtils-Embed geoip-devel lksctp-tools-devel libxml2-devel gcc gcc-c++ wget unzip curl                  ##libxml2-devel非必须
     apt install -y libgoogle-perftools-dev libatomic-ops-dev libperl-dev libxslt-dev zlib1g-dev libpcre3-dev libgeoip-dev libgd-dev libxml2-dev libsctp-dev miredo g++ wget gcc unzip curl                                         ##libxml2-dev非必须,miredo非必须(装了可支持ipv6)
     clear
-    tyblue "****即将安装bbr2加速，装完bbr2加速后系统将会重启，重启后，请再次运行此脚本完成剩余安装****"
+    tyblue "****即将安装bbr加速，装完bbr加速后系统将会重启，重启后，请再次运行此脚本完成剩余安装****"
     sleep 5s
-    wget --no-check-certificate https://github.com/xiya233/bbr2/raw/master/bbr2.sh                 #安装bbr2
-    chmod 777 bbr2.sh
-    ./bbr2.sh
+    wget --no-check-certificate https://github.com/teddysun/across/raw/master/bbr.sh                #安装bbr
+    chmod 777 bbr.sh
+    ./bbr.sh
     apt clean
     yum clean all
     readDomain                                                                                      #读取域名
@@ -492,8 +492,8 @@ install_v2ray_ws_tls()
 ##清除垃圾
     cd ..
     rm -rf nginx-1.17.5
-    rm -rf bbr2.sh
-    rm -rf bbr2.sh*
+    rm -rf bbr.sh
+    rm -rf bbr.sh*
     rm -rf nginx-1.17.5.tar.gz
     rm -rf nginx-1.17.5.tar.gz*
     rm -rf openssl-1.1.1a.tar.gz
@@ -609,7 +609,7 @@ start_menu()
     tyblue "*****************************************************"
     tyblue "v2ray  WebSocket(ws)+TLS(1.3)+Web  搭建脚本"
     tyblue "脚本特性："
-    tyblue "1.集成安装bbr2加速"
+    tyblue "1.集成安装bbr加速"
     tyblue "2.支持多种系统(ubuntu centos debian ...)"
     tyblue "3.集成TLS配置多版本安装选项"
     tyblue "4.集成删除防火墙、阿里云盾功能"
