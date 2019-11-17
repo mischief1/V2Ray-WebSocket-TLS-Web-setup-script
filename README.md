@@ -22,7 +22,7 @@
 用法：
 1. apt update && apt install wget || yum install wget
 
-2. wget "https://raw.githubusercontent.com/kirin10000/v2ray-WebSocket-TLS-Web-setup-script/master/v2ray-WebSocket(ws)+TLS(1.3)+Web-setup.sh"
+2. wget "https://github.com/kirin10000/v2ray-WebSocket-TLS-Web-setup-script/raw/master/v2ray-WebSocket(ws)+TLS(1.3)+Web-setup.sh"
 
 3. chmod +x "v2ray-WebSocket(ws)+TLS(1.3)+Web-setup.sh"
 
