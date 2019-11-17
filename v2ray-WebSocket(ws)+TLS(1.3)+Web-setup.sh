@@ -458,6 +458,9 @@ remove_v2ray_nginx()
 #安装程序主体
 install_v2ray_ws_tls()
 {
+    echo "ClientAliveInterval 30" >> /etc/ssh/sshd_config
+    echo "ClientAliveCountMax 3" >> /etc/ssh/sshd_config
+    service sshd restart                                                     #防止ssh断连
     apt update -y
     uninstall_firewall
     doupdate
