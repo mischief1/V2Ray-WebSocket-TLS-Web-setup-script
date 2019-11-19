@@ -377,8 +377,8 @@ doupdate()
 {
     clear
     tyblue "******************是否将更新系统组件？*******************"
-    tyblue "1.更新软件包，并将系统升级到最新版(仅对ubuntu有效)"
-    tyblue "2.仅更新软件包"
+    tyblue "1.仅更新软件包"
+    tyblue "2.更新软件包，并将系统升级到最新版(仅对ubuntu有效)"
     red    "3.不更新"
     tyblue "************************注意事项*************************"
     tyblue "1.升级系统仅对ubuntu有效，非ubuntu系统选则1等效于选择2"
@@ -391,6 +391,14 @@ doupdate()
     read -p "请输入数字：" ifupdate
     case "$ifupdate" in
     1)
+    yum update
+    apt dist-upgrade -y
+    apt autoremove -y
+    apt clean
+    yum autoremove -y
+    yum clean all
+    ;;
+    2)
     clear
     tyblue "**************************************即将开始升级系统**************************************"
     tyblue "****************************升级系统过程中若有问话，请选择yes(y)****************************"
@@ -401,14 +409,6 @@ doupdate()
     apt dist-upgrade -y
     apt autoremove -y
     do-release-upgrade -d
-    apt autoremove -y
-    apt clean
-    yum autoremove -y
-    yum clean all
-    ;;
-    2)
-    yum update
-    apt dist-upgrade -y
     apt autoremove -y
     apt clean
     yum autoremove -y
