@@ -463,6 +463,7 @@ remove_v2ray_nginx()
 #安装bbr
 install_bbr()
 {
+    clear
     tyblue "******************请选择要安装的bbr版本******************"
     tyblue "1.bbr"
     yellow "2.bbr2(beta)"
