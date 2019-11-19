@@ -531,14 +531,14 @@ install_v2ray_ws_tls()
     uninstall_firewall
     doupdate
     uninstall_firewall
+    install_bbr
+    readDomain                                                                                      #读取域名
     yum install -y gperftools-devel libatomic_ops-devel pcre-devel zlib-devel libxslt-devel gd-devel perl-ExtUtils-Embed geoip-devel lksctp-tools-devel libxml2-devel gcc gcc-c++ wget unzip curl                  ##libxml2-devel非必须
     apt install -y libgoogle-perftools-dev libatomic-ops-dev libperl-dev libxslt-dev zlib1g-dev libpcre3-dev libgeoip-dev libgd-dev libxml2-dev libsctp-dev miredo g++ wget gcc unzip curl                                         ##libxml2-dev非必须,miredo非必须(装了可支持ipv6)
-    install_bbr
     apt autoremove -y
     yum autoremove -y
     apt clean
     yum clean all
-    readDomain                                                                                      #读取域名
 
 
 ##安装nginx
