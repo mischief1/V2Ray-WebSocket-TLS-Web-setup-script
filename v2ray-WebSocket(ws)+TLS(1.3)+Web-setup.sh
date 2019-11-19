@@ -565,8 +565,6 @@ install_v2ray_ws_tls()
     rm -rf openssl-1.1.1a.tar.gz
     rm -rf openssl-1.1.1a.tar.gz*
     rm -rf openssl-1.1.1a
-    rm -rf install_bbr.log
-    rm -rf install_bbr.log*
 ##清除垃圾完成
 
 
