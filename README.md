@@ -35,4 +35,8 @@
 1.参考教程：https://www.v2ray.com/
 
 2.Website-Template.zip作为网站模板，进行伪装，资源来自 https://github.com/designmodo/html-website-templates
+
+3.bbr脚本来自：https://github.com/teddysun/across/blob/master/bbr.sh
+
+4.bbr2脚本来自：https://github.com/yeyingorg/bbr2.sh (ubuntu debian) https://github.com/jackjieYYY/bbr2 (centos)
 # 此脚本仅供交流学习使用，请勿使用此脚本行违法之事。网络非法外之地，行非法之事，必将接受法律制裁！！
