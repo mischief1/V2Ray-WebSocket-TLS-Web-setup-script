@@ -385,28 +385,34 @@ doupdate()
     tyblue "2.升级系统可能需要20分钟或更久"
     tyblue "3.升级系统完成后将会重启，重启后，请再次运行此脚本完成剩余安装(再次运行时请选择相同选项)"
     tyblue "4.升级过程中若有问话，请选择yes(y)"
-    tyblue "5.若是重启后再次运行此脚本，请选择相同选项"
+    tyblue "5.若是重启后再次运行此脚本，请选择任意选项"
     tyblue "*********************************************************"
     green  "推荐：1或2"
     read -p "请输入数字：" ifupdate
     case "$ifupdate" in
     1)
     clear
+    tyblue "**************************************即将开始升级系统**************************************"
     tyblue "****************************升级系统过程中若有问话，请选择yes(y)****************************"
-    tyblue "***升级系统完成后将会重启，若重启，请再次运行此脚本完成剩余安装(再次运行时请选择相同选项)***"
-    sleep 5s
+    tyblue "****************升级系统完成后将会重启，若重启，请再次运行此脚本完成剩余安装****************"
+    yellow "按任意键以继续。。。。"
+    read asfyerbsd
     yum update
     apt dist-upgrade -y
     apt autoremove -y
     do-release-upgrade -d
     apt autoremove -y
     apt clean
+    yum autoremove -y
+    yum clean all
     ;;
     2)
     yum update
     apt dist-upgrade -y
     apt autoremove -y
     apt clean
+    yum autoremove -y
+    yum clean all
     ;;
     3)
     ;;
@@ -454,6 +460,56 @@ remove_v2ray_nginx()
 }
 
 
+#安装bbr
+install_bbr()
+{
+    tyblue "******************请选择要安装的bbr版本******************"
+    tyblue "1.bbr"
+    yellow "2.bbr2(beta)"
+    red    "3.不安装"
+    tyblue "*********************************************************"
+    echo
+    tyblue "********************关于bbr加速的说明********************"
+    yellow "bbr加速可以大幅提升网络速度，建议安装"
+    yellow "bbr2目前还在测试阶段，可能造成各种系统不稳定，甚至崩溃，"
+    yellow "bbr加速安装完成后系统可能会重启"
+    yellow "若重启，请再次运行此脚本完成剩余安装"
+    tyblue "装过一遍就不需要再装啦"
+    tyblue "*********************************************************"
+    echo
+    read -p "请输入数字：" bbrconfig
+    case "$bbrconfig" in
+    1)
+    clear
+    tyblue "****即将安装bbr加速，安装完成后可能会重启，若重启，请再次运行此脚本完成剩余安装****"
+    yellow "按任意键以继续。。。。"
+    read asfyerbsd
+    wget --no-check-certificate https://github.com/teddysun/across/raw/master/bbr.sh
+    chmod +x bbr.sh
+    ./bbr.sh
+    ;;
+    2)
+    clear
+    tyblue "****即将安装bbr2加速，安装完成后服务器将会重启，重启后，请再次运行此脚本完成剩余安装"
+    tyblue "*************再次运行此脚本时可以再次选择安装bbr2，然后选择2选项开启ecn*************"
+    yellow "按任意键以继续。。。。"
+    read asfyerbsd
+    wget https://github.com/xiya233/bbr2/raw/master/bbr2.sh
+    chmod +x bbr2.sh
+    ./bbr2.sh
+    ;;
+    3)
+    ;;
+    *)
+    clear
+    red    "请输入正确数字"
+    sleep 2s
+    install_bbr
+    ;;
+    esac
+}
+
+
 #安装程序主体
 install_v2ray_ws_tls()
 {
@@ -466,12 +522,9 @@ install_v2ray_ws_tls()
     uninstall_firewall
     yum install -y gperftools-devel libatomic_ops-devel pcre-devel zlib-devel libxslt-devel gd-devel perl-ExtUtils-Embed geoip-devel lksctp-tools-devel libxml2-devel gcc gcc-c++ wget unzip curl                  ##libxml2-devel非必须
     apt install -y libgoogle-perftools-dev libatomic-ops-dev libperl-dev libxslt-dev zlib1g-dev libpcre3-dev libgeoip-dev libgd-dev libxml2-dev libsctp-dev miredo g++ wget gcc unzip curl                                         ##libxml2-dev非必须,miredo非必须(装了可支持ipv6)
-    clear
-    tyblue "****即将安装bbr加速，装完bbr加速后可能会重启，若重启，请再次运行此脚本完成剩余安装****"
-    sleep 5s
-    wget --no-check-certificate https://github.com/teddysun/across/raw/master/bbr.sh                #安装bbr
-    chmod 777 bbr.sh
-    ./bbr.sh
+    install_bbr
+    apt autoremove -y
+    yum autoremove -y
     apt clean
     yum clean all
     readDomain                                                                                      #读取域名
@@ -496,6 +549,8 @@ install_v2ray_ws_tls()
     rm -rf nginx-1.17.5
     rm -rf bbr.sh
     rm -rf bbr.sh*
+    rm -rf bbr2.sh
+    rm -rf bbr2.sh*
     rm -rf nginx-1.17.5.tar.gz
     rm -rf nginx-1.17.5.tar.gz*
     rm -rf openssl-1.1.1a.tar.gz
@@ -611,7 +666,7 @@ start_menu()
     tyblue "*****************************************************"
     tyblue "v2ray  WebSocket(ws)+TLS(1.3)+Web  搭建脚本"
     tyblue "脚本特性："
-    tyblue "1.集成安装bbr加速"
+    tyblue "1.集成安装bbr(2)加速"
     tyblue "2.支持多种系统(ubuntu centos debian ...)"
     tyblue "3.集成TLS配置多版本安装选项"
     tyblue "4.集成删除防火墙、阿里云盾功能"
@@ -628,10 +683,11 @@ start_menu()
     yellow "全程建议不要使用小键盘"
     tyblue "推荐服务器系统使用ubuntu18+"
     tyblue "*****************************************************"
-    green  "1.安装v2ray-WebSocket(ws)+TLS(1.3)+Web"
+    green  "1.安装v2ray-WebSocket(ws)+TLS(1.3)+Web(内含bbr安装选项)"
     red    "2.删除v2ray-WebSocket(ws)+TLS(1.3)+Web"
     tyblue "3.升级v2ray"
-    yellow "4.退出脚本"
+    tyblue "4.仅安装bbr"
+    yellow "5.退出脚本"
     echo
     read -p "请输入数字：" menu
     case "$menu" in
@@ -647,7 +703,9 @@ start_menu()
     bash <(curl -L -s https://install.direct/go.sh)
     ;;
     4)
-    exit 1
+    install_bbr
+    ;;
+    5)
     ;;
     *)
     clear
