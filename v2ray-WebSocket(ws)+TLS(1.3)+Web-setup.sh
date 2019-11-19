@@ -492,7 +492,8 @@ install_bbr()
     ;;
     2)
     clear
-    tyblue "****即将安装bbr2加速，安装完成后服务器将会重启，重启后，请再次运行此脚本完成剩余安装****"
+    tyblue "*********************即将安装bbr2加速，安装完成后服务器将会重启*********************"
+    tyblue "重启后，请再次选择这个选项完成bbr2剩余部分安装"
     yellow "按任意键以继续。。。。"
     read asfyerbsd
     wget https://github.com/yeyingorg/bbr2.sh/raw/master/bbr2.sh
