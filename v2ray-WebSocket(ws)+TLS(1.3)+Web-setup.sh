@@ -507,6 +507,7 @@ install_bbr()
     wget https://github.com/jackjieYYY/bbr2/raw/master/bbr2.sh
     chmod +x bbr2.sh
     ./bbr2.sh
+    ;;
     4)
     ;;
     *)
