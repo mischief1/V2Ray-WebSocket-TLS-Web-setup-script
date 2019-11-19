@@ -466,8 +466,9 @@ install_bbr()
     clear
     tyblue "******************请选择要安装的bbr版本******************"
     tyblue "1.bbr"
-    yellow "2.bbr2(beta)"
-    red    "3.不安装"
+    yellow "2.bbr2(beta)(Ubuntu、Debian)"
+    yellow "3.bbr2(beta)(Centos)"
+    red    "4.不安装"
     tyblue "*********************************************************"
     echo
     tyblue "********************关于bbr加速的说明********************"
@@ -491,15 +492,22 @@ install_bbr()
     ;;
     2)
     clear
-    tyblue "****即将安装bbr2加速，安装完成后服务器将会重启，重启后，请再次运行此脚本完成剩余安装"
-    tyblue "*************再次运行此脚本时可以再次选择安装bbr2，然后选择2选项开启ecn*************"
+    tyblue "****即将安装bbr2加速，安装完成后服务器将会重启，重启后，请再次运行此脚本完成剩余安装****"
     yellow "按任意键以继续。。。。"
     read asfyerbsd
-    wget https://github.com/xiya233/bbr2/raw/master/bbr2.sh
+    wget https://github.com/yeyingorg/bbr2.sh/raw/master/bbr2.sh
     chmod +x bbr2.sh
     ./bbr2.sh
     ;;
     3)
+    clear
+    tyblue "****即将安装bbr2加速，安装完成后服务器将会重启，重启后，请再次运行此脚本完成剩余安装****"
+    yellow "按任意键以继续。。。。"
+    read asfyerbsd
+    wget https://github.com/jackjieYYY/bbr2/raw/master/bbr2.sh
+    chmod +x bbr2.sh
+    ./bbr2.sh
+    4)
     ;;
     *)
     clear
@@ -548,10 +556,8 @@ install_v2ray_ws_tls()
 ##清除垃圾
     cd ..
     rm -rf nginx-1.17.5
-    rm -rf bbr.sh
-    rm -rf bbr.sh*
-    rm -rf bbr2.sh
-    rm -rf bbr2.sh*
+    rm -rf *bbr.*
+    rm -rf bbr2.s*
     rm -rf nginx-1.17.5.tar.gz
     rm -rf nginx-1.17.5.tar.gz*
     rm -rf openssl-1.1.1a.tar.gz
@@ -705,6 +711,8 @@ start_menu()
     ;;
     4)
     install_bbr
+    rm -rf *bbr.*
+    rm -rf bbr2.s*
     ;;
     5)
     ;;
