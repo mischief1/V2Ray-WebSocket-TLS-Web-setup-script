@@ -66,6 +66,34 @@ readDomain()
 }
 
 
+#选择tls配置
+readTlsConfig()
+{
+    clear
+    tyblue "****************************************************************"
+    tyblue "                     速度                        抗封锁性"
+    tyblue "仅TLS1.3：    ++++++++++++++++++++          ++++++++++++++++++"
+    tyblue "TLS1.2+1.3：  ++++++++++++++++              ++++++++++++++++++++"
+    tyblue "****************************************************************"
+    echo
+    tyblue "1.仅TLS1.3"
+    tyblue "2.TLS1.2+1.3"
+    read -p "请输入数字："  tlsVersion
+    case "$tlsVersion" in
+    1)
+    ;;
+    2)
+    ;;
+    *)
+    clear
+    red    "请输入正确数字"
+    sleep 2s
+    readTlsConfig
+    ;;
+    esac 
+}
+
+
 #配置nginx
 configtls()
 {
@@ -189,16 +217,6 @@ http {
 
 }
 EOF
-    clear
-    tyblue "****************************************************************"
-    tyblue "                     速度                        抗封锁性"
-    tyblue "仅TLS1.3：    ++++++++++++++++++++          ++++++++++++++++++"
-    tyblue "TLS1.2+1.3：  ++++++++++++++++              ++++++++++++++++++++"
-    tyblue "****************************************************************"
-    echo
-    tyblue "1.仅TLS1.3"
-    tyblue "2.TLS1.2+1.3"
-    read -p "请输入数字："  tlsVersion
     case "$tlsVersion" in
     1)
         case "$domainconfig" in
@@ -362,11 +380,59 @@ EOF
         ;;
         esac
     ;;
+    esac
+}
+
+
+#升级系统
+updateSystem()
+{
+    clear
+    tyblue "********************请选择升级系统版本********************"
+    tyblue "1.最新LTS版(现在是18.04)(2019/11/20)"
+    tyblue "2.最新beta版(现在是20.04)(2019/11/20)"
+    tyblue "*************************注意事项*************************"
+    tyblue "1.升级系统仅对ubuntu有效，非ubuntu系统将仅更新软件包"
+    yellow "2.升级系统可能需要15分钟或更久"
+    yellow "3.升级系统完成后将会重启，重启后，请再次运行此脚本完成剩余安装(再次运行时可选择任意选项)"
+    yellow "4.升级过程中若有问话，请选择yes(y)"
+    yellow "5.若升级过程中与ssh断开连接，建议重置系统"
+    yellow "6.升级系统后ssh超时时间将会恢复默认"
+    tyblue "**********************************************************"
+    echo
+    tyblue "*****************关于LTS版和beta版的区别******************"
+    tyblue "Ubuntu20.04暂不支持bbr2(支持bbr1)"
+    tyblue "**********************************************************"
+    echo
+    read -p "请输入数字：" updateconfig
+    case "$updateconfig" in
+    1)
+    yum update
+    apt dist-upgrade -y
+    apt autoremove -y
+    apt clean
+    do-release-upgrade
+    apt autoremove -y
+    apt clean
+    yum autoremove -y
+    yum clean all
+    ;;
+    2)
+    yum update
+    apt dist-upgrade -y
+    apt autoremove -y
+    apt clean
+    do-release-upgrade -d
+    apt autoremove -y
+    apt clean
+    yum autoremove -y
+    yum clean all
+    ;;
     *)
     clear
     red    "请输入正确数字"
     sleep 2s
-    configtls
+    updateSystem
     ;;
     esac
 }
@@ -376,40 +442,22 @@ EOF
 doupdate()
 {
     clear
-    tyblue "******************是否将更新系统组件？*******************"
-    tyblue "1.仅更新软件包"
-    tyblue "2.更新软件包，并将系统升级到最新版(仅对ubuntu有效)"
+    tyblue "*******************是否将更新系统组件？*******************"
+    green  "1.更新软件包，并升级系统(仅对ubuntu有效)"
+    green  "2.仅更新软件包"
     red    "3.不更新"
-    tyblue "************************注意事项*************************"
-    tyblue "1.升级系统仅对ubuntu有效，非ubuntu系统选则1等效于选择2"
-    tyblue "2.升级系统可能需要20分钟或更久"
-    tyblue "3.升级系统后无法安装bbr2(可以安装bbr1)"
-    tyblue "4.升级系统完成后将会重启，重启后，请再次运行此脚本完成剩余安装(再次运行时请选择相同选项)"
-    tyblue "5.升级过程中若有问话，请选择yes(y)"
-    tyblue "6.若是重启后再次运行此脚本，请选择任意选项"
-    tyblue "*********************************************************"
-    green  "推荐：1或2"
+    tyblue "*************************注意事项*************************"
+    tyblue "升级系统仅对ubuntu有效，非ubuntu系统选1等效于选2"
+    tyblue "**********************************************************"
+    echo
     read -p "请输入数字：" ifupdate
     case "$ifupdate" in
     1)
-    yum update
-    apt dist-upgrade -y
-    apt autoremove -y
-    apt clean
-    yum autoremove -y
-    yum clean all
+    updateSystem
     ;;
     2)
-    clear
-    tyblue "**************************************即将开始升级系统**************************************"
-    tyblue "****************************升级系统过程中若有问话，请选择yes(y)****************************"
-    tyblue "****************升级系统完成后将会重启，若重启，请再次运行此脚本完成剩余安装****************"
-    yellow "按任意键以继续。。。。"
-    read asfyerbsd
-    yum update
+    yum update -y
     apt dist-upgrade -y
-    apt autoremove -y
-    do-release-upgrade -d
     apt autoremove -y
     apt clean
     yum autoremove -y
@@ -474,7 +522,7 @@ install_bbr()
     echo
     tyblue "********************关于bbr加速的说明********************"
     yellow "bbr加速可以大幅提升网络速度，建议安装"
-    yellow "bbr2目前还在测试阶段，可能造成各种系统不稳定，甚至崩溃，"
+    yellow "bbr2目前还在测试阶段，可能造成各种系统不稳定，甚至崩溃"
     yellow "bbr加速安装完成后系统可能会重启"
     yellow "若重启，请再次运行此脚本完成剩余安装"
     tyblue "装过一遍就不需要再装啦"
@@ -494,8 +542,10 @@ install_bbr()
     2)
     clear
     tyblue "*********************即将安装bbr2加速，安装完成后服务器将会重启*********************"
-    tyblue "重启后，请再次选择这个选项完成bbr2剩余部分安装"
-    red    "警告，Ubuntu升级系统后安装bbr2会导致系统崩溃(可正常安装bbr1)"
+    tyblue "重启后，请再次选择这个选项完成bbr2剩余部分安装(开启bbr和ECN)"
+    tyblue "目前已知支持bbr2系统：Ubuntu16.04 18.04、Debian 8 9 10"
+    red    "目前已知不支持bbr2系统：Ubuntu14.04 20.04"
+    red    "警告：不支持的系统安装bbr2会导致系统崩溃(可正常安装bbr1)"
     yellow "按任意键以继续。。。。"
     read asfyerbsd
     wget https://github.com/yeyingorg/bbr2.sh/raw/master/bbr2.sh
@@ -523,18 +573,53 @@ install_bbr()
 }
 
 
+#配置sshd
+setsshd()
+{
+    clear
+    tyblue "*****************************************"
+    tyblue "安装可能需要比较长的时间(5-40分钟)"
+    tyblue "如果和ssh断开连接将会很麻烦"
+    tyblue "设置ssh连接超时时间将大大降低断连可能性"
+    yellow "注：升级系统后ssh配置文件将会恢复默认"
+    tyblue "*****************************************"
+    tyblue "是否设置ssh连接超时时间？(y/n)"
+    read ifsetsshd
+    case "$ifsetsshd" in
+    y)
+    echo "ClientAliveInterval 30" >> /etc/ssh/sshd_config
+    echo "ClientAliveCountMax 90" >> /etc/ssh/sshd_config
+    service sshd restart
+    clear
+    green  "配置完成"
+    tyblue "请重新进行ssh连接以生效"
+    yellow "按任意键以继续。。。。"
+    read asfyerbsd
+    exit
+    ;;
+    n)
+    ;;
+    *)
+    clear
+    red    "请输入y/n"
+    sleep 2s
+    setsshd
+    ;;
+    esac
+}
+
+
 #安装程序主体
 install_v2ray_ws_tls()
 {
-    echo "ClientAliveInterval 30" >> /etc/ssh/sshd_config
-    echo "ClientAliveCountMax 90" >> /etc/ssh/sshd_config
-    service sshd restart                                                     #防止ssh断连
+    setsshd
     apt update -y
     uninstall_firewall
     doupdate
     uninstall_firewall
     install_bbr
     readDomain                                                                                      #读取域名
+    readTlsConfig
     yum install -y gperftools-devel libatomic_ops-devel pcre-devel zlib-devel libxslt-devel gd-devel perl-ExtUtils-Embed geoip-devel lksctp-tools-devel libxml2-devel gcc gcc-c++ wget unzip curl                  ##libxml2-devel非必须
     apt install -y libgoogle-perftools-dev libatomic-ops-dev libperl-dev libxslt-dev zlib1g-dev libpcre3-dev libgeoip-dev libgd-dev libxml2-dev libsctp-dev miredo g++ wget gcc unzip curl                                         ##libxml2-dev非必须,miredo非必须(装了可支持ipv6)
     apt autoremove -y
@@ -690,7 +775,7 @@ start_menu()
     tyblue "此脚本需要一个解析到本服务器的域名!!!!"
     red    "全程建议不要使用小键盘"
     yellow "全程建议不要使用小键盘"
-    tyblue "推荐服务器系统使用ubuntu18+"
+    tyblue "推荐服务器系统使用ubuntu"
     tyblue "*****************************************************"
     green  "1.安装v2ray-WebSocket(ws)+TLS(1.3)+Web(内含bbr安装选项)"
     red    "2.删除v2ray-WebSocket(ws)+TLS(1.3)+Web"
