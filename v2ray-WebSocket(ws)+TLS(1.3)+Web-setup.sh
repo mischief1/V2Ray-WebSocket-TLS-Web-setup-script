@@ -688,12 +688,11 @@ install_v2ray_ws_tls()
 
 
     configtls                                                              ##配置nginx
-    cd /etc/nginx/html
-    rm -rf *
+    rm -rf /etc/nginx/html/*
 ##下载网站模板，用于伪装
-    wget https://github.com/kirin10000/v2ray-WebSocket-TLS-Web-setup-script/raw/master/Website-Template.zip
-    unzip *.zip
-    rm -rf *.zip
+    wget -P /etc/nginx/html https://github.com/kirin10000/v2ray-WebSocket-TLS-Web-setup-script/raw/master/Website-Template.zip
+    unzip -d /etc/nginx/html /etc/nginx/html/*.zip
+    rm -rf /etc/nginx/html/*.zip
     /etc/nginx/sbin/nginx
 
 
