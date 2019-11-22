@@ -587,13 +587,14 @@ setsshd()
     read ifsetsshd
     case "$ifsetsshd" in
     y)
-    echo "ClientAliveInterval 30" >> /etc/ssh/sshd_config
-    echo "ClientAliveCountMax 90" >> /etc/ssh/sshd_config
+    echo "ClientAliveInterval 3" >> /etc/ssh/sshd_config
+    echo "ClientAliveCountMax 7200" >> /etc/ssh/sshd_config
+    echo "#This file has been edited by v2ray-WebSocket-TLS-Web-setup-script" >> /etc/ssh/sshd_config
     service sshd restart
     clear
     green  "配置完成"
-    tyblue "请重新进行ssh连接以生效"
-    yellow "按任意键以继续。。。。"
+    tyblue "请重新进行ssh连接，然后再次运行此脚本"
+    yellow "按任意键退出。。。。"
     read asfyerbsd
     exit
     ;;
@@ -612,7 +613,9 @@ setsshd()
 #安装程序主体
 install_v2ray_ws_tls()
 {
-    setsshd
+    if ! grep -q "#This file has been edited by v2ray-WebSocket-TLS-Web-setup-script"; then
+        setsshd
+    fi
     apt update -y
     uninstall_firewall
     doupdate
