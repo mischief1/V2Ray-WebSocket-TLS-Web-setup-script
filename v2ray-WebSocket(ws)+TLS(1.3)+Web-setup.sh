@@ -613,7 +613,7 @@ setsshd()
 #安装程序主体
 install_v2ray_ws_tls()
 {
-    if ! grep -q "#This file has been edited by v2ray-WebSocket-TLS-Web-setup-script"; then
+    if ! grep -q "#This file has been edited by v2ray-WebSocket-TLS-Web-setup-script" /etc/ssh/sshd_config ; then
         setsshd
     fi
     apt update -y
