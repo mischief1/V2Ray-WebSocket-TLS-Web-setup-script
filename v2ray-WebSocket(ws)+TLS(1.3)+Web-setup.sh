@@ -588,7 +588,7 @@ setsshd()
     case "$ifsetsshd" in
     y)
     echo "ClientAliveInterval 3" >> /etc/ssh/sshd_config
-    echo "ClientAliveCountMax 7200" >> /etc/ssh/sshd_config
+    echo "ClientAliveCountMax 999" >> /etc/ssh/sshd_config
     echo "#This file has been edited by v2ray-WebSocket-TLS-Web-setup-script" >> /etc/ssh/sshd_config
     service sshd restart
     clear
