@@ -758,6 +758,7 @@ install_v2ray_ws_tls()
 #开始菜单
 start_menu()
 {
+    stty erase '^H'
     clear
     tyblue "*****************************************************"
     tyblue "v2ray  WebSocket(ws)+TLS(1.3)+Web  搭建脚本"
