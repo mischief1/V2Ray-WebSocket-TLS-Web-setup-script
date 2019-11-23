@@ -612,6 +612,7 @@ install_v2ray_ws_tls()
     if ! grep -q "#This file has been edited by v2ray-WebSocket-TLS-Web-setup-script" /etc/ssh/sshd_config ; then
         setsshd
     fi
+    remove_v2ray_nginx
     apt update -y
     uninstall_firewall
     doupdate
@@ -785,7 +786,6 @@ start_menu()
     read -p "请输入数字：" menu
     case "$menu" in
     1)
-    remove_v2ray_nginx
     install_v2ray_ws_tls
     ;;
     2)
