@@ -529,7 +529,7 @@ install_bbr()
     1)
     clear
     tyblue "****即将安装bbr加速，安装完成后可能会重启，若重启，请再次运行此脚本完成剩余安装****"
-    yellow "按任意键以继续。。。。"
+    yellow "按回车键以继续。。。。"
     read asfyerbsd
     wget --no-check-certificate https://github.com/teddysun/across/raw/master/bbr.sh
     chmod +x bbr.sh
@@ -542,7 +542,7 @@ install_bbr()
     tyblue "目前已知支持bbr2系统：Ubuntu16.04 18.04、Debian 8 9 10"
     red    "目前已知不支持bbr2系统：Ubuntu14.04 20.04"
     red    "警告：不支持的系统安装bbr2会导致系统崩溃(可正常安装bbr1)"
-    yellow "按任意键以继续。。。。"
+    yellow "按回车键以继续。。。。"
     read asfyerbsd
     wget https://github.com/yeyingorg/bbr2.sh/raw/master/bbr2.sh
     chmod +x bbr2.sh
@@ -551,7 +551,7 @@ install_bbr()
     3)
     clear
     tyblue "****即将安装bbr2加速，安装完成后服务器将会重启，重启后，请再次运行此脚本完成剩余安装****"
-    yellow "按任意键以继续。。。。"
+    yellow "按回车键以继续。。。。"
     read asfyerbsd
     wget https://github.com/jackjieYYY/bbr2/raw/master/bbr2.sh
     chmod +x bbr2.sh
@@ -590,7 +590,7 @@ setsshd()
     clear
     green  "配置完成"
     tyblue "请重新进行ssh连接，然后再次运行此脚本"
-    yellow "按任意键退出。。。。"
+    yellow "按回车键退出。。。。"
     read asfyerbsd
     exit
     ;;
