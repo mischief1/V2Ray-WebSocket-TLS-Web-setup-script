@@ -639,6 +639,8 @@ install_v2ray_ws_tls()
     make install
     mkdir /etc/nginx/certs
     mkdir /etc/nginx/conf.d
+    mkdir /etc/nginx/html/$domain
+    cp /etc/nginx/html/*.html /etc/nginx/html/$domain
 ##安装nignx完成
 
 
@@ -656,6 +658,31 @@ install_v2ray_ws_tls()
 
 
 ##获取证书
+cat > /etc/nginx/conf/nginx.conf <<-EOF
+worker_processes  1;
+events {
+    worker_connections  1024;
+}
+http {
+    include       mime.types;
+    default_type  application/octet-stream;
+    sendfile        on;
+    keepalive_timeout  65;
+    server {
+        listen       80;
+        server_name  localhost;
+        location / {
+            root   html/$domain;
+            index  index.html index.htm;
+        }
+        error_page   500 502 503 504  /50x.html;
+        location = /50x.html {
+            root   html/$domain;
+        }
+    }
+}
+EOF
+
     /etc/nginx/sbin/nginx
     curl https://get.acme.sh | sh
     ~/.acme.sh/acme.sh --upgrade --auto-upgrade
@@ -688,7 +715,7 @@ install_v2ray_ws_tls()
 
 
     configtls                                                              ##配置nginx
-    mkdir /etc/nginx/html/$domain
+    rm -rf /etc/nginx/html/$domain/*
 ##下载网站模板，用于伪装
     wget -P /etc/nginx/html/$domain https://github.com/kirin10000/v2ray-WebSocket-TLS-Web-setup-script/raw/master/Website-Template.zip
     unzip -d /etc/nginx/html/$domain /etc/nginx/html/$domain/*.zip
