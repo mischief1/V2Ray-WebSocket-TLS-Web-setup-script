@@ -1,3 +1,6 @@
+#!/bin/bash
+
+
 #定义几个颜色
 function tyblue()                           #天依蓝
 {
