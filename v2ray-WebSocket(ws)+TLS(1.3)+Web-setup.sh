@@ -1,6 +1,3 @@
-#!/bin/bash
-
-
 #定义几个颜色
 function tyblue()                           #天依蓝
 {
@@ -225,8 +222,8 @@ server {
 }
 server {
     listen  443 ssl http2;
-    ssl_certificate       /etc/nginx/cert/fullchain.cer;
-    ssl_certificate_key   /etc/nginx/cert/$domain.key;
+    ssl_certificate       /etc/nginx/certs/$domain.cer;
+    ssl_certificate_key   /etc/nginx/certs/$domain.key;
     ssl_protocols         TLSv1.3;
     ssl_ciphers           TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256;
     root /etc/nginx/html;
@@ -248,8 +245,8 @@ server {
 }
 server {
     listen  443 ssl http2;
-    ssl_certificate       /etc/nginx/cert/fullchain.cer;
-    ssl_certificate_key   /etc/nginx/cert/$domain.key;
+    ssl_certificate       /etc/nginx/certs/$domain.cer;
+    ssl_certificate_key   /etc/nginx/certs/$domain.key;
     ssl_protocols         TLSv1.3;
     ssl_ciphers           TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256;
     root /etc/nginx/html;
@@ -275,8 +272,8 @@ server {
 }
 server {
     listen  443 ssl http2;
-    ssl_certificate       /etc/nginx/cert/fullchain.cer;
-    ssl_certificate_key   /etc/nginx/cert/$domain.key;
+    ssl_certificate       /etc/nginx/certs/$domain.cer;
+    ssl_certificate_key   /etc/nginx/certs/$domain.key;
     ssl_protocols         TLSv1.3;
     ssl_ciphers           TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256;
     root /etc/nginx/html;
@@ -306,8 +303,8 @@ server {
 }
 server {
     listen  443 ssl http2;
-    ssl_certificate       /etc/nginx/cert/fullchain.cer;
-    ssl_certificate_key   /etc/nginx/cert/$domain.key;
+    ssl_certificate       /etc/nginx/certs/$domain.cer;
+    ssl_certificate_key   /etc/nginx/certs/$domain.key;
     ssl_protocols         TLSv1.3 TLSv1.2;
     ssl_ciphers           TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305;
     root /etc/nginx/html;
@@ -329,8 +326,8 @@ server {
 }
 server {
     listen  443 ssl http2;
-    ssl_certificate       /etc/nginx/cert/fullchain.cer;
-    ssl_certificate_key   /etc/nginx/cert/$domain.key;
+    ssl_certificate       /etc/nginx/certs/$domain.cer;
+    ssl_certificate_key   /etc/nginx/certs/$domain.key;
     ssl_protocols         TLSv1.3 TLSv1.2;
     ssl_ciphers           TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305;
     root /etc/nginx/html;
@@ -356,8 +353,8 @@ server {
 }
 server {
     listen  443 ssl http2;
-    ssl_certificate       /etc/nginx/cert/fullchain.cer;
-    ssl_certificate_key   /etc/nginx/cert/$domain.key;
+    ssl_certificate       /etc/nginx/certs/$domain.cer;
+    ssl_certificate_key   /etc/nginx/certs/$domain.key;
     ssl_protocols         TLSv1.3 TLSv1.2;
     ssl_ciphers           TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305;
     root /etc/nginx/html;
@@ -637,7 +634,7 @@ install_v2ray_ws_tls()
     ./configure --prefix=/etc/nginx --with-openssl=../openssl-1.1.1a --with-openssl-opt="enable-tls1_3 enable-tls1_2 enable-tls1 enable-ssl enable-ssl2 enable-ssl3 enable-ec_nistp_64_gcc_128 shared threads zlib-dynamic sctp" --with-mail=dynamic --with-mail_ssl_module --with-stream=dynamic --with-stream_ssl_module --with-stream_realip_module --with-stream_geoip_module=dynamic --with-stream_ssl_preread_module --with-http_ssl_module --with-http_v2_module --with-http_realip_module --with-http_addition_module --with-http_xslt_module=dynamic --with-http_image_filter_module=dynamic --with-http_geoip_module=dynamic --with-http_sub_module --with-http_dav_module --with-http_flv_module --with-http_mp4_module --with-http_gunzip_module --with-http_gzip_static_module --with-http_auth_request_module --with-http_random_index_module --with-http_secure_link_module --with-http_degradation_module --with-http_slice_module --with-http_stub_status_module --with-http_perl_module=dynamic --with-pcre --with-libatomic --with-compat --with-cpp_test_module --with-google_perftools_module --with-file-aio --with-threads --with-poll_module --with-select_module
     make
     make install
-    mkdir /etc/nginx/cert
+    mkdir /etc/nginx/certs
     mkdir /etc/nginx/conf.d
 ##安装nignx完成
 
@@ -662,11 +659,11 @@ install_v2ray_ws_tls()
     case "$domainconfig" in
     1)
     ~/.acme.sh/acme.sh --issue -d $domain -d www.$domain --webroot /etc/nginx/html/ -k ec-256
-    ~/.acme.sh/acme.sh --installcert -d $domain --key-file /etc/nginx/cert/$domain.key --fullchain-file /etc/nginx/cert/fullchain.cer --ecc
+    ~/.acme.sh/acme.sh --installcert -d $domain --key-file /etc/nginx/certs/$domain.key --fullchain-file /etc/nginx/certs/$domain.cer --ecc
     ;;
     2)
     ~/.acme.sh/acme.sh --issue -d $domain --webroot /etc/nginx/html/ -k ec-256
-    ~/.acme.sh/acme.sh --installcert -d $domain --key-file /etc/nginx/cert/$domain.key --fullchain-file /etc/nginx/cert/fullchain.cer --ecc
+    ~/.acme.sh/acme.sh --installcert -d $domain --key-file /etc/nginx/certs/$domain.key --fullchain-file /etc/nginx/certs/$domain.cer --ecc
     ;;
     esac
     /etc/nginx/sbin/nginx -s stop
