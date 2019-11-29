@@ -229,7 +229,7 @@ server {
     ssl_certificate_key   /etc/nginx/certs/$domain.key;
     ssl_protocols         TLSv1.3;
     ssl_ciphers           TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256;
-    root /etc/nginx/html;
+    root /etc/nginx/html/$domain;
     index index.html;
     server_name $domain;
     location /$path {
@@ -252,7 +252,7 @@ server {
     ssl_certificate_key   /etc/nginx/certs/$domain.key;
     ssl_protocols         TLSv1.3;
     ssl_ciphers           TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256;
-    root /etc/nginx/html;
+    root /etc/nginx/html/$domain;
     index index.html;
     server_name www.$domain;
     location /$path {
@@ -279,7 +279,7 @@ server {
     ssl_certificate_key   /etc/nginx/certs/$domain.key;
     ssl_protocols         TLSv1.3;
     ssl_ciphers           TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256;
-    root /etc/nginx/html;
+    root /etc/nginx/html/$domain;
     index index.html;
     server_name $domain;
     location /$path {
@@ -310,7 +310,7 @@ server {
     ssl_certificate_key   /etc/nginx/certs/$domain.key;
     ssl_protocols         TLSv1.3 TLSv1.2;
     ssl_ciphers           TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305;
-    root /etc/nginx/html;
+    root /etc/nginx/html/$domain;
     index index.html;
     server_name $domain;
     location /$path {
@@ -333,7 +333,7 @@ server {
     ssl_certificate_key   /etc/nginx/certs/$domain.key;
     ssl_protocols         TLSv1.3 TLSv1.2;
     ssl_ciphers           TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305;
-    root /etc/nginx/html;
+    root /etc/nginx/html/$domain;
     index index.html;
     server_name www.$domain;
     location /$path {
@@ -360,7 +360,7 @@ server {
     ssl_certificate_key   /etc/nginx/certs/$domain.key;
     ssl_protocols         TLSv1.3 TLSv1.2;
     ssl_ciphers           TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305;
-    root /etc/nginx/html;
+    root /etc/nginx/html/$domain;
     index index.html;
     server_name $domain;
     location /$path {
@@ -661,11 +661,11 @@ install_v2ray_ws_tls()
     ~/.acme.sh/acme.sh --upgrade --auto-upgrade
     case "$domainconfig" in
     1)
-    ~/.acme.sh/acme.sh --issue -d $domain -d www.$domain --webroot /etc/nginx/html/ -k ec-256
+    ~/.acme.sh/acme.sh --issue -d $domain -d www.$domain --webroot /etc/nginx/html/$domain -k ec-256
     ~/.acme.sh/acme.sh --installcert -d $domain --key-file /etc/nginx/certs/$domain.key --fullchain-file /etc/nginx/certs/$domain.cer --ecc
     ;;
     2)
-    ~/.acme.sh/acme.sh --issue -d $domain --webroot /etc/nginx/html/ -k ec-256
+    ~/.acme.sh/acme.sh --issue -d $domain --webroot /etc/nginx/html/$domain -k ec-256
     ~/.acme.sh/acme.sh --installcert -d $domain --key-file /etc/nginx/certs/$domain.key --fullchain-file /etc/nginx/certs/$domain.cer --ecc
     ;;
     esac
@@ -688,11 +688,11 @@ install_v2ray_ws_tls()
 
 
     configtls                                                              ##配置nginx
-    rm -rf /etc/nginx/html/*
+    mkdir /etc/nginx/html/$domain
 ##下载网站模板，用于伪装
-    wget -P /etc/nginx/html https://github.com/kirin10000/v2ray-WebSocket-TLS-Web-setup-script/raw/master/Website-Template.zip
-    unzip -d /etc/nginx/html /etc/nginx/html/*.zip
-    rm -rf /etc/nginx/html/*.zip
+    wget -P /etc/nginx/html/$domain https://github.com/kirin10000/v2ray-WebSocket-TLS-Web-setup-script/raw/master/Website-Template.zip
+    unzip -d /etc/nginx/html/$domain /etc/nginx/html/$domain/*.zip
+    rm -rf /etc/nginx/html/$domain/*.zip
     /etc/nginx/sbin/nginx
 
 
