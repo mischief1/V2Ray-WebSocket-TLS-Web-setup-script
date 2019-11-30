@@ -77,7 +77,7 @@ if_ip()
     ;;
     *)
     clear
-    red "请输入y/n"
+    red    "请输入y/n"
     sleep 2s
     clear
     if_ip
