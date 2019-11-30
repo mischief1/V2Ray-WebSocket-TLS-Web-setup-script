@@ -226,6 +226,7 @@ server {
 }
 server {
     listen 80;
+    listen [::]:80;
     server_name  www.$domain;
     return 301 https://\$server_name\$request_uri;
 }
@@ -293,6 +294,7 @@ server {
 }
 server {
     listen 80;
+    listen [::]:80;
     server_name  www.$domain;
     return 301 https://\$server_name\$request_uri;
 }
