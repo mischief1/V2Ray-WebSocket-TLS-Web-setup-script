@@ -221,40 +221,22 @@ cat > /etc/nginx/conf.d/v2ray.conf<<-EOF
 server {
     listen 80;
     server_name  $domain;
-    rewrite ^(.*) https://\$server_name\$1 permanent;
-}
-server {
-    listen  443 ssl http2;
-    ssl_certificate       /etc/nginx/certs/$domain.cer;
-    ssl_certificate_key   /etc/nginx/certs/$domain.key;
-    ssl_protocols         TLSv1.3;
-    ssl_ciphers           TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256;
-    root /etc/nginx/html/$domain;
-    index index.html;
-    server_name $domain;
-    location /$path {
-        proxy_redirect off;
-        proxy_pass http://127.0.0.1:$port;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade \$http_upgrade;
-        proxy_set_header Connection "upgrade";
-        proxy_set_header Host \$http_host;
-    }
+    return 301 https://\$server_name\$request_uri;
 }
 server {
     listen 80;
     server_name  www.$domain;
-    rewrite ^(.*) https://\$server_name\$1 permanent;
+    return 301 https://\$server_name\$request_uri;
 }
 server {
     listen  443 ssl http2;
+    server_name $domain www.$domain;
     ssl_certificate       /etc/nginx/certs/$domain.cer;
     ssl_certificate_key   /etc/nginx/certs/$domain.key;
     ssl_protocols         TLSv1.3;
     ssl_ciphers           TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256;
     root /etc/nginx/html/$domain;
     index index.html;
-    server_name www.$domain;
     location /$path {
         proxy_redirect off;
         proxy_pass http://127.0.0.1:$port;
@@ -271,17 +253,17 @@ cat > /etc/nginx/conf.d/v2ray.conf<<-EOF
 server {
     listen 80;
     server_name  $domain;
-    rewrite ^(.*) https://\$server_name\$1 permanent;
+    return 301 https://\$server_name\$request_uri;
 }
 server {
     listen  443 ssl http2;
+    server_name $domain;
     ssl_certificate       /etc/nginx/certs/$domain.cer;
     ssl_certificate_key   /etc/nginx/certs/$domain.key;
     ssl_protocols         TLSv1.3;
     ssl_ciphers           TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256;
     root /etc/nginx/html/$domain;
     index index.html;
-    server_name $domain;
     location /$path {
         proxy_redirect off;
         proxy_pass http://127.0.0.1:$port;
@@ -302,40 +284,22 @@ cat > /etc/nginx/conf.d/v2ray.conf<<-EOF
 server {
     listen 80;
     server_name  $domain;
-    rewrite ^(.*) https://\$server_name\$1 permanent;
-}
-server {
-    listen  443 ssl http2;
-    ssl_certificate       /etc/nginx/certs/$domain.cer;
-    ssl_certificate_key   /etc/nginx/certs/$domain.key;
-    ssl_protocols         TLSv1.3 TLSv1.2;
-    ssl_ciphers           TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305;
-    root /etc/nginx/html/$domain;
-    index index.html;
-    server_name $domain;
-    location /$path {
-        proxy_redirect off;
-        proxy_pass http://127.0.0.1:$port;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade \$http_upgrade;
-        proxy_set_header Connection "upgrade";
-        proxy_set_header Host \$http_host;
-    }
+    return 301 https://\$server_name\$request_uri;
 }
 server {
     listen 80;
     server_name  www.$domain;
-    rewrite ^(.*) https://\$server_name\$1 permanent;
+    return 301 https://\$server_name\$request_uri;
 }
 server {
     listen  443 ssl http2;
+    server_name $domain www.$domain;
     ssl_certificate       /etc/nginx/certs/$domain.cer;
     ssl_certificate_key   /etc/nginx/certs/$domain.key;
     ssl_protocols         TLSv1.3 TLSv1.2;
     ssl_ciphers           TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305;
     root /etc/nginx/html/$domain;
     index index.html;
-    server_name www.$domain;
     location /$path {
         proxy_redirect off;
         proxy_pass http://127.0.0.1:$port;
@@ -352,17 +316,17 @@ cat > /etc/nginx/conf.d/v2ray.conf<<-EOF
 server {
     listen 80;
     server_name  $domain;
-    rewrite ^(.*) https://\$server_name\$1 permanent;
+    return 301 https://\$server_name\$request_uri
 }
 server {
     listen  443 ssl http2;
+    server_name $domain;
     ssl_certificate       /etc/nginx/certs/$domain.cer;
     ssl_certificate_key   /etc/nginx/certs/$domain.key;
     ssl_protocols         TLSv1.3 TLSv1.2;
     ssl_ciphers           TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305;
     root /etc/nginx/html/$domain;
     index index.html;
-    server_name $domain;
     location /$path {
         proxy_redirect off;
         proxy_pass http://127.0.0.1:$port;
