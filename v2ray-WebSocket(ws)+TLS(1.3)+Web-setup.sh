@@ -93,7 +93,7 @@ readTlsConfig()
 #配置nginx
 configtls()
 {
-networkip=`curl -L -s ipecho.net/plain`
+networkip=`curl -L -s https://ipecho.net/plain`
 cat > /etc/nginx/conf/nginx.conf <<-EOF
 
 user  root root;
