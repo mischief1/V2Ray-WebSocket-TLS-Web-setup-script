@@ -54,7 +54,7 @@ readDomain()
     ;;
     *)
     clear
-    red "请输入正确数字"
+    red    "请输入正确数字"
     sleep 2s
     readDomain
     ;;
@@ -251,13 +251,13 @@ server {
 server {
     listen 80;
     listen [::]:80;
-    server_name  $domain;
+    server_name $domain;
     return 301 https://\$server_name\$request_uri;
 }
 server {
     listen 80;
     listen [::]:80;
-    server_name  www.$domain;
+    server_name www.$domain;
     return 301 https://\$server_name\$request_uri;
 }
 server {
@@ -292,7 +292,7 @@ server {
 server {
     listen 80;
     listen [::]:80;
-    server_name  $domain;
+    server_name $domain;
     return 301 https://\$server_name\$request_uri;
 }
 server {
@@ -331,13 +331,13 @@ server {
 server {
     listen 80;
     listen [::]:80;
-    server_name  $domain;
+    server_name $domain;
     return 301 https://\$server_name\$request_uri;
 }
 server {
     listen 80;
     listen [::]:80;
-    server_name  www.$domain;
+    server_name www.$domain;
     return 301 https://\$server_name\$request_uri;
 }
 server {
@@ -372,7 +372,7 @@ server {
 server {
     listen 80;
     listen [::]:80;
-    server_name  $domain;
+    server_name $domain;
     return 301 https://\$server_name\$request_uri;
 }
 server {
@@ -407,8 +407,8 @@ updateSystem()
 {
     clear
     tyblue "********************请选择升级系统版本********************"
-    tyblue "1.最新LTS版(现在是18.04)(2019/11/20)"
-    tyblue "2.最新beta版(现在是20.04)(2019/11/20)"
+    tyblue "1.最新LTS版(现在是18.04)(2019/12/01)"
+    tyblue "2.最新beta版(现在是20.04)(2019/12/01)"
     tyblue "*************************注意事项*************************"
     tyblue "1.升级系统仅对ubuntu有效，非ubuntu系统将仅更新软件包"
     yellow "2.升级系统可能需要15分钟或更久"
@@ -416,10 +416,6 @@ updateSystem()
     yellow "4.升级过程中若有问话，请选择yes(y)"
     yellow "5.若升级过程中与ssh断开连接，建议重置系统"
     yellow "6.升级系统后ssh超时时间将会恢复默认"
-    tyblue "**********************************************************"
-    echo
-    tyblue "*****************关于LTS版和beta版的区别******************"
-    tyblue "Ubuntu20.04暂不支持bbr2(支持bbr1)"
     tyblue "**********************************************************"
     echo
     read -p "请输入数字：" updateconfig
@@ -561,8 +557,8 @@ install_bbr()
     clear
     tyblue "*********************即将安装bbr2加速，安装完成后服务器将会重启*********************"
     tyblue "重启后，请再次选择这个选项完成bbr2剩余部分安装(开启bbr和ECN)"
-    tyblue "目前已知支持bbr2系统：Ubuntu16.04 18.04、Debian 8 9 10"
-    red    "目前已知不支持bbr2系统：Ubuntu14.04 20.04"
+    tyblue "目前已知支持bbr2系统：Ubuntu16.04 18.04 20.04、Debian 8 9 10"
+    red    "目前已知不支持bbr2系统：Ubuntu14.04"
     red    "警告：不支持的系统安装bbr2会导致系统崩溃(可正常安装bbr1)"
     yellow "按回车键以继续。。。。"
     read asfyerbsd
@@ -643,9 +639,9 @@ install_v2ray_ws_tls()
     readDomain                                                                                      #读取域名
     apt install -y curl
     yum install -y curl
-    networkip=`curl -L -s https://ipecho.net/plain`
     clear
-    red    "解析中。。。"
+    red    "获取ip中。。。"
+    networkip=`curl -L -s https://ipecho.net/plain`
     if_ip
     readTlsConfig
     yum install -y gperftools-devel libatomic_ops-devel pcre-devel zlib-devel libxslt-devel gd-devel perl-ExtUtils-Embed geoip-devel lksctp-tools-devel libxml2-devel gcc gcc-c++ wget unzip                   ##libxml2-devel非必须
