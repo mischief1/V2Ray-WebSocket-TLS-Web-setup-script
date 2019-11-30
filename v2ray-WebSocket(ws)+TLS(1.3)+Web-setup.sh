@@ -684,7 +684,7 @@ install_v2ray_ws_tls()
 
 
 ##获取证书
-cat > /etc/nginx/conf/nginx.conf <<-EOF
+cat > /etc/nginx/conf/nginx.conf <<EOF
 worker_processes  1;
 events {
     worker_connections  1024;
