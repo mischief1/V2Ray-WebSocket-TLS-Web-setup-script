@@ -62,6 +62,30 @@ readDomain()
 }
 
 
+#检查ip地址是否正确
+if_ip()
+{
+    tyblue "您的服务器ip地址是不是\"$networkip\"？(y/n)"
+    read if_ip_correct
+    case "if_ip_correct" in
+    y)
+    ;;
+    n)
+    clear
+    tyblue "请输入您的服务器ip地址"
+    read networkip
+    ;;
+    *)
+    clear
+    red "请输入y/n"
+    sleep 2s
+    clear
+    if_ip
+    ;;
+    esac
+}
+
+
 #选择tls配置
 readTlsConfig()
 {
@@ -93,7 +117,6 @@ readTlsConfig()
 #配置nginx
 configtls()
 {
-networkip=`curl -L -s https://ipecho.net/plain`
 cat > /etc/nginx/conf/nginx.conf <<-EOF
 
 user  root root;
@@ -618,6 +641,10 @@ install_v2ray_ws_tls()
     uninstall_firewall
     install_bbr
     readDomain                                                                                      #读取域名
+    networkip=`curl -L -s https://ipecho.net/plain`
+    clear
+    red    "解析中。。。"
+    if_ip
     readTlsConfig
     yum install -y gperftools-devel libatomic_ops-devel pcre-devel zlib-devel libxslt-devel gd-devel perl-ExtUtils-Embed geoip-devel lksctp-tools-devel libxml2-devel gcc gcc-c++ wget unzip curl                  ##libxml2-devel非必须
     apt install -y libgoogle-perftools-dev libatomic-ops-dev libperl-dev libxslt-dev zlib1g-dev libpcre3-dev libgeoip-dev libgd-dev libxml2-dev libsctp-dev miredo g++ wget gcc unzip curl                                         ##libxml2-dev非必须,miredo非必须(装了可支持ipv6)
