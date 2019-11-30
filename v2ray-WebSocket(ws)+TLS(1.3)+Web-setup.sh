@@ -220,6 +220,7 @@ EOF
 cat > /etc/nginx/conf.d/v2ray.conf<<-EOF
 server {
     listen 80;
+    listen [::]:80;
     server_name  $domain;
     return 301 https://\$server_name\$request_uri;
 }
@@ -229,7 +230,8 @@ server {
     return 301 https://\$server_name\$request_uri;
 }
 server {
-    listen  443 ssl http2;
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
     server_name $domain www.$domain;
     ssl_certificate       /etc/nginx/certs/$domain.cer;
     ssl_certificate_key   /etc/nginx/certs/$domain.key;
@@ -252,11 +254,13 @@ EOF
 cat > /etc/nginx/conf.d/v2ray.conf<<-EOF
 server {
     listen 80;
+    listen [::]:80;
     server_name  $domain;
     return 301 https://\$server_name\$request_uri;
 }
 server {
-    listen  443 ssl http2;
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
     server_name $domain;
     ssl_certificate       /etc/nginx/certs/$domain.cer;
     ssl_certificate_key   /etc/nginx/certs/$domain.key;
@@ -283,6 +287,7 @@ EOF
 cat > /etc/nginx/conf.d/v2ray.conf<<-EOF
 server {
     listen 80;
+    listen [::]:80;
     server_name  $domain;
     return 301 https://\$server_name\$request_uri;
 }
@@ -292,7 +297,8 @@ server {
     return 301 https://\$server_name\$request_uri;
 }
 server {
-    listen  443 ssl http2;
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
     server_name $domain www.$domain;
     ssl_certificate       /etc/nginx/certs/$domain.cer;
     ssl_certificate_key   /etc/nginx/certs/$domain.key;
@@ -315,11 +321,13 @@ EOF
 cat > /etc/nginx/conf.d/v2ray.conf<<-EOF
 server {
     listen 80;
+    listen [::]:80;
     server_name  $domain;
     return 301 https://\$server_name\$request_uri;
 }
 server {
-    listen  443 ssl http2;
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
     server_name $domain;
     ssl_certificate       /etc/nginx/certs/$domain.cer;
     ssl_certificate_key   /etc/nginx/certs/$domain.key;
