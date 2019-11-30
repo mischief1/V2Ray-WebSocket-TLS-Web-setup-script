@@ -117,7 +117,7 @@ readTlsConfig()
 #配置nginx
 configtls()
 {
-cat > /etc/nginx/conf/nginx.conf <<-EOF
+cat > /etc/nginx/conf/nginx.conf <<EOF
 
 user  root root;
 worker_processes  4;
@@ -241,7 +241,7 @@ EOF
     1)
         case "$domainconfig" in
         1)
-cat > /etc/nginx/conf.d/v2ray.conf<<-EOF
+cat > /etc/nginx/conf.d/v2ray.conf<<EOF
 server {
     listen 80;
     listen [::]:80;
@@ -282,7 +282,7 @@ server {
 EOF
         ;;
         2)
-cat > /etc/nginx/conf.d/v2ray.conf<<-EOF
+cat > /etc/nginx/conf.d/v2ray.conf<<EOF
 server {
     listen 80;
     listen [::]:80;
@@ -321,7 +321,7 @@ EOF
     2)
         case "$domainconfig" in
         1)
-cat > /etc/nginx/conf.d/v2ray.conf<<-EOF
+cat > /etc/nginx/conf.d/v2ray.conf<<EOF
 server {
     listen 80;
     listen [::]:80;
@@ -362,7 +362,7 @@ server {
 EOF
         ;;
         2)
-cat > /etc/nginx/conf.d/v2ray.conf<<-EOF
+cat > /etc/nginx/conf.d/v2ray.conf<<EOF
 server {
     listen 80;
     listen [::]:80;
