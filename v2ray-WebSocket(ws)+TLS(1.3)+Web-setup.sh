@@ -93,6 +93,7 @@ readTlsConfig()
 #配置nginx
 configtls()
 {
+networkip=`curl -L -s ipecho.net/plain`
 cat > /etc/nginx/conf/nginx.conf <<-EOF
 
 user  root root;
@@ -221,6 +222,12 @@ cat > /etc/nginx/conf.d/v2ray.conf<<-EOF
 server {
     listen 80;
     listen [::]:80;
+    server_name $networkip;
+    return 301 https://$domain\$request_uri;
+}
+server {
+    listen 80;
+    listen [::]:80;
     server_name  $domain;
     return 301 https://\$server_name\$request_uri;
 }
@@ -253,6 +260,12 @@ EOF
         ;;
         2)
 cat > /etc/nginx/conf.d/v2ray.conf<<-EOF
+server {
+    listen 80;
+    listen [::]:80;
+    server_name $networkip;
+    return 301 https://$domain\$request_uri;
+}
 server {
     listen 80;
     listen [::]:80;
@@ -289,6 +302,12 @@ cat > /etc/nginx/conf.d/v2ray.conf<<-EOF
 server {
     listen 80;
     listen [::]:80;
+    server_name $networkip;
+    return 301 https://$domain\$request_uri;
+}
+server {
+    listen 80;
+    listen [::]:80;
     server_name  $domain;
     return 301 https://\$server_name\$request_uri;
 }
@@ -321,6 +340,12 @@ EOF
         ;;
         2)
 cat > /etc/nginx/conf.d/v2ray.conf<<-EOF
+server {
+    listen 80;
+    listen [::]:80;
+    server_name $networkip;
+    return 301 https://$domain\$request_uri;
+}
 server {
     listen 80;
     listen [::]:80;
