@@ -316,7 +316,7 @@ cat > /etc/nginx/conf.d/v2ray.conf<<-EOF
 server {
     listen 80;
     server_name  $domain;
-    return 301 https://\$server_name\$request_uri
+    return 301 https://\$server_name\$request_uri;
 }
 server {
     listen  443 ssl http2;
