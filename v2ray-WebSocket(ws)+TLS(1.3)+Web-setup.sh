@@ -67,7 +67,7 @@ if_ip()
 {
     tyblue "您的服务器ip地址是不是\"$networkip\"？(y/n)"
     read if_ip_correct
-    case "if_ip_correct" in
+    case "$if_ip_correct" in
     y)
     ;;
     n)
