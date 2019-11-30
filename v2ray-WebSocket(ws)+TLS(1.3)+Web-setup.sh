@@ -676,12 +676,11 @@ EOF
 
 
 ##获取端口、id和path
-    cd /etc/v2ray
     path=$(cat /dev/urandom | head -c 8 | md5sum | head -c 6)               ##获取随机值作为path
-    port=`grep port config.json`
+    port=`grep port /etc/v2ray/config.json`
     port=${port##*' '}
     port=${port%%,*}
-    v2id=`grep id config.json`
+    v2id=`grep id /etc/v2ray/config.json`
     v2id=${v2id#*:}
 ##获取端口、id和path完成
 
