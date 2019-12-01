@@ -437,6 +437,7 @@ EOF
 #升级系统
 updateSystem()
 {
+    systemVersion=`lsb_release -r --short`
     clear
     tyblue "********************请选择升级系统版本********************"
     tyblue "1.最新beta版(现在是20.04)(2019/12/01)"
@@ -451,6 +452,8 @@ updateSystem()
     yellow "5.升级过程中若有问话，请选择yes(y)"
     yellow "6.若升级过程中与ssh断开连接，建议重置系统"
     yellow "7.升级系统后ssh超时时间将会恢复默认"
+    tyblue "**********************************************************"
+    green  "您现在的系统版本是$systemVersion"
     tyblue "**********************************************************"
     echo
     read -p "请输入数字：" updateconfig
