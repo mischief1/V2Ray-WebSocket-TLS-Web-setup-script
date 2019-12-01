@@ -439,8 +439,8 @@ updateSystem()
 {
     clear
     tyblue "********************请选择升级系统版本********************"
-    tyblue "1.最新LTS版(现在是18.04)(2019/12/01)"
-    tyblue "2.最新beta版(现在是20.04)(2019/12/01)"
+    tyblue "1.最新beta版(现在是20.04)(2019/12/01)"
+    tyblue "2.最新LTS版(现在是18.04)(2019/12/01)"
     tyblue "*************************注意事项*************************"
     tyblue "1.升级系统仅对ubuntu有效，非ubuntu系统将仅更新软件包"
     yellow "2.升级系统可能需要15分钟或更久"
@@ -457,7 +457,7 @@ updateSystem()
     apt dist-upgrade -y
     apt autoremove -y
     apt clean
-    do-release-upgrade
+    do-release-upgrade -d
     apt autoremove -y
     apt clean
     yum autoremove -y
@@ -468,7 +468,7 @@ updateSystem()
     apt dist-upgrade -y
     apt autoremove -y
     apt clean
-    do-release-upgrade -d
+    do-release-upgrade
     apt autoremove -y
     apt clean
     yum autoremove -y
