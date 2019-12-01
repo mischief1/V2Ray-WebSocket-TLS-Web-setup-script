@@ -457,6 +457,7 @@ updateSystem()
     apt dist-upgrade -y
     apt autoremove -y
     apt clean
+    do-release-upgrade
     do-release-upgrade -d
     apt autoremove -y
     apt clean
