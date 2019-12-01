@@ -249,6 +249,14 @@ server {
     return 301 https://$domain\$request_uri;
 }
 server {
+    listen 443;
+    listen [::]:443;
+    server_name $networkip;
+    ssl_certificate       /etc/nginx/certs/$domain.cer;
+    ssl_certificate_key   /etc/nginx/certs/$domain.key;
+    return 301 https://$domain\$request_uri;
+}
+server {
     listen 80;
     listen [::]:80;
     server_name $domain;
@@ -287,6 +295,14 @@ server {
     listen 80;
     listen [::]:80;
     server_name $networkip;
+    return 301 https://$domain\$request_uri;
+}
+server {
+    listen 443;
+    listen [::]:443;
+    server_name $networkip;
+    ssl_certificate       /etc/nginx/certs/$domain.cer;
+    ssl_certificate_key   /etc/nginx/certs/$domain.key;
     return 301 https://$domain\$request_uri;
 }
 server {
@@ -329,6 +345,14 @@ server {
     return 301 https://$domain\$request_uri;
 }
 server {
+    listen 443;
+    listen [::]:443;
+    server_name $networkip;
+    ssl_certificate       /etc/nginx/certs/$domain.cer;
+    ssl_certificate_key   /etc/nginx/certs/$domain.key;
+    return 301 https://$domain\$request_uri;
+}
+server {
     listen 80;
     listen [::]:80;
     server_name $domain;
@@ -367,6 +391,14 @@ server {
     listen 80;
     listen [::]:80;
     server_name $networkip;
+    return 301 https://$domain\$request_uri;
+}
+server {
+    listen 443;
+    listen [::]:443;
+    server_name $networkip;
+    ssl_certificate       /etc/nginx/certs/$domain.cer;
+    ssl_certificate_key   /etc/nginx/certs/$domain.key;
     return 301 https://$domain\$request_uri;
 }
 server {
