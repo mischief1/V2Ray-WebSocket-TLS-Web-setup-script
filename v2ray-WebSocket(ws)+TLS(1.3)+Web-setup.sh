@@ -635,6 +635,26 @@ setsshd()
 }
 
 
+#获取证书
+get_certs()
+{
+    cp /etc/nginx/nginx.conf.default /etc/nginx/nginx.conf
+    /etc/nginx/sbin/nginx -s stop
+    /etc/nginx/sbin/nginx
+    case "$domainconfig" in
+    1)
+    ~/.acme.sh/acme.sh --issue -d $domain -d www.$domain --webroot /etc/nginx/html -k ec-256
+    ~/.acme.sh/acme.sh --installcert -d $domain --key-file /etc/nginx/certs/$domain.key --fullchain-file /etc/nginx/certs/$domain.cer --ecc
+    ;;
+    2)
+    ~/.acme.sh/acme.sh --issue -d $domain --webroot /etc/nginx/html -k ec-256
+    ~/.acme.sh/acme.sh --installcert -d $domain --key-file /etc/nginx/certs/$domain.key --fullchain-file /etc/nginx/certs/$domain.cer --ecc
+    ;;
+    esac
+    /etc/nginx/sbin/nginx -s stop
+}
+
+
 #安装程序主体
 install_v2ray_ws_tls()
 {
@@ -684,24 +704,9 @@ install_v2ray_ws_tls()
 ##清除垃圾完成
 
 
-##获取证书
-    /etc/nginx/sbin/nginx
     curl https://get.acme.sh | sh
     ~/.acme.sh/acme.sh --upgrade --auto-upgrade
-    case "$domainconfig" in
-    1)
-    ~/.acme.sh/acme.sh --issue -d $domain -d www.$domain --webroot /etc/nginx/html -k ec-256
-    ~/.acme.sh/acme.sh --installcert -d $domain --key-file /etc/nginx/certs/$domain.key --fullchain-file /etc/nginx/certs/$domain.cer --ecc
-    ;;
-    2)
-    ~/.acme.sh/acme.sh --issue -d $domain --webroot /etc/nginx/html -k ec-256
-    ~/.acme.sh/acme.sh --installcert -d $domain --key-file /etc/nginx/certs/$domain.key --fullchain-file /etc/nginx/certs/$domain.cer --ecc
-    ;;
-    esac
-    /etc/nginx/sbin/nginx -s stop
-##获取证书完成
-
-
+    get_certs
     bash <(curl -L -s https://install.direct/go.sh)                       #安装v2ray
 
 
@@ -807,9 +812,10 @@ start_menu()
     tyblue "*****************************************************"
     green  "1.安装v2ray-WebSocket(ws)+TLS(1.3)+Web(内含bbr安装选项)"
     red    "2.删除v2ray-WebSocket(ws)+TLS(1.3)+Web"
-    tyblue "3.升级v2ray"
-    tyblue "4.仅安装bbr"
-    yellow "5.退出脚本"
+    tyblue "3.更换域名和TLS配置"
+    tyblue "4.升级v2ray"
+    tyblue "5.仅安装bbr(2)"
+    yellow "6.退出脚本"
     echo
     read -p "请输入数字：" menu
     case "$menu" in
@@ -821,14 +827,20 @@ start_menu()
     green  "v2ray-WebSocket(ws)+TLS(1.3)+Web已删除"
     ;;
     3)
-    bash <(curl -L -s https://install.direct/go.sh)
+    readDomain
+    readTlsConfig
+    get_certs
+    configtls
     ;;
     4)
+    bash <(curl -L -s https://install.direct/go.sh)
+    ;;
+    5)
     install_bbr
     rm -rf *bbr.*
     rm -rf bbr2.s*
     ;;
-    5)
+    6)
     ;;
     *)
     clear
