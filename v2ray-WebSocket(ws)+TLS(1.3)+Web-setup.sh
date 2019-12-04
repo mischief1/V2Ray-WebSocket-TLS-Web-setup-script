@@ -830,6 +830,12 @@ start_menu()
     readDomain
     readTlsConfig
     get_certs
+    port=`grep port /etc/v2ray/config.json`
+    port=${port##*' '}
+    port=${port%%,*}
+    path=`grep path /etc/v2ray/config.json`
+    path=${path#*/}
+    path=${path%'"'*}
     configtls
     ;;
     4)
