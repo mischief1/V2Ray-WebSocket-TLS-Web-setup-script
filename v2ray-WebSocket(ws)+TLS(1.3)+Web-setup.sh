@@ -640,6 +640,7 @@ get_certs()
 {
     cp /etc/nginx/conf/nginx.conf.default /etc/nginx/conf/nginx.conf
     /etc/nginx/sbin/nginx -s stop
+    sleep 1s
     /etc/nginx/sbin/nginx
     case "$domainconfig" in
     1)
