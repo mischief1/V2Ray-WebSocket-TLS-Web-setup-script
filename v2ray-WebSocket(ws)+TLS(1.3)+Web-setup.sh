@@ -230,7 +230,6 @@ server {
     ssl_certificate_key   /etc/nginx/certs/$domain.key;
     ssl_protocols         TLSv1.3;
     ssl_ciphers           TLS_AES_128_GCM_SHA256:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_256_GCM_SHA384;
-    ssl_prefer_server_ciphers on;
     return 301 https://$domain\$request_uri;
 }
 server {
@@ -247,7 +246,6 @@ server {
     ssl_certificate_key   /etc/nginx/certs/$domain.key;
     ssl_protocols         TLSv1.3;
     ssl_ciphers           TLS_AES_128_GCM_SHA256:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_256_GCM_SHA384;
-    ssl_prefer_server_ciphers on;
     root /etc/nginx/html/$domain;
     index index.html;
     location /$path {
@@ -275,7 +273,6 @@ server {
     ssl_certificate_key   /etc/nginx/certs/$domain.key;
     ssl_protocols         TLSv1.3;
     ssl_ciphers           TLS_AES_128_GCM_SHA256:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_256_GCM_SHA384;
-    ssl_prefer_server_ciphers on;
     return 301 https://$domain\$request_uri;
 }
 server {
@@ -292,7 +289,6 @@ server {
     ssl_certificate_key   /etc/nginx/certs/$domain.key;
     ssl_protocols         TLSv1.3;
     ssl_ciphers           TLS_AES_128_GCM_SHA256:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_256_GCM_SHA384;
-    ssl_prefer_server_ciphers on;
     root /etc/nginx/html/$domain;
     index index.html;
     location /$path {
@@ -324,7 +320,6 @@ server {
     ssl_certificate_key   /etc/nginx/certs/$domain.key;
     ssl_protocols         TLSv1.3 TLSv1.2;
     ssl_ciphers           TLS_AES_128_GCM_SHA256:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_256_GCM_SHA384:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305;
-    ssl_prefer_server_ciphers on;
     return 301 https://$domain\$request_uri;
 }
 server {
@@ -341,7 +336,6 @@ server {
     ssl_certificate_key   /etc/nginx/certs/$domain.key;
     ssl_protocols         TLSv1.3 TLSv1.2;
     ssl_ciphers           TLS_AES_128_GCM_SHA256:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_256_GCM_SHA384:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305;
-    ssl_prefer_server_ciphers on;
     root /etc/nginx/html/$domain;
     index index.html;
     location /$path {
@@ -369,7 +363,6 @@ server {
     ssl_certificate_key   /etc/nginx/certs/$domain.key;
     ssl_protocols         TLSv1.3 TLSv1.2;
     ssl_ciphers           TLS_AES_128_GCM_SHA256:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_256_GCM_SHA384:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305;
-    ssl_prefer_server_ciphers on;
     return 301 https://$domain\$request_uri;
 }
 server {
@@ -386,7 +379,6 @@ server {
     ssl_certificate_key   /etc/nginx/certs/$domain.key;
     ssl_protocols         TLSv1.3 TLSv1.2;
     ssl_ciphers           TLS_AES_128_GCM_SHA256:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_256_GCM_SHA384:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305;
-    ssl_prefer_server_ciphers on;
     root /etc/nginx/html/$domain;
     index index.html;
     location /$path {
