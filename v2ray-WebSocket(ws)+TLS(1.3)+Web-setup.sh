@@ -812,10 +812,11 @@ start_menu()
     tyblue "*****************************************************"
     green  "1.安装v2ray-WebSocket(ws)+TLS(1.3)+Web(内含bbr安装选项)"
     red    "2.删除v2ray-WebSocket(ws)+TLS(1.3)+Web"
-    tyblue "3.更换域名和TLS配置"
-    tyblue "4.升级v2ray"
-    tyblue "5.仅安装bbr(2)"
-    yellow "6.退出脚本"
+    tyblue "3.重启v2ray-WebSocket(ws)+TLS(1.3)+Web服务(对于玄学断连/掉速有奇效)"
+    tyblue "4.更换域名和TLS配置"
+    tyblue "5.升级v2ray"
+    tyblue "6.仅安装bbr(2)"
+    yellow "7.退出脚本"
     echo
     read -p "请输入数字：" menu
     case "$menu" in
@@ -827,6 +828,11 @@ start_menu()
     green  "v2ray-WebSocket(ws)+TLS(1.3)+Web已删除"
     ;;
     3)
+    /etc/nginx/sbin/nginx -s stop
+    service v2ray restart
+    /etc/nginx/sbin/nginx
+    ;;
+    4)
     readDomain
     readTlsConfig
     get_certs
@@ -839,15 +845,15 @@ start_menu()
     configtls
     /etc/nginx/sbin/nginx
     ;;
-    4)
+    5)
     bash <(curl -L -s https://install.direct/go.sh)
     ;;
-    5)
+    6)
     install_bbr
     rm -rf *bbr.*
     rm -rf bbr2.s*
     ;;
-    6)
+    7)
     ;;
     *)
     clear
