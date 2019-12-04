@@ -837,6 +837,7 @@ start_menu()
     path=${path#*/}
     path=${path%'"'*}
     configtls
+    /etc/nginx/sbin/nginx
     ;;
     4)
     bash <(curl -L -s https://install.direct/go.sh)
