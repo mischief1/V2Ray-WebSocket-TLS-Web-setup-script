@@ -62,30 +62,6 @@ readDomain()
 }
 
 
-#检查ip地址是否正确
-if_ip()
-{
-    tyblue "您的服务器ip地址是不是\"$networkip\"？(y/n)"
-    read if_ip_correct
-    case "$if_ip_correct" in
-    y)
-    ;;
-    n)
-    clear
-    tyblue "请输入您的服务器ip地址"
-    read networkip
-    ;;
-    *)
-    clear
-    red    "请输入y/n"
-    sleep 2s
-    clear
-    if_ip
-    ;;
-    esac
-}
-
-
 #选择tls配置
 readTlsConfig()
 {
@@ -243,15 +219,13 @@ EOF
         1)
 cat > /etc/nginx/conf.d/v2ray.conf<<EOF
 server {
-    listen 80;
-    listen [::]:80;
-    server_name $networkip;
+    listen 80 default_server;
+    listen [::]:80 default_server;
     return 301 https://$domain\$request_uri;
 }
 server {
-    listen 443;
-    listen [::]:443;
-    server_name $networkip;
+    listen 443 default_server;
+    listen [::]:443 default_server;
     ssl_certificate       /etc/nginx/certs/$domain.cer;
     ssl_certificate_key   /etc/nginx/certs/$domain.key;
     return 301 https://$domain\$request_uri;
@@ -292,15 +266,13 @@ EOF
         2)
 cat > /etc/nginx/conf.d/v2ray.conf<<EOF
 server {
-    listen 80;
-    listen [::]:80;
-    server_name $networkip;
+    listen 80 default_server;
+    listen [::]:80 default_server;
     return 301 https://$domain\$request_uri;
 }
 server {
-    listen 443;
-    listen [::]:443;
-    server_name $networkip;
+    listen 443 default_server;
+    listen [::]:443 default_server;
     ssl_certificate       /etc/nginx/certs/$domain.cer;
     ssl_certificate_key   /etc/nginx/certs/$domain.key;
     return 301 https://$domain\$request_uri;
@@ -339,15 +311,13 @@ EOF
         1)
 cat > /etc/nginx/conf.d/v2ray.conf<<EOF
 server {
-    listen 80;
-    listen [::]:80;
-    server_name $networkip;
+    listen 80 default_server;
+    listen [::]:80 default_server;
     return 301 https://$domain\$request_uri;
 }
 server {
-    listen 443;
-    listen [::]:443;
-    server_name $networkip;
+    listen 443 default_server;
+    listen [::]:443 default_server;
     ssl_certificate       /etc/nginx/certs/$domain.cer;
     ssl_certificate_key   /etc/nginx/certs/$domain.key;
     return 301 https://$domain\$request_uri;
@@ -388,15 +358,13 @@ EOF
         2)
 cat > /etc/nginx/conf.d/v2ray.conf<<EOF
 server {
-    listen 80;
-    listen [::]:80;
-    server_name $networkip;
+    listen 80 default_server;
+    listen [::]:80 default_server;
     return 301 https://$domain\$request_uri;
 }
 server {
-    listen 443;
-    listen [::]:443;
-    server_name $networkip;
+    listen 443 default_server;
+    listen [::]:443 default_server;
     ssl_certificate       /etc/nginx/certs/$domain.cer;
     ssl_certificate_key   /etc/nginx/certs/$domain.key;
     return 301 https://$domain\$request_uri;
@@ -678,10 +646,6 @@ install_v2ray_ws_tls()
     readDomain                                                                                      #读取域名
     apt install -y curl
     yum install -y curl
-    clear
-    red    "获取ip中。。。"
-    networkip=`curl -L -s https://ipecho.net/plain`
-    if_ip
     readTlsConfig
     yum install -y gperftools-devel libatomic_ops-devel pcre-devel zlib-devel libxslt-devel gd-devel perl-ExtUtils-Embed geoip-devel lksctp-tools-devel libxml2-devel gcc gcc-c++ wget unzip                   ##libxml2-devel非必须
     apt install -y libgoogle-perftools-dev libatomic-ops-dev libperl-dev libxslt-dev zlib1g-dev libpcre3-dev libgeoip-dev libgd-dev libxml2-dev libsctp-dev miredo g++ wget gcc unzip                                          ##libxml2-dev非必须,miredo非必须(装了可支持ipv6)
