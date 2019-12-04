@@ -638,7 +638,7 @@ setsshd()
 #获取证书
 get_certs()
 {
-    cp /etc/nginx/nginx.conf.default /etc/nginx/nginx.conf
+    cp /etc/nginx/conf/nginx.conf.default /etc/nginx/conf/nginx.conf
     /etc/nginx/sbin/nginx -s stop
     /etc/nginx/sbin/nginx
     case "$domainconfig" in
