@@ -38,8 +38,8 @@ readDomain()
     tyblue "如:www.abcd.com，pan.abcd.com，abcd.com，abcd2.com算不同域名"
     echo
     tyblue "********************请输入域名解析情况********************"
-    tyblue "1.一级域名和  www.一级域名  都解析到此服务器上"
-    tyblue "2.仅一级域名或某个二(三)级域名解析到此服务器上"
+    tyblue "1.一级域名和  www.一级域名  都解析到此服务器上(支持cdn解析)"
+    tyblue "2.仅一级域名或某个二(三)级域名解析到此服务器上(支持cdn解析)"
     read -p "请输入数字：" domainconfig
     case "$domainconfig" in
     1)
