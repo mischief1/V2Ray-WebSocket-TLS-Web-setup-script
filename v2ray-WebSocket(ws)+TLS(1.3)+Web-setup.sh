@@ -803,7 +803,11 @@ install_v2ray_ws_tls()
     rm -rf openssl-1.1.1d.tar.gz
     rm -rf openssl-1.1.1d
     rm -rf nginx-1.17.6
-    wget https://www.openssl.org/source/openssl-1.1.1d.tar.gz
+    if ! wget https://www.openssl.org/source/openssl-1.1.1d.tar.gz ; then
+        red    "获取openssl失败"
+        yellow "你的服务器貌似没有联网呢，请检查网络连接"
+        exit
+    fi
     tar -zxf openssl-1.1.1d.tar.gz
     wget https://nginx.org/download/nginx-1.17.6.tar.gz
     tar -zxf nginx-1.17.6.tar.gz
@@ -844,7 +848,11 @@ install_v2ray_ws_tls()
     rm -rf /etc/nginx/html/$domain
     mkdir /etc/nginx/html/$domain
 ##下载网站模板，用于伪装
-    wget -P /etc/nginx/html/$domain https://github.com/kirin10000/v2ray-WebSocket-TLS-Web-setup-script/raw/master/Website-Template.zip
+    if ! wget -P /etc/nginx/html/$domain https://github.com/kirin10000/v2ray-WebSocket-TLS-Web-setup-script/raw/master/Website-Template.zip ; then
+        red    "获取网站模板失败"
+        yellow "你的服务器貌似不支持ipv4，已终止"
+        exit
+    fi
     unzip -d /etc/nginx/html/$domain /etc/nginx/html/$domain/*.zip
     rm -rf /etc/nginx/html/$domain/*.zip
     /etc/nginx/sbin/nginx
