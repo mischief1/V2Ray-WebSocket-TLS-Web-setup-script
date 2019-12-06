@@ -674,6 +674,7 @@ install_bbr()
     tyblue "****即将安装bbr加速，安装完成后可能会重启，若重启，请再次运行此脚本完成剩余安装****"
     yellow "按回车键以继续。。。。"
     read asfyerbsd
+    rm -rf bbr.sh
     wget --no-check-certificate https://github.com/teddysun/across/raw/master/bbr.sh
     chmod +x bbr.sh
     ./bbr.sh
@@ -687,6 +688,7 @@ install_bbr()
     red    "警告：不支持的系统安装bbr2会导致系统崩溃(可正常安装bbr1)"
     yellow "按回车键以继续。。。。"
     read asfyerbsd
+    rm -rf bbr2.sh
     wget https://github.com/yeyingorg/bbr2.sh/raw/master/bbr2.sh
     chmod +x bbr2.sh
     ./bbr2.sh
@@ -696,6 +698,7 @@ install_bbr()
     tyblue "****即将安装bbr2加速，安装完成后服务器将会重启，重启后，请再次运行此脚本完成剩余安装****"
     yellow "按回车键以继续。。。。"
     read asfyerbsd
+    rm -rf bbr2.sh
     wget https://github.com/jackjieYYY/bbr2/raw/master/bbr2.sh
     chmod +x bbr2.sh
     ./bbr2.sh
@@ -782,6 +785,9 @@ install_v2ray_ws_tls()
     doupdate
     uninstall_firewall
     install_bbr
+    rm -rf bbr.sh
+    rm -rf bbr2.sh
+    rm -rf install_bbr.log*
     readDomain                                                                                      #读取域名
     readTlsConfig
     yum install -y gperftools-devel libatomic_ops-devel pcre-devel zlib-devel libxslt-devel gd-devel perl-ExtUtils-Embed geoip-devel lksctp-tools-devel libxml2-devel gcc gcc-c++ wget unzip curl                   ##libxml2-devel非必须
@@ -793,6 +799,10 @@ install_v2ray_ws_tls()
 
 
 ##安装nginx
+    rm -rf nginx-1.17.6.tar.gz
+    rm -rf openssl-1.1.1d.tar.gz
+    rm -rf openssl-1.1.1d
+    rm -rf nginx-1.17.6
     wget https://www.openssl.org/source/openssl-1.1.1d.tar.gz
     tar -zxf openssl-1.1.1d.tar.gz
     wget https://nginx.org/download/nginx-1.17.6.tar.gz
@@ -806,20 +816,12 @@ install_v2ray_ws_tls()
     make install
     mkdir /etc/nginx/certs
     mkdir /etc/nginx/conf.d
-##安装nignx完成
-
-
-##清除垃圾
     cd ..
-    rm -rf nginx-1.17.6
-    rm -rf *bbr.*
-    rm -rf bbr2.s*
     rm -rf nginx-1.17.6.tar.gz
-    rm -rf nginx-1.17.6.tar.gz*
     rm -rf openssl-1.1.1d.tar.gz
-    rm -rf openssl-1.1.1d.tar.gz*
     rm -rf openssl-1.1.1d
-##清除垃圾完成
+    rm -rf nginx-1.17.6
+##安装nignx完成
 
 
     curl https://get.acme.sh | sh
