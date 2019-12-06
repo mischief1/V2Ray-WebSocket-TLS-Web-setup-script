@@ -276,7 +276,7 @@ server {
     listen 80;
     listen [::]:80;
     server_name $domain;
-    return 301 https://\$server_name\$request_uri;
+    return 301 https://\$host\$request_uri;
 }
 server {
     listen 443 ssl http2;
@@ -365,8 +365,126 @@ server {
     listen 80;
     listen [::]:80;
     server_name $domain;
-    return 301 https://\$server_name\$request_uri;
+    return 301 https://\$host\$request_uri;
 }
+server {
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
+    server_name $domain;
+    ssl_certificate       /etc/nginx/certs/$domain.cer;
+    ssl_certificate_key   /etc/nginx/certs/$domain.key;
+    ssl_protocols         TLSv1.3 TLSv1.2;
+    ssl_ciphers           ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305;
+    root /etc/nginx/html/$domain;
+    index index.html;
+    location /$path {
+        proxy_redirect off;
+        proxy_pass http://127.0.0.1:$port;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade \$http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_set_header Host \$http_host;
+    }
+}
+EOF
+        ;;
+        esac
+    ;;
+    esac
+}
+
+
+#配置新域名tls
+new_tls()
+{
+    case "$tlsVersion" in
+    1)
+        case "$domainconfig" in
+        1)
+        old_domain=$(grep -m 1 "server_name" /etc/nginx/conf.d/v2ray.conf)
+        old_domain=${old_domain%';'*}
+        sed -i "0,/$old_domain/s//$old_domain $domain www.$domain/" /etc/nginx/conf.d/v2ray.conf
+cat >> /etc/nginx/conf.d/v2ray.conf<<EOF
+server {
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
+    server_name $domain www.$domain;
+    ssl_certificate       /etc/nginx/certs/$domain.cer;
+    ssl_certificate_key   /etc/nginx/certs/$domain.key;
+    ssl_protocols         TLSv1.3;
+    root /etc/nginx/html/$domain;
+    index index.html;
+    location /$path {
+        proxy_redirect off;
+        proxy_pass http://127.0.0.1:$port;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade \$http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_set_header Host \$http_host;
+    }
+}
+EOF
+        ;;
+        2)
+        old_domain=$(grep -m 1 "server_name" /etc/nginx/conf.d/v2ray.conf)
+        old_domain=${old_domain%';'*}
+        sed -i "0,/$old_domain/s//$old_domain $domain/" /etc/nginx/conf.d/v2ray.conf
+cat >> /etc/nginx/conf.d/v2ray.conf<<EOF
+server {
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
+    server_name $domain;
+    ssl_certificate       /etc/nginx/certs/$domain.cer;
+    ssl_certificate_key   /etc/nginx/certs/$domain.key;
+    ssl_protocols         TLSv1.3;
+    root /etc/nginx/html/$domain;
+    index index.html;
+    location /$path {
+        proxy_redirect off;
+        proxy_pass http://127.0.0.1:$port;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade \$http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_set_header Host \$http_host;
+    }
+}
+EOF
+        ;;
+        esac
+    ;;
+    2)
+        case "$domainconfig" in
+        1)
+        old_domain=$(grep -m 1 "server_name" /etc/nginx/conf.d/v2ray.conf)
+        old_domain=${old_domain%';'*}
+        sed -i "0,/$old_domain/s//$old_domain $domain www.$domain/" /etc/nginx/conf.d/v2ray.conf
+cat >> /etc/nginx/conf.d/v2ray.conf<<EOF
+server {
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
+    server_name $domain www.$domain;
+    ssl_certificate       /etc/nginx/certs/$domain.cer;
+    ssl_certificate_key   /etc/nginx/certs/$domain.key;
+    ssl_protocols         TLSv1.3 TLSv1.2;
+    ssl_ciphers           ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305;
+    root /etc/nginx/html/$domain;
+    index index.html;
+    location /$path {
+        proxy_redirect off;
+        proxy_pass http://127.0.0.1:$port;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade \$http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_set_header Host \$http_host;
+    }
+}
+EOF
+        ;;
+        2)
+        old_domain=$(grep -m 1 "server_name" /etc/nginx/conf.d/v2ray.conf)
+        old_domain=${old_domain%';'*}
+        sed -i "0,/$old_domain/s//$old_domain $domain/" /etc/nginx/conf.d/v2ray.conf
+cat >> /etc/nginx/conf.d/v2ray.conf<<EOF
 server {
     listen 443 ssl http2;
     listen [::]:443 ssl http2;
@@ -722,7 +840,7 @@ install_v2ray_ws_tls()
 
 
 ##配置v2ray文件
-    sed -i 0,/}],/s/}],/}],rsa/ /etc/v2ray/config.json
+    sed -i 0,/}],/s//}],rsa/ /etc/v2ray/config.json
     sed -i s#}],rsa#,\"streamSettings\":{\"network\"# /etc/v2ray/config.json
     sed -i s#\"network\"#\"network\":\"ws\",\"wsSettings\":{\"pa# /etc/v2ray/config.json
     sed -i s#gs\":{\"pa#gs\":{\"path\":\"/$path\"}}}],# /etc/v2ray/config.json
