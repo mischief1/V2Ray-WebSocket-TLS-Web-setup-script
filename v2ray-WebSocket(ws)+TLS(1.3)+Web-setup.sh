@@ -677,7 +677,7 @@ install_bbr()
     rm -rf bbr.sh
     if ! wget --no-check-certificate https://github.com/teddysun/across/raw/master/bbr.sh ; then
         red    "获取bbr脚本失败"
-        yellow "你的服务器貌似不支持ipv4，已终止"
+        yellow "你的服务器貌似没联网，或不支持ipv4，已终止"
         exit
     fi
     chmod +x bbr.sh
@@ -695,7 +695,7 @@ install_bbr()
     rm -rf bbr2.sh
     if ! wget https://github.com/yeyingorg/bbr2.sh/raw/master/bbr2.sh ; then
         red    "获取bbr2脚本失败"
-        yellow "你的服务器貌似不支持ipv4，已终止"
+        yellow "你的服务器貌似没联网，或不支持ipv4，已终止"
         exit
     fi
     chmod +x bbr2.sh
@@ -709,7 +709,7 @@ install_bbr()
     rm -rf bbr2.sh
     if ! wget https://github.com/jackjieYYY/bbr2/raw/master/bbr2.sh ; then
         red    "获取bbr2脚本失败"
-        yellow "你的服务器貌似不支持ipv4，已终止"
+        yellow "你的服务器貌似没联网，或不支持ipv4，已终止"
         exit
     fi
     chmod +x bbr2.sh
