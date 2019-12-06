@@ -773,6 +773,17 @@ get_certs()
 }
 
 
+##下载网站模板，用于伪装
+get_web()
+{
+    rm -rf /etc/nginx/html/$domain
+    mkdir /etc/nginx/html/$domain
+    wget -P /etc/nginx/html/$domain https://github.com/kirin10000/v2ray-WebSocket-TLS-Web-setup-script/raw/master/Website-Template.zip
+    unzip -d /etc/nginx/html/$domain /etc/nginx/html/$domain/*.zip
+    rm -rf /etc/nginx/html/$domain/*.zip
+}
+
+
 #安装程序主体
 install_v2ray_ws_tls()
 {
@@ -849,12 +860,7 @@ install_v2ray_ws_tls()
 
 
     configtls                                                              ##配置nginx
-    rm -rf /etc/nginx/html/$domain
-    mkdir /etc/nginx/html/$domain
-##下载网站模板，用于伪装
-    wget -P /etc/nginx/html/$domain https://github.com/kirin10000/v2ray-WebSocket-TLS-Web-setup-script/raw/master/Website-Template.zip
-    unzip -d /etc/nginx/html/$domain /etc/nginx/html/$domain/*.zip
-    rm -rf /etc/nginx/html/$domain/*.zip
+    get_web
     /etc/nginx/sbin/nginx
 
 
@@ -973,6 +979,7 @@ start_menu()
     path=${path#*/}
     path=${path%'"'*}
     configtls
+    get_web
     /etc/nginx/sbin/nginx
     ;;
     5)
@@ -986,12 +993,7 @@ start_menu()
     path=${path#*/}
     path=${path%'"'*}
     new_tls
-    rm -rf /etc/nginx/html/$domain
-    mkdir /etc/nginx/html/$domain
-##下载网站模板，用于伪装
-    wget -P /etc/nginx/html/$domain https://github.com/kirin10000/v2ray-WebSocket-TLS-Web-setup-script/raw/master/Website-Template.zip
-    unzip -d /etc/nginx/html/$domain /etc/nginx/html/$domain/*.zip
-    rm -rf /etc/nginx/html/$domain/*.zip
+    get_web
     /etc/nginx/sbin/nginx
     ;;
     6)
