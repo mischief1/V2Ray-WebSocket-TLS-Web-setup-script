@@ -859,7 +859,7 @@ install_v2ray_ws_tls()
     ~/.acme.sh/acme.sh --upgrade --auto-upgrade
     get_certs
     if ! bash <(curl -L -s https://install.direct/go.sh) ; then
-        yellow "你的服务器貌似没有联网呢，请检查网络连接"
+        yellow "你的服务器貌似不支持ipv4，已终止"
         exit
     fi
 
@@ -1012,12 +1012,16 @@ start_menu()
     /etc/nginx/sbin/nginx
     ;;
     6)
-    bash <(curl -L -s https://install.direct/go.sh)
+    if ! bash <(curl -L -s https://install.direct/go.sh) ; then
+        yellow "你的服务器貌似没有联网，或不支持ipv4，已终止"
+        exit
+    fi
     ;;
     7)
     install_bbr
-    rm -rf *bbr.*
-    rm -rf bbr2.s*
+    rm -rf bbr.sh
+    rm -rf bbr2.sh
+    rm -rf install_bbr.log*
     ;;
     8)
     ;;
