@@ -675,7 +675,11 @@ install_bbr()
     yellow "按回车键以继续。。。。"
     read asfyerbsd
     rm -rf bbr.sh
-    wget --no-check-certificate https://github.com/teddysun/across/raw/master/bbr.sh
+    if ! wget --no-check-certificate https://github.com/teddysun/across/raw/master/bbr.sh ; then
+        red    "获取bbr脚本失败"
+        yellow "你的服务器貌似不支持ipv4，已终止"
+        exit
+    fi
     chmod +x bbr.sh
     ./bbr.sh
     ;;
@@ -689,7 +693,11 @@ install_bbr()
     yellow "按回车键以继续。。。。"
     read asfyerbsd
     rm -rf bbr2.sh
-    wget https://github.com/yeyingorg/bbr2.sh/raw/master/bbr2.sh
+    if ! wget https://github.com/yeyingorg/bbr2.sh/raw/master/bbr2.sh ; then
+        red    "获取bbr2脚本失败"
+        yellow "你的服务器貌似不支持ipv4，已终止"
+        exit
+    fi
     chmod +x bbr2.sh
     ./bbr2.sh
     ;;
@@ -699,7 +707,11 @@ install_bbr()
     yellow "按回车键以继续。。。。"
     read asfyerbsd
     rm -rf bbr2.sh
-    wget https://github.com/jackjieYYY/bbr2/raw/master/bbr2.sh
+    if ! wget https://github.com/jackjieYYY/bbr2/raw/master/bbr2.sh ; then
+        red    "获取bbr2脚本失败"
+        yellow "你的服务器貌似不支持ipv4，已终止"
+        exit
+    fi
     chmod +x bbr2.sh
     ./bbr2.sh
     ;;
@@ -846,7 +858,10 @@ install_v2ray_ws_tls()
     curl https://get.acme.sh | sh
     ~/.acme.sh/acme.sh --upgrade --auto-upgrade
     get_certs
-    bash <(curl -L -s https://install.direct/go.sh)
+    if ! bash <(curl -L -s https://install.direct/go.sh) ; then
+        yellow "你的服务器貌似没有联网呢，请检查网络连接"
+        exit
+    fi
 
 
 ##获取端口、id和path
