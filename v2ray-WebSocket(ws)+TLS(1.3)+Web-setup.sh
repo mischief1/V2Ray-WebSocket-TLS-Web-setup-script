@@ -931,7 +931,7 @@ start_menu()
     green  "1.安装v2ray-WebSocket(ws)+TLS(1.3)+Web(内含bbr安装选项)"
     red    "2.删除v2ray-WebSocket(ws)+TLS(1.3)+Web"
     tyblue "3.重启v2ray-WebSocket(ws)+TLS(1.3)+Web服务(对于玄学断连/掉速有奇效)"
-    tyblue "4.更换域名和TLS配置(会覆盖原有域名)"
+    tyblue "4.更换域名和TLS配置(会覆盖原有域名配置，配置过程中域名输错了造成v2ray无法启动可以用此选项修复)"
     tyblue "5.添加域名和TLS配置(不同域名可以有不同的TLS配置)"
     tyblue "6.升级v2ray"
     tyblue "7.仅安装bbr(2)"
