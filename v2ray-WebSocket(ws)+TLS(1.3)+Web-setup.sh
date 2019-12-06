@@ -778,7 +778,11 @@ get_web()
 {
     rm -rf /etc/nginx/html/$domain
     mkdir /etc/nginx/html/$domain
-    wget -P /etc/nginx/html/$domain https://github.com/kirin10000/v2ray-WebSocket-TLS-Web-setup-script/raw/master/Website-Template.zip
+    if ! wget -P /etc/nginx/html/$domain https://github.com/kirin10000/v2ray-WebSocket-TLS-Web-setup-script/raw/master/Website-Template.zip ; then
+        red    "获取网站模板失败"
+        yellow "你的服务器貌似不支持ipv4，已终止"
+        exit
+    fi
     unzip -d /etc/nginx/html/$domain /etc/nginx/html/$domain/*.zip
     rm -rf /etc/nginx/html/$domain/*.zip
 }
@@ -842,11 +846,7 @@ install_v2ray_ws_tls()
     curl https://get.acme.sh | sh
     ~/.acme.sh/acme.sh --upgrade --auto-upgrade
     get_certs
-    if ! bash <(curl -L -s https://install.direct/go.sh) ; then
-        red    "获取网站模板失败"
-        yellow "你的服务器貌似不支持ipv4，已终止"
-        exit
-    fi
+    bash <(curl -L -s https://install.direct/go.sh)
 
 
 ##获取端口、id和path
