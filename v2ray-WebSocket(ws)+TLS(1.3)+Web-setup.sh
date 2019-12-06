@@ -90,8 +90,8 @@ readTlsConfig()
 }
 
 
-#配置nginx
-configtls()
+#配置nginx(部分)
+configtls_part()
 {
 cat > /etc/nginx/conf/nginx.conf <<EOF
 
@@ -213,6 +213,13 @@ http {
 
 }
 EOF
+}
+
+
+#配置nginx
+configtls()
+{
+    configtls_part
     case "$tlsVersion" in
     1)
         case "$domainconfig" in
@@ -397,6 +404,7 @@ EOF
 #配置新域名tls
 new_tls()
 {
+    configtls_part
     case "$tlsVersion" in
     1)
         case "$domainconfig" in
