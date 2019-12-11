@@ -885,14 +885,14 @@ install_v2ray_ws_tls()
 
 
 ##配置v2ray文件
-    sed -i 's/"protocol"/"listen":"127.0.0.1",\n    &/' config.json
-    sed -i '/"level"/d' config.json
-    hang=`sed -n '/outbounds/=' config.json`
+    sed -i 's/"protocol"/"listen":"127.0.0.1",\n    &/' /etc/v2ray/config.json
+    sed -i '/"level"/d' /etc/v2ray/config.json
+    hang=`sed -n '/"outbounds"/=' /etc/v2ray/config.json`
     hang=$(($hang+1))
-    hanglast=`sed -n '$=' config.json`
-    sed -i "${hang},${hanglast}d" config.json
-    echo '"protocol":"freedom"}]' >> config.json
-    echo { >> config.json
+    hanglast=`sed -n '$=' /etc/v2ray/config.json`
+    sed -i "${hang},${hanglast}d" /etc/v2ray/config.json
+    echo '"protocol":"freedom"}]' >> /etc/v2ray/config.json
+    echo '}' >> /etc/v2ray/config.json
     sed -i 's#}],#,"streamSettings":{"network"#' /etc/v2ray/config.json
     sed -i 's#"network"#&:"ws","wsSettings":{"pa#' /etc/v2ray/config.json
     sed -i s#gs\":{\"pa#\&th\":\"/$path\"}}}],# /etc/v2ray/config.json
