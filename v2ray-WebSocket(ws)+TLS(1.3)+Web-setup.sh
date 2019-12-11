@@ -899,8 +899,8 @@ install_v2ray_ws_tls()
 ##配置v2ray文件完成
 
 
-    /etc/nginx/sbin/nginx
     service v2ray restart
+    /etc/nginx/sbin/nginx
     case "$domainconfig" in
     1)
     clear
