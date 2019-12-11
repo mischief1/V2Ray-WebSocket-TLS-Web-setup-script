@@ -677,8 +677,9 @@ install_bbr()
     rm -rf bbr.sh
     if ! wget --no-check-certificate https://github.com/teddysun/across/raw/master/bbr.sh ; then
         red    "获取bbr脚本失败"
-        yellow "你的服务器貌似没联网，或不支持ipv4，已终止"
-        exit
+        red    "你的服务器貌似没联网，或不支持ipv4"
+        yellow "按回车键继续或者按ctrl+c终止"
+        read asfyerbsd
     fi
     chmod +x bbr.sh
     ./bbr.sh
@@ -695,8 +696,9 @@ install_bbr()
     rm -rf bbr2.sh
     if ! wget https://github.com/yeyingorg/bbr2.sh/raw/master/bbr2.sh ; then
         red    "获取bbr2脚本失败"
-        yellow "你的服务器貌似没联网，或不支持ipv4，已终止"
-        exit
+        red    "你的服务器貌似没联网，或不支持ipv4"
+        yellow "按回车键继续或者按ctrl+c终止"
+        read asfyerbsd
     fi
     chmod +x bbr2.sh
     ./bbr2.sh
@@ -709,8 +711,9 @@ install_bbr()
     rm -rf bbr2.sh
     if ! wget https://github.com/jackjieYYY/bbr2/raw/master/bbr2.sh ; then
         red    "获取bbr2脚本失败"
-        yellow "你的服务器貌似没联网，或不支持ipv4，已终止"
-        exit
+        yellow "你的服务器貌似没联网，或不支持ipv4"
+        yellow "按回车键继续或者按ctrl+c终止"
+        read asfyerbsd
     fi
     chmod +x bbr2.sh
     ./bbr2.sh
@@ -792,8 +795,9 @@ get_web()
     mkdir /etc/nginx/html/$domain
     if ! wget -P /etc/nginx/html/$domain https://github.com/kirin10000/v2ray-WebSocket-TLS-Web-setup-script/raw/master/Website-Template.zip ; then
         red    "获取网站模板失败"
-        yellow "你的服务器貌似不支持ipv4，已终止"
-        exit
+        red    "你的服务器貌似没联网，或不支持ipv4"
+        yellow "按回车键继续或者按ctrl+c终止"
+        read asfyerbsd
     fi
     unzip -d /etc/nginx/html/$domain /etc/nginx/html/$domain/*.zip
     rm -rf /etc/nginx/html/$domain/*.zip
@@ -832,8 +836,9 @@ install_v2ray_ws_tls()
     rm -rf nginx-1.17.6
     if ! wget https://www.openssl.org/source/openssl-1.1.1d.tar.gz ; then
         red    "获取openssl失败"
-        yellow "你的服务器貌似没有联网呢，请检查网络连接"
-        exit
+        red    "你的服务器貌似没有联网呢"
+        yellow "按回车键继续或者按ctrl+c终止"
+        read asfyerbsd
     fi
     tar -zxf openssl-1.1.1d.tar.gz
     wget https://nginx.org/download/nginx-1.17.6.tar.gz
@@ -859,8 +864,9 @@ install_v2ray_ws_tls()
     ~/.acme.sh/acme.sh --upgrade --auto-upgrade
     get_certs
     if ! bash <(curl -L -s https://install.direct/go.sh) ; then
-        yellow "你的服务器貌似不支持ipv4，已终止"
-        exit
+        red    "你的服务器貌似不支持ipv4"
+        yellow "按回车键继续或者按ctrl+c终止"
+        read asfyerbsd
     fi
 
 
@@ -1013,8 +1019,8 @@ start_menu()
     ;;
     6)
     if ! bash <(curl -L -s https://install.direct/go.sh) ; then
-        yellow "你的服务器貌似没有联网，或不支持ipv4，已终止"
-        exit
+        red    "你的服务器貌似没联网，或不支持ipv4，请检查网络连接"
+        yellow "v2ray更新失败"
     fi
     ;;
     7)
