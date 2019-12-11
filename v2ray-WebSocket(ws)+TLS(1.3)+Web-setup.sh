@@ -882,25 +882,24 @@ install_v2ray_ws_tls()
 
     configtls                                                              ##配置nginx
     get_web
-    /etc/nginx/sbin/nginx
 
 
 ##配置v2ray文件
     sed -i 's/"protocol"/"listen":"127.0.0.1",\n    &/' config.json
     sed -i '/"level"/d' config.json
-    sed -i 0,/}],/s//}],rsa/ /etc/v2ray/config.json
-    sed -i s#}],rsa#,\"streamSettings\":{\"network\"# /etc/v2ray/config.json
-    sed -i s#\"network\"#\"network\":\"ws\",\"wsSettings\":{\"pa# /etc/v2ray/config.json
-    sed -i s#gs\":{\"pa#gs\":{\"path\":\"/$path\"}}}],# /etc/v2ray/config.json
     hang=`sed -n '/outbounds/=' config.json`
     hang=$(($hang+1))
     hanglast=`sed -n '$=' config.json`
     sed -i "${hang},${hanglast}d" config.json
     echo '"protocol":"freedom"}]' >> config.json
     echo { >> config.json
+    sed -i 's#}],#,"streamSettings":{"network"#' /etc/v2ray/config.json
+    sed -i 's#"network"#&:"ws","wsSettings":{"pa#' /etc/v2ray/config.json
+    sed -i s#gs\":{\"pa#\&th\":\"/$path\"}}}],# /etc/v2ray/config.json
 ##配置v2ray文件完成
 
 
+    /etc/nginx/sbin/nginx
     service v2ray restart
     case "$domainconfig" in
     1)
