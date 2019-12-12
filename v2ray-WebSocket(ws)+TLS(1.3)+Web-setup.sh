@@ -892,9 +892,9 @@ install_v2ray_ws_tls()
     hang=$(($hang+1))
     hanglast=`sed -n '$=' /etc/v2ray/config.json`
     sed -i "${hang},${hanglast}d" /etc/v2ray/config.json
-    echo '        "protocol": "freedom",' >> /etc/v2ray/config.json
-    echo '        "settings": {}' >> /etc/v2ray/config.json
-    echo '    }]' >> /etc/v2ray/config.json
+    echo '    "protocol": "freedom",' >> /etc/v2ray/config.json
+    echo '    "settings": {}' >> /etc/v2ray/config.json
+    echo '  }]' >> /etc/v2ray/config.json
     echo '}' >> /etc/v2ray/config.json
     sed -i 's#}],#,"streamSettings":{"network"#' /etc/v2ray/config.json
     sed -i 's#"network"#&:"ws","wsSettings":{"pa#' /etc/v2ray/config.json
