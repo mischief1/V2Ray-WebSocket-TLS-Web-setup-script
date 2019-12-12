@@ -886,7 +886,6 @@ install_v2ray_ws_tls()
 
 ##配置v2ray文件
     sed -i 's/"protocol"/"listen": "127.0.0.1",\n    &/' /etc/v2ray/config.json
-    sed -i '/"level"/d' /etc/v2ray/config.json
     hang=`sed -n '/"outbounds"/=' /etc/v2ray/config.json`
     hang=$(($hang+1))
     hanglast=`sed -n '$=' /etc/v2ray/config.json`
