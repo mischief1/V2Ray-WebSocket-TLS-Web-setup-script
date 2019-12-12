@@ -68,12 +68,14 @@ readTlsConfig()
     clear
     tyblue "****************************************************************"
     tyblue "                     速度                        抗封锁性"
+    tyblue "TLS1.2+1.3：  ++++++++++++++++++++          ++++++++++++++++++++"
     tyblue "仅TLS1.3：    ++++++++++++++++++++          ++++++++++++++++++"
-    tyblue "TLS1.2+1.3：  ++++++++++++++++              ++++++++++++++++++++"
     tyblue "****************************************************************"
+    tyblue "经测试，当TLS1.2和TLS1.3并存的时候，v2ray会优先选择TLS1.3进行连接"
+    green  "推荐使用TLS1.2+1.3"
     echo
-    tyblue "1.仅TLS1.3"
-    tyblue "2.TLS1.2+1.3"
+    tyblue "1.TLS1.2+1.3"
+    tyblue "2.仅TLS1.3"
     read -p "请输入数字："  tlsVersion
     case "$tlsVersion" in
     1)
@@ -221,7 +223,7 @@ configtls()
 {
     configtls_part
     case "$tlsVersion" in
-    1)
+    2)
         case "$domainconfig" in
         1)
 cat > /etc/nginx/conf.d/v2ray.conf<<EOF
@@ -307,7 +309,7 @@ EOF
         ;;
         esac
     ;;
-    2)
+    1)
         case "$domainconfig" in
         1)
 cat > /etc/nginx/conf.d/v2ray.conf<<EOF
@@ -406,7 +408,7 @@ new_tls()
 {
     configtls_part
     case "$tlsVersion" in
-    1)
+    2)
         case "$domainconfig" in
         1)
         old_domain=$(grep -m 1 "server_name" /etc/nginx/conf.d/v2ray.conf)
@@ -460,7 +462,7 @@ EOF
         ;;
         esac
     ;;
-    2)
+    1)
         case "$domainconfig" in
         1)
         old_domain=$(grep -m 1 "server_name" /etc/nginx/conf.d/v2ray.conf)
