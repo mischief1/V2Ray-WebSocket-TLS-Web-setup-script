@@ -2,19 +2,19 @@
 
 
 #定义几个颜色
-function tyblue()                           #天依蓝
+tyblue()                           #天依蓝
 {
     echo -e "\033[36;1m $1 \033[0m"
 }
-function green()                            #水鸭青
+green()                            #水鸭青
 {
     echo -e "\033[32;1m $1 \033[0m"
 }
-function yellow()                           #鸭屎黄
+yellow()                           #鸭屎黄
 {
     echo -e "\033[33;1m $1 \033[0m"
 }
-function red()                              #姨妈红
+red()                              #姨妈红
 {
     echo -e "\033[31;1m $1 \033[0m"
 }
@@ -885,13 +885,15 @@ install_v2ray_ws_tls()
 
 
 ##配置v2ray文件
-    sed -i 's/"protocol"/"listen":"127.0.0.1",\n    &/' /etc/v2ray/config.json
+    sed -i 's/"protocol"/"listen": "127.0.0.1",\n    &/' /etc/v2ray/config.json
     sed -i '/"level"/d' /etc/v2ray/config.json
     hang=`sed -n '/"outbounds"/=' /etc/v2ray/config.json`
     hang=$(($hang+1))
     hanglast=`sed -n '$=' /etc/v2ray/config.json`
     sed -i "${hang},${hanglast}d" /etc/v2ray/config.json
-    echo '"protocol":"freedom"}]' >> /etc/v2ray/config.json
+    echo '        "protocol": "freedom",' >> /etc/v2ray/config.json
+    echo '        "settings": {}' >> /etc/v2ray/config.json
+    echo '    }]' >> /etc/v2ray/config.json
     echo '}' >> /etc/v2ray/config.json
     sed -i 's#}],#,"streamSettings":{"network"#' /etc/v2ray/config.json
     sed -i 's#"network"#&:"ws","wsSettings":{"pa#' /etc/v2ray/config.json
