@@ -994,8 +994,10 @@ start_menu()
     ;;
     3)
     /etc/nginx/sbin/nginx -s stop
+    sleep 1s
     service v2ray restart
     /etc/nginx/sbin/nginx
+    green  "重启完成"
     ;;
     4)
     readDomain
