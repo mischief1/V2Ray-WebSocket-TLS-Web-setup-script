@@ -994,7 +994,11 @@ start_menu()
     ;;
     3)
     /etc/nginx/sbin/nginx -s stop
-    sleep 1s
+    service network restart
+    service networking restart
+    service network-manager restart
+    service systemd-networkd restart
+    nmcli c reload
     service v2ray restart
     /etc/nginx/sbin/nginx
     green  "重启完成"
