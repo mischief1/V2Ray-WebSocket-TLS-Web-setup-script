@@ -923,8 +923,7 @@ install_v2ray_ws_tls()
     yellow "注意事项：如重新启动服务器，请执行/etc/nginx/sbin/nginx"
     echo
     red    "此脚本仅供交流学习使用，请勿使用此脚本行违法之事。网络非法外之地，行非法之事，必将接受法律制裁!!!!"
-    tyblue "脚本作者：华南理工大学某大一学生"
-    tyblue "2019.12"
+    tyblue "2019.11"
     ;;
     2)
     clear
@@ -944,8 +943,7 @@ install_v2ray_ws_tls()
     yellow "注意事项：如重新启动服务器，请执行/etc/nginx/sbin/nginx"
     echo
     red    "此脚本仅供交流学习使用，请勿使用此脚本行违法之事。网络非法外之地，行非法之事，必将接受法律制裁!!!!"
-    tyblue "脚本作者：华南理工大学某大一学生"
-    tyblue "2019.12"
+    tyblue "2019.11"
     ;;
     esac
 }
