@@ -908,7 +908,7 @@ install_v2ray_ws_tls()
     1)
     clear
     tyblue "*************安装完成*************"
-    tyblue "地址：${domain}或www.${domain}"
+    tyblue "地址：www.${domain}或${domain}"
     tyblue "端口：443"
     tyblue "ID：${v2id}"
     tyblue "额外ID：0-64(任填其一，建议4)"
