@@ -25,25 +25,32 @@
 
 Debian基系统，包括Ubuntu、Debian：
 
-`apt update && apt install wget
-`
+```bash
+apt update && apt install wget
+```
 
 redhat系统、包括Centos OS：
 
-`yum install wget
-`
+```bash
+yum install wget
+```
 
 2. 
 
-`wget "https://github.com/kirin10000/v2ray-WebSocket-TLS-Web-setup-script/raw/master/v2ray-WebSocket(ws)+TLS(1.3)+Web-setup.sh"`
+```bash
+wget "https://github.com/kirin10000/v2ray-WebSocket-TLS-Web-setup-script/raw/master/v2ray-WebSocket(ws)+TLS(1.3)+Web-setup.sh"
+```
 
 3. 
 
-`chmod +x "v2ray-WebSocket(ws)+TLS(1.3)+Web-setup.sh"`
+```bashchmod +x "v2ray-WebSocket(ws)+TLS(1.3)+Web-setup.sh"
+```
 
 4. 
 
-`./"v2ray-WebSocket(ws)+TLS(1.3)+Web-setup.sh"`
+```bash
+./"v2ray-WebSocket(ws)+TLS(1.3)+Web-setup.sh"
+```
 
 5. 根据脚本提示完成安装
 
