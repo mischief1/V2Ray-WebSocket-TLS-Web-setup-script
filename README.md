@@ -43,7 +43,8 @@ wget "https://github.com/kirin10000/v2ray-WebSocket-TLS-Web-setup-script/raw/mas
 
 3. 
 
-```bashchmod +x "v2ray-WebSocket(ws)+TLS(1.3)+Web-setup.sh"
+```bash
+chmod +x "v2ray-WebSocket(ws)+TLS(1.3)+Web-setup.sh"
 ```
 
 4. 
