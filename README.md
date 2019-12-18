@@ -23,8 +23,15 @@
 
 1.
 
-`apt update && apt install wget`(debian基系统，包括Ubuntu、Debian)
-`yum install wget`(redhat系统、包括Centos OS)
+Debian基系统，包括Ubuntu、Debian：
+
+`apt update && apt install wget
+`
+
+redhat系统、包括Centos OS：
+
+`yum install wget
+`
 
 2. 
 
