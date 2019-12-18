@@ -20,15 +20,23 @@
 6.使用acme.sh自动申请域名证书
  
 用法：
+
 1.
+
 `apt update && apt install wget`(debian基系统，包括Ubuntu、Debian)
 `yum install wget`(redhat系统、包括Centos OS)
 
-2. wget "https://github.com/kirin10000/v2ray-WebSocket-TLS-Web-setup-script/raw/master/v2ray-WebSocket(ws)+TLS(1.3)+Web-setup.sh"
+2. 
 
-3. chmod +x "v2ray-WebSocket(ws)+TLS(1.3)+Web-setup.sh"
+`wget "https://github.com/kirin10000/v2ray-WebSocket-TLS-Web-setup-script/raw/master/v2ray-WebSocket(ws)+TLS(1.3)+Web-setup.sh"`
 
-4. ./"v2ray-WebSocket(ws)+TLS(1.3)+Web-setup.sh"
+3. 
+
+`chmod +x "v2ray-WebSocket(ws)+TLS(1.3)+Web-setup.sh"`
+
+4. 
+
+`./"v2ray-WebSocket(ws)+TLS(1.3)+Web-setup.sh"`
 
 5. 根据脚本提示完成安装
 
