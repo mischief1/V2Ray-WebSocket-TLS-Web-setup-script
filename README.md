@@ -29,7 +29,7 @@ Debian基系统，包括Ubuntu、Debian：
 apt update && apt install wget
 ```
 
-redhat系统、包括CentOS：
+Red Hat系统、包括CentOS：
 
 ```bash
 yum install wget
