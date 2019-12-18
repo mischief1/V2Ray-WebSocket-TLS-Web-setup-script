@@ -11,7 +11,7 @@
 
 1.集成安装bbr(2)加速 
  
-2.支持多种系统(ubuntu centos debian ...) 
+2.支持多种系统(Ubuntu CentOS Debian ...) 
  
 3.集成TLS配置多版本安装选项 
  
@@ -21,7 +21,7 @@
 
 6.使用acme.sh自动申请域名证书
  
-## 用法
+## 脚本使用说明
 
 ### 1. 安装wget
 
