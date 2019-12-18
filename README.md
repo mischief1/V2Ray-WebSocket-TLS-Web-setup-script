@@ -70,3 +70,5 @@ chmod +x "v2ray-WebSocket(ws)+TLS(1.3)+Web-setup.sh"
 3.bbr脚本来自：https://github.com/teddysun/across/blob/master/bbr.sh
 
 4.bbr2脚本来自：https://github.com/yeyingorg/bbr2.sh (ubuntu debian) https://github.com/jackjieYYY/bbr2 (centos)
+
+5.此脚本仅供交流学习使用，请勿使用此脚本行违法之事。网络非法外之地，行非法之事，必将接受法律制裁！！
