@@ -606,22 +606,6 @@ get_certs()
 }
 
 
-##下载网站模板，用于伪装
-get_web()
-{
-    rm -rf /etc/nginx/html/$domain
-    mkdir /etc/nginx/html/$domain
-    if ! wget -P /etc/nginx/html/$domain https://github.com/kirin10000/v2ray-WebSocket-TLS-Web-setup-script/raw/master/Website-Template.zip ; then
-        red    "获取网站模板失败"
-        red    "你的服务器貌似没联网，或不支持ipv4"
-        yellow "按回车键继续或者按ctrl+c终止"
-        read rubbish
-    fi
-    unzip -q -d /etc/nginx/html/$domain /etc/nginx/html/$domain/*.zip
-    rm -rf /etc/nginx/html/$domain/*.zip
-}
-
-
 #安装程序主体
 install_v2ray_ws_tls()
 {
@@ -699,7 +683,6 @@ install_v2ray_ws_tls()
 
 
     configtls                                                              ##配置nginx
-    get_web
 
 
 ##配置v2ray文件
@@ -855,7 +838,6 @@ start_menu()
             path=${path#*/}
             path=${path%'"'*}
             configtls
-            get_web
             /etc/nginx/sbin/nginx
             green "重置域名完成！！"
             case "$domainconfig" in
@@ -878,7 +860,6 @@ start_menu()
             path=${path#*/}
             path=${path%'"'*}
             new_tls
-            get_web
             /etc/nginx/sbin/nginx
             green "添加域名完成！！"
             case "$domainconfig" in
