@@ -521,8 +521,6 @@ install_bbr()
                 fi
                 chmod +x bbr.sh
                 ./bbr.sh
-            else
-                green "********************bbr已安装********************"
             fi
             ;;
         2)
