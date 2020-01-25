@@ -504,18 +504,26 @@ install_bbr()
     done
     case "$bbrconfig" in
         1)
-            tyblue "****即将安装bbr加速，安装完成后可能会重启，若重启，请再次运行此脚本完成剩余安装****"
-            yellow "按回车键以继续。。。。"
-            read rubbish
-            rm -rf bbr.sh
-            if ! wget --no-check-certificate https://github.com/teddysun/across/raw/master/bbr.sh ; then
-                red    "获取bbr脚本失败"
-                red    "你的服务器貌似没联网，或不支持ipv4"
-                yellow "按回车键继续或者按ctrl+c终止"
-                read rubbish
+            if ! grep -q "#This file has been edited by v2ray-WebSocket-TLS-Web-setup-script" /etc/sysctl.conf ; then
+                echo 'net.ipv4.tcp_congestion_control = bbr' >> /etc/sysctl.conf
+                echo '#This file has been edited by v2ray-WebSocket-TLS-Web-setup-script' >> /etc/sysctl.conf
             fi
-            chmod +x bbr.sh
-            ./bbr.sh
+            if ! sysctl -p | sysctl -a | grep "net.ipv4.tcp_congestion_control" | grep -q "bbr" ; then
+                tyblue "****即将安装bbr加速，安装完成后可能会重启，若重启，请再次运行此脚本完成剩余安装****"
+                yellow "按回车键以继续。。。。"
+                read rubbish
+                rm -rf bbr.sh
+                if ! wget --no-check-certificate https://github.com/teddysun/across/raw/master/bbr.sh ; then
+                    red    "获取bbr脚本失败"
+                    red    "你的服务器貌似没联网，或不支持ipv4"
+                    yellow "按回车键继续或者按ctrl+c终止"
+                    read rubbish
+                fi
+                chmod +x bbr.sh
+                ./bbr.sh
+            else
+                green "********************bbr已安装********************"
+            fi
             ;;
         2)
             tyblue "*********************即将安装bbr2加速，安装完成后服务器将会重启*********************"
@@ -712,7 +720,7 @@ install_v2ray_ws_tls()
             tyblue "端口：443"
             tyblue "ID：${v2id}"
             tyblue "额外ID：0"
-            tyblue "加密方式：任意(推荐：none)"
+            tyblue "加密方式：一般情况推荐none;若使用了cdn，推荐auto"
             tyblue "传输协议：ws"
             tyblue "伪装类型：none"
             tyblue "伪装域名：空"
@@ -733,7 +741,7 @@ install_v2ray_ws_tls()
             tyblue "端口：443"
             tyblue "ID：${v2id}"
             tyblue "额外ID：0"
-            tyblue "加密方式：任意(推荐：none)"
+            tyblue "加密方式：一般情况推荐none;若使用了cdn，推荐auto"
             tyblue "传输协议：ws"
             tyblue "伪装类型：none"
             tyblue "伪装域名：空"
@@ -776,6 +784,10 @@ change_dns()
 start_menu()
 {
     stty erase '^H'
+    if [ "$EUID" != "0" ]; then
+        red "请用root用户运行此脚本！！"
+        exit 1
+    fi
     clear
     tyblue "*****************************************************"
     tyblue "v2ray  WebSocket(ws)+TLS(1.3)+Web  搭建脚本"
@@ -786,7 +798,7 @@ start_menu()
     tyblue "4.集成删除防火墙、阿里云盾功能"
     tyblue "5.使用nginx作为网站服务"
     tyblue "6.使用acme.sh自动申请域名证书"
-    tyblue "官网：https://github.com/kirin10000/v2ray-WebSocket-TLS-Web-setup-script"
+    tyblue "官网：https://github.com/kirin10000/V2ray-WebSocket-TLS-Web-setup-script"
     tyblue "*****************************************************"
     echo
     tyblue "*****************************************************"
