@@ -1,5 +1,5 @@
-# V2ray-WebSocket(ws)+TLS(1.3)+Web搭建脚本
-### V2ray-ws+TLS+Web搭建脚本
+# V2Ray-WebSocket(ws)+TLS(1.3)+Web搭建脚本
+### V2Ray-ws+TLS+Web搭建脚本
 此脚本需要一个解析到服务器的域名!!!!
 
 此脚本需要一个解析到服务器的域名!!!!
@@ -66,7 +66,7 @@ chmod +x "v2ray-WebSocket(ws)+TLS(1.3)+Web-setup.sh"
 
 ## 注
 
-1.本文链接(官网)：https://github.com/kirin10000/v2ray-WebSocket-TLS-Web-setup-script
+1.本文链接(官网)：https://github.com/kirin10000/V2Ray-WebSocket-TLS-Web-setup-script
 
 2.参考教程：https://www.v2ray.com/
 
