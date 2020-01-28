@@ -41,7 +41,7 @@ yum install wget
 ### 2. 获取脚本
 
 ```bash
-wget "https://github.com/kirin10000/V2ray-WebSocket-TLS-Web-setup-script/raw/master/v2ray-WebSocket(ws)+TLS(1.3)+Web-setup.sh"
+wget "https://github.com/kirin10000/V2Ray-WebSocket-TLS-Web-setup-script/raw/master/v2ray-WebSocket(ws)+TLS(1.3)+Web-setup.sh"
 ```
 
 ### 3. 增加脚本可执行权限
