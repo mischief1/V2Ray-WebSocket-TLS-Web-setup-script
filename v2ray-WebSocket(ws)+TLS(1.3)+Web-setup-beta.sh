@@ -798,7 +798,7 @@ start_menu()
     tyblue "4.集成删除防火墙、阿里云盾功能"
     tyblue "5.使用nginx作为网站服务"
     tyblue "6.使用acme.sh自动申请域名证书"
-    tyblue "官网：https://github.com/kirin10000/V2ray-WebSocket-TLS-Web-setup-script"
+    tyblue "官网：https://github.com/kirin10000/V2Ray-WebSocket-TLS-Web-setup-script"
     tyblue "*****************************************************"
     echo
     tyblue "*****************************************************"
