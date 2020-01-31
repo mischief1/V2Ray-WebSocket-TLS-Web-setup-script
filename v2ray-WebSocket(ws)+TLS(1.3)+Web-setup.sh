@@ -797,6 +797,7 @@ change_dns()
     if [ $if_change_dns == "y" ]; then
         if ! grep -q "#This file has been edited by v2ray-WebSocket-TLS-Web-setup-script" /etc/resolv.conf ; then
             sed -i 's/nameserver /#&/' /etc/resolv.conf
+            echo '#' >> /etc/resolv.conf
             echo 'nameserver 1.1.1.1' >> /etc/resolv.conf
             echo 'nameserver 1.0.0.1' >> /etc/resolv.conf
             echo '#This file has been edited by v2ray-WebSocket-TLS-Web-setup-script' >> /etc/resolv.conf
