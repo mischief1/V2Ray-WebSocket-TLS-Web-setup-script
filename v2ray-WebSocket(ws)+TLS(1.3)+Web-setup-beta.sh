@@ -833,7 +833,7 @@ turn_to_socks()
     config_v2ray_socks
     green  "配置完成！！！"
     tyblue "将下面一段文字复制下来，保存到文本文件中"
-    tyblue "天上你的其中一个域名，即原配置中“地址”一栏怎么填，这里就怎么填"
+    tyblue "将“你的域名”修改为你的其中一个域名，即原配置中“地址”一栏怎么填，这里就怎么填"
     tyblue "并将文本文件重命名为config.json"
     tyblue "然后在V2RayN/V2RayNG中，选择导入自定义配置，选择config.json"
     yellow "******************以下是文本******************"
@@ -866,7 +866,7 @@ cat <<EOF
       "settings": {
         "servers": [
           {
-            "address": "你的域名(即原“地址”一栏要填写的东西)",
+            "address": "你的域名",
             "level": 10,
             "port": 443
           }
