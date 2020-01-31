@@ -445,7 +445,7 @@ remove_v2ray_nginx()
 {
     /etc/nginx/sbin/nginx -s stop
     service v2ray stop
-    service v2ray disable
+    #service v2ray disable
     rm -rf /usr/bin/v2ray 
     rm -rf /etc/v2ray
     rm -rf /etc/nginx
@@ -680,7 +680,7 @@ install_v2ray_ws_tls()
             tyblue "**********************************"
             yellow "注意事项：如重新启动服务器，请执行/etc/nginx/sbin/nginx"
             echo
-            tyblue "脚本最后更新时间：2020.1.21"
+            tyblue "脚本最后更新时间：2020.1.31"
             echo
             red    "此脚本仅供交流学习使用，请勿使用此脚本行违法之事。网络非法外之地，行非法之事，必将接受法律制裁!!!!"
             tyblue "2019.11"
@@ -700,7 +700,7 @@ install_v2ray_ws_tls()
             tyblue "**********************************"
             yellow "注意事项：如重新启动服务器，请执行/etc/nginx/sbin/nginx"
             echo
-            tyblue "脚本最后更新时间：2020.1.21"
+            tyblue "脚本最后更新时间：2020.1.31"
             echo
             red    "此脚本仅供交流学习使用，请勿使用此脚本行违法之事。网络非法外之地，行非法之事，必将接受法律制裁!!!!"
             tyblue "2019.11"
@@ -830,6 +830,17 @@ get_info()
 #使用socks作为底层协议
 turn_to_socks()
 {
+    tyblue "此操作将会把底层协议修改为socks(5)"
+    tyblue "关于这么做的意义，参考https://github.com/v2ray/discussion/issues/513"
+    if_turn_to_socks="45"
+    while [ "$if_turn_to_socks" != "y" -a "$if_turn_to_socks" != "n" ]
+    do
+        tyblue "是否要继续?(y/n)"
+        read if_turn_to_socks
+    done
+    if [ $if_turn_to_socks == "n" ]; then
+        exit 0;
+    fi
     get_info
     config_v2ray_socks
     service v2ray restart
