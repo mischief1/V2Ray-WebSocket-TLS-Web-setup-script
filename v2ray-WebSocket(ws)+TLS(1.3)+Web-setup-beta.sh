@@ -4,19 +4,19 @@
 #定义几个颜色
 tyblue()                           #天依蓝
 {
-    echo -e "\033[36;1m${1}\033[0m"
+    echo -e "\033[36;1m ${1}\033[0m"
 }
 green()                            #水鸭青
 {
-    echo -e "\033[32;1m${1}\033[0m"
+    echo -e "\033[32;1m ${1}\033[0m"
 }
 yellow()                           #鸭屎黄
 {
-    echo -e "\033[33;1m${1}\033[0m"
+    echo -e "\033[33;1m ${1}\033[0m"
 }
 red()                              #姨妈红
 {
-    echo -e "\033[31;1m${1}\033[0m"
+    echo -e "\033[31;1m ${1}\033[0m"
 }
 
 
@@ -931,7 +931,7 @@ start_menu()
     yellow "10.退出脚本"
     echo
     menu="3345"
-    while [ "$menu" != "1" -a "$menu" != "2" -a "$menu" != "3" -a "$menu" != "4" -a "$menu" != "5" -a "$menu" != "6" -a "$menu" != "7" -a "$menu" != "8" -a "$menu" != "9" ]
+    while [ "$menu" != "1" -a "$menu" != "2" -a "$menu" != "3" -a "$menu" != "4" -a "$menu" != "5" -a "$menu" != "6" -a "$menu" != "7" -a "$menu" != "8" -a "$menu" != "9" -a "$menu" != "10" ]
     do
         read -p "您的选择是：" menu
     done
