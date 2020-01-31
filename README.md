@@ -1,4 +1,4 @@
-# V2Ray-WebSocket(ws)+TLS(1.3)+Web搭建脚本
+# V2Ray-WebSocket(ws)+TLS(1.3)+Web搭建/管理脚本
 此脚本需要一个解析到服务器的域名!!!!
 
 此脚本需要一个解析到服务器的域名!!!!
