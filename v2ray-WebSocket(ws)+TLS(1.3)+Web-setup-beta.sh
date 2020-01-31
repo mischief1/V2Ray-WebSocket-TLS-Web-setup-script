@@ -843,6 +843,10 @@ turn_to_socks()
     if [ $if_turn_to_socks == "n" ]; then
         exit 0;
     fi
+    if [ ! -e /etc/v2ray/config.json ] || [ ! -e /etc/nginx ] ; then
+        red "请先安装V2Ray-WebSocket(ws)+TLS(1.3)+Web！！"
+        exit 1;
+    fi
     get_info
     config_v2ray_socks
     service v2ray restart
@@ -940,13 +944,15 @@ start_menu()
     tyblue "  (会覆盖原有域名配置，配置过程中域名输错了造成V2Ray无法启动可以用此选项修复)"
     tyblue "5.添加域名(不同域名可以有不同的TLS配置)"
     tyblue "6.使用socks(5)作为底层传输协议(beta)"
-    tyblue "7.仅安装bbr(2)"
-    tyblue "8.修改dns"
-    tyblue "9.仅升级V2Ray"
-    yellow "10.退出脚本"
+    tyblue "7.修改ID"
+    tyblue "8.修改路径"
+    tyblue "9.仅安装bbr(2)"
+    tyblue "10.修改dns"
+    tyblue "11.仅升级V2Ray"
+    yellow "12.退出脚本"
     echo
     menu="3345"
-    while [ "$menu" != "1" -a "$menu" != "2" -a "$menu" != "3" -a "$menu" != "4" -a "$menu" != "5" -a "$menu" != "6" -a "$menu" != "7" -a "$menu" != "8" -a "$menu" != "9" -a "$menu" != "10" ]
+    while [ "$menu" != "1" -a "$menu" != "2" -a "$menu" != "3" -a "$menu" != "4" -a "$menu" != "5" -a "$menu" != "6" -a "$menu" != "7" -a "$menu" != "8" -a "$menu" != "9" -a "$menu" != "10" -a "$menu" != "11" -a "$menu" != "12" ]
     do
         read -p "您的选择是：" menu
     done
@@ -1003,15 +1009,69 @@ start_menu()
             turn_to_socks
             ;;
         7)
+            if [ ! -e /etc/v2ray/config.json ] ; then
+                red "请先安装V2Ray-WebSocket(ws)+TLS(1.3)+Web！！"
+                exit 1;
+            fi
+            if ! grep -q "id" /etc/v2ray/config.json ; then
+                red "socks模式没有ID！！"
+                exit 1;
+            fi
+            get_info
+            tyblue "您现在的ID是：$v2id"
+            if_change_id="45"
+            while [ "$if_change_id" != "y" -a "$if_change_id" != "n" ]
+            do
+                tyblue "是否要继续?(y/n)"
+                read if_change_id
+            done
+            if [ $if_change_id == "n" ]; then
+                exit 0;
+            fi
+            tyblue "*****************请输入新的ID*****************"
+            read new_v2id
+            sed -i s/"$v2id"/"$new_v2id"/ /etc/v2ray/config.json
+            service v2ray restart
+            green "更换成功！！"
+            green "新ID：$new_v2id"
+            ;;
+        8)
+            if [ ! -e /etc/v2ray/config.json ] || [ ! -e /etc/nginx ] ; then
+                red "请先安装V2Ray-WebSocket(ws)+TLS(1.3)+Web！！"
+                exit 1;
+            fi
+            get_info
+            tyblue "您现在的path是：$path"
+            if_change_path="45"
+            while [ "$if_change_path" != "y" -a "$if_change_path" != "n" ]
+            do
+                tyblue "是否要继续?(y/n)"
+                read if_change_path
+            done
+            if [ $if_change_path == "n" ]; then
+                exit 0;
+            fi
+            tyblue "*****************请输入新的path(带\"/\")*****************"
+            read new_path
+            sed -i s#"$path"#"$new_path"# /etc/v2ray/config.json
+            sed -i s#"$path"#"$new_path"# /etc/nginx/conf.d/v2ray.conf
+            service v2ray restart
+            /etc/nginx/sbin/nginx -s stop
+            sleep 1s
+            /etc/nginx/sbin/nginx
+            green "更换成功！！"
+            green "新path：$new_path"
+            ;;
+        9)
             install_bbr
             rm -rf bbr.sh
             rm -rf bbr2.sh
             rm -rf install_bbr.log*
             ;;
-        8)
+        10)
             change_dns
             ;;
-        9)
+        11)
             if ! bash <(curl -L -s https://install.direct/go.sh) ; then
                 red    "你的服务器貌似没联网，或不支持ipv4，请检查网络连接"
                 yellow "v2ray更新失败"
