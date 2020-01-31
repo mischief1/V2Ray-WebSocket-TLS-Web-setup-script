@@ -831,6 +831,7 @@ turn_to_socks()
 {
     get_info
     config_v2ray_socks
+    service v2ray restart
     green  "配置完成！！！"
     tyblue "将下面一段文字复制下来，保存到文本文件中"
     tyblue "将“你的域名”四个字修改为你的其中一个域名(保留引号)，即原配置中“地址”一栏怎么填，这里就怎么填"
