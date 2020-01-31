@@ -364,6 +364,7 @@ updateSystem()
     case "$updateconfig" in
         1)
             do-release-upgrade
+            sed -i 's/Prompt=lts/Prompt=normal/' /etc/update-manager/release-upgrades
             do-release-upgrade -d
             ;;
         2)
