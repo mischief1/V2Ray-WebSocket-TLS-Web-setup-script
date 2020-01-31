@@ -679,6 +679,7 @@ install_v2ray_ws_tls()
             tyblue "底层传输安全：tls"
             tyblue "**********************************"
             yellow "注意事项：如重新启动服务器，请执行/etc/nginx/sbin/nginx"
+            yellow "          或运行脚本，选择重启服务选项"
             echo
             tyblue "脚本最后更新时间：2020.1.31"
             echo
@@ -699,6 +700,7 @@ install_v2ray_ws_tls()
             tyblue "底层传输安全：tls"
             tyblue "**********************************"
             yellow "注意事项：如重新启动服务器，请执行/etc/nginx/sbin/nginx"
+            yellow "          或运行脚本，选择重启服务选项"
             echo
             tyblue "脚本最后更新时间：2020.1.31"
             echo
@@ -911,7 +913,7 @@ start_menu()
         exit 1
     fi
     clear
-    tyblue "*************V2Ray  WebSocket(ws)+TLS(1.3)+Web  搭建/管理脚本**************"
+    tyblue "************* V2Ray  WebSocket(ws)+TLS(1.3)+Web  搭建/管理脚本*************"
     tyblue "脚本特性："
     tyblue "1.集成安装bbr(2)加速"
     tyblue "2.支持多种系统(Ubuntu Centos Debian ...)"
@@ -933,7 +935,7 @@ start_menu()
     green  "1.安装V2Ray-WebSocket(ws)+TLS(1.3)+Web"
     green  "  (内含bbr安装选项/支持覆盖安装、升级，如要升级，先下载最新脚本再安装)"
     red    "2.删除V2Ray-WebSocket(ws)+TLS(1.3)+Web"
-    tyblue "3.重启V2Ray-WebSocket(ws)+TLS(1.3)+Web服务(对于玄学断连/掉速有奇效)"
+    tyblue "3.重启/启动V2Ray-WebSocket(ws)+TLS(1.3)+Web服务(对于玄学断连/掉速有奇效)"
     tyblue "4.重置域名和TLS配置"
     tyblue "  (会覆盖原有域名配置，配置过程中域名输错了造成V2Ray无法启动可以用此选项修复)"
     tyblue "5.添加域名(不同域名可以有不同的TLS配置)"
