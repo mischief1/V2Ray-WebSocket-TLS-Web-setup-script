@@ -471,7 +471,7 @@ install_bbr()
     yellow "重启后，请再次运行此脚本完成剩余安装"
     tyblue "*********************************************************"
     tyblue "当前内核是否支持bbr："
-    if sysctl -a | grep -q bbr ; then
+    if sysctl -a 2>&1 | grep -q bbr ; then
         green "是"
     else
         red "否，需升级内核"
