@@ -9,7 +9,7 @@
 
 ## 脚本特性
 
-1.集成安装bbr(2)加速 
+1.集成多版本bbr加速 
  
 2.支持多种系统(Ubuntu CentOS Debian ...) 
  
@@ -75,4 +75,6 @@ chmod +x "v2ray-WebSocket(ws)+TLS(1.3)+Web-setup.sh"
 
 5.bbr2脚本来自：https://github.com/yeyingorg/bbr2.sh (ubuntu debian) https://github.com/jackjieYYY/bbr2 (centos)
 
-6.此脚本仅供交流学习使用，请勿使用此脚本行违法之事。网络非法外之地，行非法之事，必将接受法律制裁！！
+6.bbrplus脚本来自：https://github.com/chiakge/Linux-NetSpeed
+
+7.此脚本仅供交流学习使用，请勿使用此脚本行违法之事。网络非法外之地，行非法之事，必将接受法律制裁！！
