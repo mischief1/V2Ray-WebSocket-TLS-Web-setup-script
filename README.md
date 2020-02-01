@@ -9,7 +9,7 @@
 
 ## 脚本特性
 
-1.集成多版本bbr加速 
+1.集成多版本bbr安装选项
  
 2.支持多种系统(Ubuntu CentOS Debian ...) 
  
