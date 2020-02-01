@@ -978,7 +978,7 @@ start_menu()
     clear
     tyblue "************* V2Ray  WebSocket(ws)+TLS(1.3)+Web  搭建/管理脚本*************"
     tyblue "脚本特性："
-    tyblue "1.集成安装bbr(2)加速"
+    tyblue "1.集成多版本bbr安装选项"
     tyblue "2.支持多种系统(Ubuntu Centos Debian ...)"
     tyblue "3.集成TLS配置多版本安装选项"
     tyblue "4.集成删除防火墙、阿里云盾功能"
@@ -1005,7 +1005,7 @@ start_menu()
     tyblue "6.使用socks(5)作为底层传输协议(beta)"
     tyblue "7.修改ID"
     tyblue "8.修改路径"
-    tyblue "9.仅安装bbr(2)"
+    tyblue "9.仅安装bbr(2)(plus)"
     tyblue "10.修改dns"
     tyblue "11.仅升级V2Ray"
     yellow "12.退出脚本"
