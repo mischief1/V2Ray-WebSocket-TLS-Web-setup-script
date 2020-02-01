@@ -455,7 +455,6 @@ remove_v2ray_nginx()
 #安装bbr
 install_bbr()
 {
-    clear
     tyblue "******************请选择要安装的bbr版本******************"
     tyblue "1.bbr"
     yellow "2.bbr2(beta)(Ubuntu、Debian)"
@@ -483,7 +482,9 @@ install_bbr()
                 echo 'net.ipv4.tcp_congestion_control = bbr' >> /etc/sysctl.conf
                 echo '#This file has been edited by v2ray-WebSocket-TLS-Web-setup-script' >> /etc/sysctl.conf
             fi
-            if ! sysctl -p | sysctl -a | grep "net.ipv4.tcp_congestion_control" | grep -q "bbr" ; then
+            sysctl -p
+            sleep 1s
+            if ! sysctl net.ipv4.tcp_congestion_control | grep -q "bbr" ; then
                 tyblue "****即将安装bbr加速，安装完成后可能会重启，若重启，请再次运行此脚本完成剩余安装****"
                 yellow "按回车键以继续。。。。"
                 read rubbish
