@@ -126,18 +126,24 @@ version_ge(){
 }
 
 get_latest_version() {
-    latest_version=($(wget -qO- https://kernel.ubuntu.com/~kernel-ppa/mainline/ | awk -F'\"v' '/v[4-9]./{print $2}' | cut -d/ -f1 | grep -v - | sort -V))
-
-    [ ${#latest_version[@]} -eq 0 ] && echo -e "${red}Error:${plain} Get latest kernel version failed." && exit 1
-
-    kernel_arr=()
-    for i in ${latest_version[@]}; do
-        if version_ge $i 4.14; then
-            kernel_arr+=($i);
+    latest_version=$(wget -qO- https://kernel.ubuntu.com/~kernel-ppa/mainline/ | awk -F'\"v' '/v[0-9]/{print $2}' | cut -d '"' -f1 | cut -d '/' -f1 | sort -rV)
+    kernel=$(echo $latest_version | cut -d ' ' -f 1)
+    if [[ $kernel =~ "rc" ]] ; then
+        kernel2=${kernel%%-*}
+        if echo $latest_version | grep " $kernel2 " ; then
+            kernel=$kernel2
         fi
-    done
+    fi
+    #[ ${#latest_version[@]} -eq 0 ] && echo -e "${red}Error:${plain} Get latest kernel version failed." && exit 1
 
-    display_menu kernel last
+    #kernel_arr=()
+    #for i in ${latest_version[@]}; do
+    #    if version_ge $i 4.14; then
+    #        kernel_arr+=($i);
+    #    fi
+    #done
+
+    #display_menu kernel last
 
     if [[ `getconf WORD_BIT` == "32" && `getconf LONG_BIT` == "64" ]]; then
         deb_name=$(wget -qO- https://kernel.ubuntu.com/~kernel-ppa/mainline/v${kernel}/ | grep "linux-image" | grep "generic" | awk -F'\">' '/amd64.deb/{print $2}' | cut -d'<' -f1 | head -1)
