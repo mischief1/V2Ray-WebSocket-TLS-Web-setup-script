@@ -328,9 +328,9 @@ updateSystem()
 {
     systemVersion=`lsb_release -r --short`
     tyblue "********************请选择升级系统版本********************"
-    tyblue "1.最新beta版(现在是20.04)(2020/01/21)"
-    tyblue "2.最新稳定版(现在是19.10)(2020/01/21)"
-    tyblue "3.最新LTS版(现在是18.04)(2020/01/21)"
+    tyblue "1.最新beta版(现在是20.04)(2020/02/01)"
+    tyblue "2.最新稳定版(现在是19.10)(2020/02/01)"
+    tyblue "3.最新LTS版(现在是18.04)(2020/02/01)"
     tyblue "*************************版本说明*************************"
     tyblue "beta版：就是测试版啦"
     tyblue "稳定版：就是稳定版啦"
@@ -344,7 +344,7 @@ updateSystem()
     yellow "5.升级过程中若有问话/对话框，如果看不懂，优先选择yes/y/第一个选项"
     yellow "6.若升级过程中与ssh断开连接，建议重置系统"
     yellow "7.升级系统后ssh超时时间将会恢复默认"
-    tyblue "8.ubuntu20.04暂不支持bbr2(支持bbr)"
+    tyblue "8.ubuntu20.04暂不支持bbr2"
     tyblue "**********************************************************"
     green  "您现在的系统版本是$systemVersion"
     tyblue "**********************************************************"
@@ -451,10 +451,22 @@ remove_v2ray_nginx()
     rm -rf /etc/nginx
 }
 
+version_ge(){
+    test "$(echo "$@" | tr " " "\n" | sort -rV | head -n 1)" == "$1"
+}
 
 #安装bbr
 install_bbr()
 {
+    kernel_version=`uname -r | cut -d - -f1`
+    version=$(wget -qO- https://kernel.ubuntu.com/~kernel-ppa/mainline/ | awk -F'\"v' '/v/{print $2}' | cut -d/ -f1  | sort -rV)
+    last_v=$(echo $version | cut -d ' ' -f 1)
+    if [[ $last_v =~ "rc" ]] ; then
+        last_v2=${last_v%%-*}
+        if echo $version | grep " $last_v2 " ; then
+            last_v=$last_v2
+        fi
+    fi
     clear
     tyblue "******************请选择要使用的bbr版本******************"
     green  "1.升级最新版内核并启用bbr(推荐)"
@@ -470,8 +482,10 @@ install_bbr()
     yellow "安装内核需重启才能生效"
     yellow "重启后，请再次运行此脚本完成剩余安装"
     tyblue "*********************************************************"
+    tyblue "当前内核版本：${kernel_version}"
+    tyblue "最新内核版本：${last_v}"
     tyblue "当前内核是否支持bbr："
-    if sysctl -a 2>&1 | grep -q bbr ; then
+    if version_ge $kernel_version 4.9 ; then
         green "是"
     else
         red "否，需升级内核"
@@ -739,7 +753,7 @@ install_v2ray_ws_tls()
             yellow "注意事项：如重新启动服务器，请执行/etc/nginx/sbin/nginx"
             yellow "          或运行脚本，选择重启服务选项"
             echo
-            tyblue "脚本最后更新时间：2020.1.31"
+            tyblue "脚本最后更新时间：2020.2.1"
             echo
             red    "此脚本仅供交流学习使用，请勿使用此脚本行违法之事。网络非法外之地，行非法之事，必将接受法律制裁!!!!"
             tyblue "2019.11"
@@ -760,7 +774,7 @@ install_v2ray_ws_tls()
             yellow "注意事项：如重新启动服务器，请执行/etc/nginx/sbin/nginx"
             yellow "          或运行脚本，选择重启服务选项"
             echo
-            tyblue "脚本最后更新时间：2020.1.31"
+            tyblue "脚本最后更新时间：2020.2.1"
             echo
             red    "此脚本仅供交流学习使用，请勿使用此脚本行违法之事。网络非法外之地，行非法之事，必将接受法律制裁!!!!"
             tyblue "2019.11"
