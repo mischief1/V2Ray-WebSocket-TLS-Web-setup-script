@@ -470,12 +470,12 @@ install_bbr()
     yellow "安装内核需重启才能生效"
     yellow "重启后，请再次运行此脚本完成剩余安装"
     tyblue "*********************************************************"
-    tyblue "当前内核是否支持bbr："
-    if sysctl -a 2>&1 | grep -q bbr ; then
-        green "是"
-    else
-        red "否，需升级内核"
-    fi
+    #tyblue "当前内核是否支持bbr："
+    #if sysctl -a 2>&1 | grep -q bbr ; then
+    #    green "是"
+    #else
+    #    red "否，需升级内核"
+    #fi
     tyblue "bbr启用状态："
     if sysctl net.ipv4.tcp_congestion_control | grep -q bbr ; then
         bbr_info=`sysctl net.ipv4.tcp_congestion_control`
