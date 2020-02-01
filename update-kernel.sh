@@ -313,7 +313,7 @@ install_bbr() {
             if_continue=""
             while [ "$if_continue" != "y" -a "$if_continue" != "n" ]
             do
-                read "是否要继续？(y/n)" if_continue
+                read -p "是否要继续？(y/n)" if_continue
             done
             if [ $if_continue == "n" ] ; then
                 exit 0
