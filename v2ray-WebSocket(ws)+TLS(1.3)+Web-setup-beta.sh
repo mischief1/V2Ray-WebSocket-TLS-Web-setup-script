@@ -512,6 +512,7 @@ install_bbr()
                 red "如果重启仍然无效，请尝试选择2选项"
             else
                 green "********************bbr已安装********************"
+                sleep 1s
             fi
             install_bbr
             ;;
@@ -535,6 +536,7 @@ install_bbr()
                 ./bbr.sh
             else
                 green "********************bbr已安装********************"
+                sleep 1s
             fi
             install_bbr
             ;;
