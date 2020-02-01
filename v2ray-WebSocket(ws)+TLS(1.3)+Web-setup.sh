@@ -23,7 +23,6 @@ red()                              #姨妈红
 #读取域名
 readDomain()
 {
-    clear
     tyblue "**********************关于域名的说明**********************"
     tyblue "假设你的域名是abcd.com，则:"
     tyblue "一级域名为:abcd.com(主机记录为 @ )"
@@ -61,7 +60,6 @@ readDomain()
 #选择tls配置
 readTlsConfig()
 {
-    clear
     tyblue "****************************************************************"
     tyblue "                     速度                        抗封锁性"
     tyblue "TLS1.2+1.3：  ++++++++++++++++++++          ++++++++++++++++++++"
@@ -329,7 +327,6 @@ EOF
 updateSystem()
 {
     systemVersion=`lsb_release -r --short`
-    clear
     tyblue "********************请选择升级系统版本********************"
     tyblue "1.最新beta版(现在是20.04)(2020/01/21)"
     tyblue "2.最新稳定版(现在是19.10)(2020/01/21)"
@@ -364,14 +361,18 @@ updateSystem()
     case "$updateconfig" in
         1)
             do-release-upgrade
+            do-release-upgrade
             sed -i 's/Prompt=lts/Prompt=normal/' /etc/update-manager/release-upgrades
+            do-release-upgrade -d
             do-release-upgrade -d
             ;;
         2)
             sed -i 's/Prompt=lts/Prompt=normal/' /etc/update-manager/release-upgrades
             do-release-upgrade
+            do-release-upgrade
             ;;
         3)
+            do-release-upgrade
             do-release-upgrade
             ;;
     esac
@@ -384,7 +385,6 @@ updateSystem()
 #升级系统组件
 doupdate()
 {
-    clear
     tyblue "*******************是否将更新系统组件？*******************"
     green  "1.更新已安装软件，并升级系统(仅对ubuntu有效)"
     green  "2.仅更新已安装软件"
@@ -479,6 +479,7 @@ install_bbr()
     case "$bbrconfig" in
         1)
             if ! grep -q "#This file has been edited by v2ray-WebSocket-TLS-Web-setup-script" /etc/sysctl.conf ; then
+                echo ' ' >> /etc/sysctl.conf
                 echo 'net.ipv4.tcp_congestion_control = bbr' >> /etc/sysctl.conf
                 echo '#This file has been edited by v2ray-WebSocket-TLS-Web-setup-script' >> /etc/sysctl.conf
             fi
@@ -552,6 +553,7 @@ setsshd()
     done
     case "$ifsetsshd" in
         y)
+            echo ' ' >> /etc/ssh/sshd_config
             echo "ClientAliveInterval 30" >> /etc/ssh/sshd_config
             echo "ClientAliveCountMax 60" >> /etc/ssh/sshd_config
             echo "#This file has been edited by v2ray-WebSocket-TLS-Web-setup-script" >> /etc/ssh/sshd_config
@@ -797,7 +799,7 @@ change_dns()
     if [ $if_change_dns == "y" ]; then
         if ! grep -q "#This file has been edited by v2ray-WebSocket-TLS-Web-setup-script" /etc/resolv.conf ; then
             sed -i 's/nameserver /#&/' /etc/resolv.conf
-            echo '#' >> /etc/resolv.conf
+            echo ' ' >> /etc/resolv.conf
             echo 'nameserver 1.1.1.1' >> /etc/resolv.conf
             echo 'nameserver 1.0.0.1' >> /etc/resolv.conf
             echo '#This file has been edited by v2ray-WebSocket-TLS-Web-setup-script' >> /etc/resolv.conf
