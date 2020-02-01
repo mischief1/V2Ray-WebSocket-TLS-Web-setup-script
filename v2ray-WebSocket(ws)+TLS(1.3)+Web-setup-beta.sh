@@ -479,6 +479,7 @@ install_bbr()
     case "$bbrconfig" in
         1)
             if ! grep -q "#This file has been edited by v2ray-WebSocket-TLS-Web-setup-script" /etc/sysctl.conf ; then
+                echo ' ' >> /etc/sysctl.conf
                 echo 'net.ipv4.tcp_congestion_control = bbr' >> /etc/sysctl.conf
                 echo '#This file has been edited by v2ray-WebSocket-TLS-Web-setup-script' >> /etc/sysctl.conf
             fi
@@ -552,6 +553,7 @@ setsshd()
     done
     case "$ifsetsshd" in
         y)
+            echo ' ' >> /etc/ssh/sshd_config
             echo "ClientAliveInterval 30" >> /etc/ssh/sshd_config
             echo "ClientAliveCountMax 60" >> /etc/ssh/sshd_config
             echo "#This file has been edited by v2ray-WebSocket-TLS-Web-setup-script" >> /etc/ssh/sshd_config
@@ -797,7 +799,7 @@ change_dns()
     if [ $if_change_dns == "y" ]; then
         if ! grep -q "#This file has been edited by v2ray-WebSocket-TLS-Web-setup-script" /etc/resolv.conf ; then
             sed -i 's/nameserver /#&/' /etc/resolv.conf
-            echo '#' >> /etc/resolv.conf
+            echo ' ' >> /etc/resolv.conf
             echo 'nameserver 1.1.1.1' >> /etc/resolv.conf
             echo 'nameserver 1.0.0.1' >> /etc/resolv.conf
             echo '#This file has been edited by v2ray-WebSocket-TLS-Web-setup-script' >> /etc/resolv.conf
