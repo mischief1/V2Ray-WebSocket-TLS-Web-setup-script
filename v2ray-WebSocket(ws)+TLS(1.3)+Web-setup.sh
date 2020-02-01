@@ -455,6 +455,7 @@ remove_v2ray_nginx()
 #安装bbr
 install_bbr()
 {
+    clear
     tyblue "******************请选择要使用的bbr版本******************"
     green  "1.升级最新版内核并启用bbr(推荐)"
     tyblue "2.启用bbr(如果内核不支持，将自动升级内核)"
