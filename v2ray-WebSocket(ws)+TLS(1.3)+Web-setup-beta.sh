@@ -455,43 +455,78 @@ remove_v2ray_nginx()
 #安装bbr
 install_bbr()
 {
-    tyblue "******************请选择要安装的bbr版本******************"
-    tyblue "1.bbr"
-    yellow "2.bbr2(beta)(Ubuntu、Debian)"
-    yellow "3.bbr2(beta)(Centos)"
-    red    "4.不安装"
-    tyblue "*********************************************************"
-    echo
-    tyblue "********************关于bbr加速的说明********************"
+    tyblue "******************请选择要使用的bbr版本******************"
+    green  "1.升级最新版内核并启用bbr(推荐)"
+    tyblue "2.启用bbr(如果内核不支持，将自动升级内核)"
+    yellow "3.启用bbr2(需安装第三方内核)(Ubuntu、Debian)"
+    yellow "4.启用bbr2(需安装第三方内核)(Centos)"
+    yellow "5.启用bbrplus/魔改版bbr(需安装第三方内核)"
+    tyblue "6.退出bbr安装"
+    tyblue "******************关于安装bbr加速的说明******************"
     yellow "bbr加速可以大幅提升网络速度，建议安装"
-    yellow "bbr2目前还在测试阶段，可能造成各种系统不稳定，甚至崩溃"
-    yellow "bbr加速安装完成后系统可能会重启"
-    yellow "若重启，请再次运行此脚本完成剩余安装"
-    tyblue "装过一遍就不需要再装啦"
+    tyblue "新版本内核的bbr比旧版强得多，最新版本内核的bbr强于bbrplus"
+    yellow "安装第三方内核可能造成各种系统不稳定，甚至无法开机"
+    yellow "安装内核需重启才能生效"
+    yellow "重启后，请再次运行此脚本完成剩余安装"
     tyblue "*********************************************************"
-    echo
-    bbrconfig=7
-    while [ "$bbrconfig" != "1" -a "$bbrconfig" != "2" -a "$bbrconfig" != "3" -a "$bbrconfig" != "4" ]
+    tyblue "当前内核是否支持bbr："
+    if sysctl -a | grep -q bbr ; then
+        green "是"
+    else
+        red "否，需升级内核"
+    fi
+    tyblue "bbr启用状态："
+    if sysctl net.ipv4.tcp_congestion_control | grep -q bbr ; then
+        bbr_info=`sysctl net.ipv4.tcp_congestion_control`
+        bbr_info=${bbr_info#*=}
+        green "正在使用：${bbr_info}"
+    else
+        red "bbr未启用！！"
+    fi
+    bbrconfig=100
+    while [ "$bbrconfig" != "1" -a "$bbrconfig" != "2" -a "$bbrconfig" != "3" -a "$bbrconfig" != "4" -a "$bbrconfig" != "5" -a "$bbrconfig" != "6" ]
     do
         read -p "您的选择是：" bbrconfig
     done
     case "$bbrconfig" in
         1)
-            if ! grep -q "#This file has been edited by v2ray-WebSocket-TLS-Web-setup-script" /etc/sysctl.conf ; then
-                echo ' ' >> /etc/sysctl.conf
-                echo 'net.ipv4.tcp_congestion_control = bbr' >> /etc/sysctl.conf
-                echo '#This file has been edited by v2ray-WebSocket-TLS-Web-setup-script' >> /etc/sysctl.conf
+            sed -i '/net.core.default_qdisc/d' /etc/sysctl.conf
+            sed -i '/net.ipv4.tcp_congestion_control/d' /etc/sysctl.conf
+            echo ' ' >> /etc/sysctl.conf
+            echo 'net.ipv4.tcp_congestion_control = bbr' >> /etc/sysctl.conf
+            sysctl -p
+            rm -rf update-kernel.sh
+            if ! wget https://github.com/kirin10000/V2Ray-WebSocket-TLS-Web-setup-script/raw/master/update-kernel.sh ; then
+                red    "获取内核升级脚本失败"
+                red    "你的服务器貌似没联网，或不支持ipv4"
+                yellow "可以尝试一下修改DNS(搭建脚本里有这个选项)"
+                yellow "按回车键继续或者按ctrl+c终止"
+                read rubbish
             fi
+            chmod +x update-kernel.sh
+            ./update-kernel.sh
+            if ! sysctl net.ipv4.tcp_congestion_control | grep -q "bbr" ; then
+                red "开启bbr失败！！"
+                red "如果刚安装完内核，请先重启！！"
+                red "如果重启仍然无效，请尝试选择2选项"
+            else
+                green "********************bbr已安装********************"
+            fi
+            install_bbr
+            ;;
+        2)
+            sed -i '/net.core.default_qdisc/d' /etc/sysctl.conf
+            sed -i '/net.ipv4.tcp_congestion_control/d' /etc/sysctl.conf
+            echo ' ' >> /etc/sysctl.conf
+            echo 'net.ipv4.tcp_congestion_control = bbr' >> /etc/sysctl.conf
             sysctl -p
             sleep 1s
             if ! sysctl net.ipv4.tcp_congestion_control | grep -q "bbr" ; then
-                tyblue "****即将安装bbr加速，安装完成后可能会重启，若重启，请再次运行此脚本完成剩余安装****"
-                yellow "按回车键以继续。。。。"
-                read rubbish
                 rm -rf bbr.sh
-                if ! wget --no-check-certificate https://github.com/teddysun/across/raw/master/bbr.sh ; then
+                if ! wget https://github.com/teddysun/across/raw/master/bbr.sh ; then
                     red    "获取bbr脚本失败"
                     red    "你的服务器貌似没联网，或不支持ipv4"
+                    yellow "可以尝试一下修改DNS(搭建脚本里有这个选项)"
                     yellow "按回车键继续或者按ctrl+c终止"
                     read rubbish
                 fi
@@ -500,8 +535,9 @@ install_bbr()
             else
                 green "********************bbr已安装********************"
             fi
+            install_bbr
             ;;
-        2)
+        3)
             tyblue "*********************即将安装bbr2加速，安装完成后服务器将会重启*********************"
             tyblue "重启后，请再次选择这个选项完成bbr2剩余部分安装(开启bbr和ECN)"
             tyblue "目前已知支持bbr2系统：Ubuntu16.04 —— 19.10、Debian 8 9 10"
@@ -513,27 +549,46 @@ install_bbr()
             if ! wget https://github.com/yeyingorg/bbr2.sh/raw/master/bbr2.sh ; then
                 red    "获取bbr2脚本失败"
                 red    "你的服务器貌似没联网，或不支持ipv4"
+                yellow "可以尝试一下修改DNS(搭建脚本里有这个选项)"
                 yellow "按回车键继续或者按ctrl+c终止"
                 read rubbish
             fi
             chmod +x bbr2.sh
             ./bbr2.sh
+            install_bbr
             ;;
-        3)
-            tyblue "****即将安装bbr2加速，安装完成后服务器将会重启，重启后，请再次运行此脚本完成剩余安装****"
-            yellow "按回车键以继续。。。。"
-            read rubbish
+        4)
             rm -rf bbr2.sh
             if ! wget https://github.com/jackjieYYY/bbr2/raw/master/bbr2.sh ; then
                 red    "获取bbr2脚本失败"
                 yellow "你的服务器貌似没联网，或不支持ipv4"
+                yellow "可以尝试一下修改DNS(搭建脚本里有这个选项)"
                 yellow "按回车键继续或者按ctrl+c终止"
                 read rubbish
             fi
             chmod +x bbr2.sh
             ./bbr2.sh
+            install_bbr
+            ;;
+        5)
+            rm -rf tcp.sh
+            if ! wget "https://raw.githubusercontent.com/chiakge/Linux-NetSpeed/master/tcp.sh" ; then
+                red    "获取bbrplus脚本失败"
+                yellow "你的服务器貌似没联网，或不支持ipv4"
+                yellow "可以尝试一下修改DNS(搭建脚本里有这个选项)"
+                yellow "按回车键继续或者按ctrl+c终止"
+                read rubbish
+            fi
+            chmod +x tcp.sh
+            ./tcp.sh
+            install_bbr
             ;;
     esac
+    rm -rf bbr.sh
+    rm -rf update-kernel.sh
+    rm -rf tcp.sh
+    rm -rf bbr2.sh
+    rm -rf install_bbr.log*
 }
 
 
@@ -603,9 +658,6 @@ install_v2ray_ws_tls()
     doupdate
     uninstall_firewall
     install_bbr
-    rm -rf bbr.sh
-    rm -rf bbr2.sh
-    rm -rf install_bbr.log*
     readDomain                                                                                      #读取域名
     readTlsConfig
     yum install -y gperftools-devel libatomic_ops-devel pcre-devel zlib-devel libxslt-devel gd-devel perl-ExtUtils-Embed geoip-devel lksctp-tools-devel libxml2-devel gcc gcc-c++ wget unzip curl                   ##libxml2-devel非必须
@@ -1068,9 +1120,6 @@ start_menu()
             ;;
         9)
             install_bbr
-            rm -rf bbr.sh
-            rm -rf bbr2.sh
-            rm -rf install_bbr.log*
             ;;
         10)
             change_dns
