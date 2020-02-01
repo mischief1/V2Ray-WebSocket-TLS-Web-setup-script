@@ -238,9 +238,11 @@ install_elrepo() {
     rpm --import https://www.elrepo.org/RPM-GPG-KEY-elrepo.org
 
     if centosversion 6; then
-        rpm -Uvh https://www.elrepo.org/elrepo-release-6-9.el6.elrepo.noarch.rpm
+        yum install -y https://www.elrepo.org/elrepo-release-6-9.el6.elrepo.noarch.rpm
     elif centosversion 7; then
-        rpm -Uvh https://www.elrepo.org/elrepo-release-7.0-4.el7.elrepo.noarch.rpm
+        yum install -y https://www.elrepo.org/elrepo-release-7.0-4.el7.elrepo.noarch.rpm
+    elif centosversion 8; then
+        yum install -y https://www.elrepo.org/elrepo-release-8.0-2.el8.elrepo.noarch.rpm
     fi
 
     if [ ! -f /etc/yum.repos.d/elrepo.repo ]; then
@@ -307,6 +309,15 @@ install_bbr() {
         [ ! "$(command -v yum-config-manager)" ] && yum install -y yum-utils > /dev/null 2>&1
         [ x"$(yum-config-manager elrepo-kernel | grep -w enabled | awk '{print $3}')" != x"True" ] && yum-config-manager --enable elrepo-kernel > /dev/null 2>&1
         if centosversion 6; then
+            echo "Centos 6太老了，不能更新最新内核，只能更新到4.18.20"
+            if_continue=""
+            while [ "$if_continue" != "y" -a "$if_continue" != "n" ]
+            do
+                read "是否要继续？(y/n)" if_continue
+            done
+            if [ $if_continue == "n" ] ; then
+                exit 0
+            fi
             if is_64bit; then
                 rpm_kernel_name="kernel-ml-4.18.20-1.el6.elrepo.x86_64.rpm"
                 rpm_kernel_devel_name="kernel-ml-devel-4.18.20-1.el6.elrepo.x86_64.rpm"
@@ -346,6 +357,12 @@ install_bbr() {
                 echo -e "${red}Error:${plain} Install latest kernel failed, please check it."
                 exit 1
             fi
+        elif centosversion 8; then
+            yum -y install kernel-ml kernel-ml-devel
+            if [ $? -ne 0 ]; then
+                echo -e "${red}Error:${plain} Install latest kernel failed, please check it."
+                exit 1
+            fi
         fi
     elif [[ x"${release}" == x"debian" || x"${release}" == x"ubuntu" ]]; then
         rm -rf kernel_
@@ -375,11 +392,11 @@ echo " OS      : $opsy"
 echo " Arch    : $arch ($lbit Bit)"
 echo " Kernel  : $kern"
 echo "----------------------------------------"
-echo " Auto install latest kernel for TCP BBR"
+echo " Auto install latest kernel"
 echo
 echo " URL: https://teddysun.com/489.html"
 echo "----------------------------------------"
-echo
+echo "######更  新  内  核######"
 echo "Press any key to start...or Press Ctrl+C to cancel"
 char=`get_char`
 
