@@ -22,16 +22,16 @@ cur_dir=$(pwd)
 
 if [ -f /etc/redhat-release ]; then
     release="centos"
-elif cat /etc/issue | grep -Eqi "debian"; then
-    release="debian"
 elif cat /etc/issue | grep -Eqi "ubuntu"; then
     release="ubuntu"
+elif cat /etc/issue | grep -Eqi "debian"; then
+    release="debian"
 elif cat /etc/issue | grep -Eqi "centos|red hat|redhat"; then
     release="centos"
-elif cat /proc/version | grep -Eqi "debian"; then
-    release="debian"
 elif cat /proc/version | grep -Eqi "ubuntu"; then
     release="ubuntu"
+elif cat /proc/version | grep -Eqi "debian"; then
+    release="debian"
 elif cat /proc/version | grep -Eqi "centos|red hat|redhat"; then
     release="centos"
 else
@@ -364,7 +364,7 @@ install_bbr() {
                 exit 1
             fi
         fi
-    elif [[ x"${release}" == x"debian" || x"${release}" == x"ubuntu" ]]; then
+    elif [[ x"${release}" == x"ubuntu" ]]; then
         rm -rf kernel_
         mkdir kernel_
         cd kernel_
@@ -375,6 +375,9 @@ install_bbr() {
         dpkg -i *
         cd ..
         rm -rf kernel_
+    elif [[ x"${release}" == x"debian" ]]; then
+        echo "暂不支持debian升级内核"
+        exit 1
     else
         echo -e "${red}Error:${plain} OS is not be supported, please change to CentOS/Debian/Ubuntu and try again."
         exit 1
@@ -396,7 +399,7 @@ echo " Auto install latest kernel"
 echo
 echo " URL: https://teddysun.com/489.html"
 echo "----------------------------------------"
-echo "######更  新  内  核######"
+echo "     更       新       内       核"
 echo "Press any key to start...or Press Ctrl+C to cancel"
 char=`get_char`
 
