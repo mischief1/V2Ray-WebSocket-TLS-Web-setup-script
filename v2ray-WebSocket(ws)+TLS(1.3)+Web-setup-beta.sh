@@ -361,14 +361,18 @@ updateSystem()
     case "$updateconfig" in
         1)
             do-release-upgrade
+            do-release-upgrade
             sed -i 's/Prompt=lts/Prompt=normal/' /etc/update-manager/release-upgrades
+            do-release-upgrade -d
             do-release-upgrade -d
             ;;
         2)
             sed -i 's/Prompt=lts/Prompt=normal/' /etc/update-manager/release-upgrades
             do-release-upgrade
+            do-release-upgrade
             ;;
         3)
+            do-release-upgrade
             do-release-upgrade
             ;;
     esac
