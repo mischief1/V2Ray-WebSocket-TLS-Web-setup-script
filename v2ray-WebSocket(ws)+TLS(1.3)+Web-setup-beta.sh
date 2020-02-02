@@ -362,8 +362,6 @@ updateSystem()
         1)
             do-release-upgrade
             do-release-upgrade
-            do-release-upgrade -d
-            do-release-upgrade -d
             sed -i 's/Prompt=lts/Prompt=normal/' /etc/update-manager/release-upgrades
             do-release-upgrade -d
             do-release-upgrade -d
@@ -460,14 +458,23 @@ version_ge(){
 #安装bbr
 install_bbr()
 {
-    kernel_version=`uname -r | cut -d - -f1`
-    version=$(wget -qO- https://kernel.ubuntu.com/~kernel-ppa/mainline/ | awk -F'\"v' '/v/{print $2}' | cut -d/ -f1  | sort -rV)
+    kernel_version=`uname -r | cut -d - -f 1`
+    version=$(wget -qO- https://kernel.ubuntu.com/~kernel-ppa/mainline/ | awk -F'\"v' '/v[0-9]/{print $2}' | cut -d '"' -f1 | cut -d '/' -f1 | sort -rV)
     last_v=$(echo $version | cut -d ' ' -f 1)
-    if [[ $last_v =~ "rc" ]] ; then
-        last_v2=${last_v%%-*}
-        if echo $version | grep " $last_v2 " ; then
-            last_v=$last_v2
+    if cat /etc/issue | grep -qi "ubuntu" || cat /proc/version | grep -qi "ubuntu" ; then
+        rc_version=`uname -r | cut -d - -f 2`
+        if [[ $rc_version =~ "rc" ]] ; then
+            rc_version=${rc_version##*'rc'}
+            kernel_version=${kernel_version}-rc${rc_version}
         fi
+        if [[ $last_v =~ "rc" ]] ; then
+            last_v2=${last_v%%-*}
+            if echo $version | grep " $last_v2 " ; then
+                last_v=$last_v2
+            fi
+        fi
+    else
+        last_v=${last_v%%-*}
     fi
     clear
     tyblue "******************请选择要使用的bbr版本******************"
@@ -528,6 +535,7 @@ install_bbr()
                 red "如果重启仍然无效，请尝试选择2选项"
             else
                 green "********************bbr已安装********************"
+                sleep 1s
             fi
             install_bbr
             ;;
@@ -551,6 +559,7 @@ install_bbr()
                 ./bbr.sh
             else
                 green "********************bbr已安装********************"
+                sleep 1s
             fi
             install_bbr
             ;;
