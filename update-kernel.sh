@@ -294,8 +294,11 @@ install_config() {
             fi
             grub2-set-default 0
         fi
-    elif [[ x"${release}" == x"debian" || x"${release}" == x"ubuntu" ]]; then
-        /usr/sbin/update-grub
+    elif [[ x"${release}" == x"ubuntu" ]]; then
+        systemVersion=`lsb_release -r --short`
+        if ! version_ge $systemVersion 16.04; then
+            /usr/sbin/update-grub
+        fi
     fi
 }
 
