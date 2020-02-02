@@ -362,6 +362,8 @@ updateSystem()
         1)
             do-release-upgrade
             do-release-upgrade
+            do-release-upgrade -d
+            do-release-upgrade -d
             sed -i 's/Prompt=lts/Prompt=normal/' /etc/update-manager/release-upgrades
             do-release-upgrade -d
             do-release-upgrade -d
@@ -535,7 +537,6 @@ install_bbr()
                 red "如果重启仍然无效，请尝试选择2选项"
             else
                 green "********************bbr已安装********************"
-                sleep 1s
             fi
             install_bbr
             ;;
@@ -559,7 +560,6 @@ install_bbr()
                 ./bbr.sh
             else
                 green "********************bbr已安装********************"
-                sleep 1s
             fi
             install_bbr
             ;;
