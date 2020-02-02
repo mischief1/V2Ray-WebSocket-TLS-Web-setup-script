@@ -367,6 +367,9 @@ updateSystem()
             sed -i 's/Prompt=lts/Prompt=normal/' /etc/update-manager/release-upgrades
             do-release-upgrade -d
             do-release-upgrade -d
+            sed -i 's/Prompt=normal/Prompt=lts/' /etc/update-manager/release-upgrades
+            do-release-upgrade -d
+            do-release-upgrade -d
             ;;
         2)
             sed -i 's/Prompt=lts/Prompt=normal/' /etc/update-manager/release-upgrades
@@ -453,10 +456,31 @@ remove_v2ray_nginx()
     rm -rf /etc/nginx
 }
 
+version_ge(){
+    test "$(echo "$@" | tr " " "\n" | sort -rV | head -n 1)" == "$1"
+}
 
 #安装bbr
 install_bbr()
 {
+    kernel_version=`uname -r | cut -d - -f 1`
+    version=$(wget -qO- https://kernel.ubuntu.com/~kernel-ppa/mainline/ | awk -F'\"v' '/v[0-9]/{print $2}' | cut -d '"' -f1 | cut -d '/' -f1 | sort -rV)
+    last_v=$(echo $version | cut -d ' ' -f 1)
+    if cat /etc/issue | grep -qi "ubuntu" || cat /proc/version | grep -qi "ubuntu" ; then
+        rc_version=`uname -r | cut -d - -f 2`
+        if [[ $rc_version =~ "rc" ]] ; then
+            rc_version=${rc_version##*'rc'}
+            kernel_version=${kernel_version}-rc${rc_version}
+        fi
+        if [[ $last_v =~ "rc" ]] ; then
+            last_v2=${last_v%%-*}
+            if echo $version | grep " $last_v2 " ; then
+                last_v=$last_v2
+            fi
+        fi
+    else
+        last_v=${last_v%%-*}
+    fi
     clear
     tyblue "******************请选择要使用的bbr版本******************"
     green  "1.升级最新版内核并启用bbr(推荐)"
@@ -472,12 +496,14 @@ install_bbr()
     yellow "安装内核需重启才能生效"
     yellow "重启后，请再次运行此脚本完成剩余安装"
     tyblue "*********************************************************"
-    #tyblue "当前内核是否支持bbr："
-    #if sysctl -a 2>&1 | grep -q bbr ; then
-    #    green "是"
-    #else
-    #    red "否，需升级内核"
-    #fi
+    tyblue "当前内核版本：${kernel_version}"
+    tyblue "最新内核版本：${last_v}"
+    tyblue "当前内核是否支持bbr："
+    if version_ge $kernel_version 4.9 ; then
+        green "是"
+    else
+        red "否，需升级内核"
+    fi
     tyblue "bbr启用状态："
     if sysctl net.ipv4.tcp_congestion_control | grep -q bbr ; then
         bbr_info=`sysctl net.ipv4.tcp_congestion_control`
@@ -514,7 +540,6 @@ install_bbr()
                 red "如果重启仍然无效，请尝试选择2选项"
             else
                 green "********************bbr已安装********************"
-                sleep 1s
             fi
             install_bbr
             ;;
@@ -538,7 +563,6 @@ install_bbr()
                 ./bbr.sh
             else
                 green "********************bbr已安装********************"
-                sleep 1s
             fi
             install_bbr
             ;;
@@ -663,6 +687,7 @@ install_v2ray_ws_tls()
     doupdate
     uninstall_firewall
     install_bbr
+    apt -y -f install
     readDomain                                                                                      #读取域名
     readTlsConfig
     yum install -y gperftools-devel libatomic_ops-devel pcre-devel zlib-devel libxslt-devel gd-devel perl-ExtUtils-Embed geoip-devel lksctp-tools-devel libxml2-devel gcc gcc-c++ wget unzip curl                   ##libxml2-devel非必须
@@ -1019,6 +1044,7 @@ start_menu()
     done
     case "$menu" in
         1)
+            apt -y -f install
             install_v2ray_ws_tls
             ;;
         2)
@@ -1124,6 +1150,7 @@ start_menu()
             green "新path：$new_path"
             ;;
         9)
+            apt -y -f install
             install_bbr
             ;;
         10)
