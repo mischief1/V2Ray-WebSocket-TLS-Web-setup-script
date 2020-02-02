@@ -315,8 +315,9 @@ reboot_os() {
 }
 
 install_bbr() {
+    #apt update
+    #apt install -y libssl-dev
     [[ ! -e "/usr/bin/wget" ]] && apt -y update && apt -y install wget
-    apt install -y libssl-dev
 
     if [[ x"${release}" == x"centos" ]]; then
         install_elrepo
