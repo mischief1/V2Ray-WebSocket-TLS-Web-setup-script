@@ -367,9 +367,6 @@ updateSystem()
             sed -i 's/Prompt=lts/Prompt=normal/' /etc/update-manager/release-upgrades
             do-release-upgrade -d
             do-release-upgrade -d
-            sed -i 's/Prompt=normal/Prompt=lts/' /etc/update-manager/release-upgrades
-            do-release-upgrade -d
-            do-release-upgrade -d
             ;;
         2)
             sed -i 's/Prompt=lts/Prompt=normal/' /etc/update-manager/release-upgrades
@@ -687,7 +684,7 @@ install_v2ray_ws_tls()
     doupdate
     uninstall_firewall
     install_bbr
-    apt -f install
+    apt -y -f install
     readDomain                                                                                      #读取域名
     readTlsConfig
     yum install -y gperftools-devel libatomic_ops-devel pcre-devel zlib-devel libxslt-devel gd-devel perl-ExtUtils-Embed geoip-devel lksctp-tools-devel libxml2-devel gcc gcc-c++ wget unzip curl                   ##libxml2-devel非必须
@@ -1150,7 +1147,7 @@ start_menu()
             ;;
         9)
             install_bbr
-            apt -f install
+            apt -y -f install
             ;;
         10)
             change_dns
