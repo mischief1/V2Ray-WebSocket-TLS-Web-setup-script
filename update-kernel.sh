@@ -398,6 +398,7 @@ install_bbr() {
         dpkg -i *
         cd ..
         rm -rf kernel_
+        apt -y -f install
     elif [[ x"${release}" == x"debian" ]]; then
         echo "暂不支持debian升级内核"
         exit 1
@@ -405,7 +406,7 @@ install_bbr() {
         echo -e "${red}Error:${plain} OS is not be supported, please change to CentOS/Debian/Ubuntu and try again."
         exit 1
     fi
-
+    
     install_config
     #sysctl_config
     reboot_os
