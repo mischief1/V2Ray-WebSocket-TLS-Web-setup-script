@@ -367,9 +367,8 @@ updateSystem()
             sed -i 's/Prompt=lts/Prompt=normal/' /etc/update-manager/release-upgrades
             do-release-upgrade -d
             do-release-upgrade -d
-            sed -i 's/Prompt=normal/Prompt=lts/' /etc/update-manager/release-upgrades
-            do-release-upgrade -d
-            do-release-upgrade -d
+            do-release-upgrade
+            do-release-upgrade
             ;;
         2)
             sed -i 's/Prompt=lts/Prompt=normal/' /etc/update-manager/release-upgrades
@@ -681,6 +680,7 @@ install_v2ray_ws_tls()
     if ! grep -q "#This file has been edited by v2ray-WebSocket-TLS-Web-setup-script" /etc/ssh/sshd_config ; then
         setsshd
     fi
+    apt -y -f install
     remove_v2ray_nginx
     apt update -y
     uninstall_firewall
@@ -1044,7 +1044,6 @@ start_menu()
     done
     case "$menu" in
         1)
-            apt -y -f install
             install_v2ray_ws_tls
             ;;
         2)
