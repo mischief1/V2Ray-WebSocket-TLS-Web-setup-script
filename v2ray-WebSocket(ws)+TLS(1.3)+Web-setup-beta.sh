@@ -366,9 +366,10 @@ updateSystem()
             do-release-upgrade -d
             sed -i 's/Prompt=lts/Prompt=normal/' /etc/update-manager/release-upgrades
             do-release-upgrade -d
-            do-release-upgrade
             do-release-upgrade -d
-            do-release-upgrade
+            sed -i 's/Prompt=normal/Prompt=lts/' /etc/update-manager/release-upgrades
+            do-release-upgrade -d
+            do-release-upgrade -d
             ;;
         2)
             sed -i 's/Prompt=lts/Prompt=normal/' /etc/update-manager/release-upgrades
