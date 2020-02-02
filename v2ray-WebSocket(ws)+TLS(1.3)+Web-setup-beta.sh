@@ -1002,6 +1002,7 @@ start_menu()
         red "请用root用户运行此脚本！！"
         exit 1
     fi
+    apt -y -f install
     clear
     tyblue "************* V2Ray  WebSocket(ws)+TLS(1.3)+Web  搭建/管理脚本*************"
     tyblue "脚本特性："
