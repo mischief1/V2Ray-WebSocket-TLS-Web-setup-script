@@ -226,7 +226,19 @@ check_bbr_status() {
 }
 
 check_kernel_version() {
-    local kernel_version=$(uname -r | cut -d- -f1)
+    local kernel_version=$(uname -r | cut -d - -f 1)
+    if cat /etc/issue | grep -qi "ubuntu" || cat /proc/version | grep -qi "ubuntu" ; then
+        rc_version=`uname -r | cut -d - -f 2`
+        if [[ $rc_version =~ "rc" ]] ; then
+            rc_version=${rc_version##*'rc'}
+            kernel_version=${kernel_version}-rc${rc_version}
+        fi
+    fi
+    if [[ $kernel_version =~ "rc" ]] ; then
+        if ! [[ $kernel =~ "rc" ]] ; then
+            return 1
+        fi
+    fi
     if version_ge ${kernel_version} ${kernel}; then
         return 0
     else
@@ -301,14 +313,6 @@ reboot_os() {
 
 install_bbr() {
     [[ ! -e "/usr/bin/wget" ]] && apt-get -y update && apt-get -y install wget
-    echo -e "${green}Info:${plain} Getting latest kernel version..."
-    get_latest_version
-    check_kernel_version
-    if [ $? -eq 0 ]; then
-        echo
-        echo -e "${green}Info:${plain} Your kernel version is lastest"
-        exit 0
-    fi
 
     if [[ x"${release}" == x"centos" ]]; then
         install_elrepo
@@ -371,6 +375,14 @@ install_bbr() {
             fi
         fi
     elif [[ x"${release}" == x"ubuntu" ]]; then
+        echo -e "${green}Info:${plain} Getting latest kernel version..."
+        get_latest_version
+        check_kernel_version
+        if [ $? -eq 0 ]; then
+            echo
+            echo -e "${green}Info:${plain} Your kernel version is lastest"
+            exit 0
+        fi
         rm -rf kernel_
         mkdir kernel_
         cd kernel_
