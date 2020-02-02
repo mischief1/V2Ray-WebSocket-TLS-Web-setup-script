@@ -360,10 +360,10 @@ updateSystem()
     echo 'Prompt=lts' >> /etc/update-manager/release-upgrades
     case "$updateconfig" in
         1)
-            do-release-upgrade
-            do-release-upgrade
             do-release-upgrade -d
             do-release-upgrade -d
+            do-release-upgrade
+            do-release-upgrade
             sed -i 's/Prompt=lts/Prompt=normal/' /etc/update-manager/release-upgrades
             do-release-upgrade -d
             do-release-upgrade -d
@@ -1031,7 +1031,7 @@ start_menu()
     tyblue "5.添加域名(不同域名可以有不同的TLS配置)"
     tyblue "6.使用socks(5)作为底层传输协议(beta)"
     tyblue "7.修改ID"
-    tyblue "8.修改路径"
+    tyblue "8.修改路径(path)"
     tyblue "9.仅安装bbr(2)(plus)"
     tyblue "10.修改dns"
     tyblue "11.仅升级V2Ray"
