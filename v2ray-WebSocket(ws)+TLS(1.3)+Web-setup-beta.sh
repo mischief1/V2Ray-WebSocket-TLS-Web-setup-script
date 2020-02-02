@@ -1002,7 +1002,6 @@ start_menu()
         red "请用root用户运行此脚本！！"
         exit 1
     fi
-    apt -y -f install
     clear
     tyblue "************* V2Ray  WebSocket(ws)+TLS(1.3)+Web  搭建/管理脚本*************"
     tyblue "脚本特性："
@@ -1045,6 +1044,7 @@ start_menu()
     done
     case "$menu" in
         1)
+            apt -y -f install
             install_v2ray_ws_tls
             ;;
         2)
@@ -1150,8 +1150,8 @@ start_menu()
             green "新path：$new_path"
             ;;
         9)
-            install_bbr
             apt -y -f install
+            install_bbr
             ;;
         10)
             change_dns
