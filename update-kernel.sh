@@ -391,14 +391,17 @@ install_bbr() {
         rm -rf kernel_
         mkdir kernel_
         cd kernel_
-        wget ${deb_kernel_headers_all_url}
-        wget ${deb_kernel_headers_generic_url}
+        systemVersion=`lsb_release -r --short`
+        if version_ge $systemVersion 18.04 ; then
+            wget ${deb_kernel_headers_all_url}
+            wget ${deb_kernel_headers_generic_url}
+        fi
         wget ${deb_kernel_url}
         wget ${deb_kernel_modules_url}
         dpkg -i *
         cd ..
         rm -rf kernel_
-        #apt -y -f install
+        apt -y -f install
     elif [[ x"${release}" == x"debian" ]]; then
         echo "暂不支持debian升级内核"
         exit 1
