@@ -294,11 +294,6 @@ install_config() {
             fi
             grub2-set-default 0
         fi
-    elif [[ x"${release}" == x"ubuntu" ]]; then
-        systemVersion=`lsb_release -r --short`
-        if ! version_ge $systemVersion 16.04; then
-            /usr/sbin/update-grub
-        fi
     fi
 }
 
@@ -379,7 +374,7 @@ install_bbr() {
                 exit 1
             fi
         fi
-    elif [[ x"${release}" == x"ubuntu" ]]; then
+    elif [[ x"${release}" == x"ubuntu" || x"${release}" == x"debian" ]]; then
         echo -e "${green}Info:${plain} Getting latest kernel version..."
         get_latest_version
         check_kernel_version
@@ -392,9 +387,16 @@ install_bbr() {
         mkdir kernel_
         cd kernel_
         systemVersion=`lsb_release -r --short`
-        if version_ge $systemVersion 18.04 ; then
-            wget ${deb_kernel_headers_all_url}
-            wget ${deb_kernel_headers_generic_url}
+        if [[ x"${release}" == x"ubuntu" ]] ; then
+            if version_ge $systemVersion 18.04 ; then
+                wget ${deb_kernel_headers_all_url}
+                wget ${deb_kernel_headers_generic_url}
+            fi
+        else
+            if version_ge $systemVersion 10 ; then
+                wget ${deb_kernel_headers_all_url}
+                wget ${deb_kernel_headers_generic_url}
+            fi
         fi
         wget ${deb_kernel_url}
         wget ${deb_kernel_modules_url}
@@ -402,9 +404,6 @@ install_bbr() {
         cd ..
         rm -rf kernel_
         apt -y -f install
-    elif [[ x"${release}" == x"debian" ]]; then
-        echo "暂不支持debian升级内核"
-        exit 1
     else
         echo -e "${red}Error:${plain} OS is not be supported, please change to CentOS/Debian/Ubuntu and try again."
         exit 1
