@@ -518,6 +518,12 @@ install_bbr()
     done
     case "$bbrconfig" in
         1)
+            yellow "此操作将会尝试安装最新内核，并开启bbr"
+            yellow "若无法安装最新版内核，可以尝试："
+            yellow "1.使用更新版本的系统"
+            yellow "2.选择2选项，或者使用bbr2/bbrplus"
+            yellow "按回车键以继续。。。"
+            read rubbish
             sed -i '/net.core.default_qdisc/d' /etc/sysctl.conf
             sed -i '/net.ipv4.tcp_congestion_control/d' /etc/sysctl.conf
             echo ' ' >> /etc/sysctl.conf
