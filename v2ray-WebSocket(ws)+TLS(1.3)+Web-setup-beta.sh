@@ -518,6 +518,12 @@ install_bbr()
     done
     case "$bbrconfig" in
         1)
+            yellow "此操作将会尝试安装最新内核，并开启bbr"
+            yellow "若无法安装最新版内核，可以尝试："
+            yellow "1.使用更新版本的系统"
+            yellow "2.选择2选项，或者使用bbr2/bbrplus"
+            yellow "按回车键以继续。。。"
+            read rubbish
             sed -i '/net.core.default_qdisc/d' /etc/sysctl.conf
             sed -i '/net.ipv4.tcp_congestion_control/d' /etc/sysctl.conf
             echo ' ' >> /etc/sysctl.conf
@@ -754,7 +760,7 @@ install_v2ray_ws_tls()
             tyblue "*************安装完成*************"
             tyblue "地址：www.${domain}或${domain}"
             tyblue "端口：443"
-            tyblue "ID：${v2id}"
+            tyblue "用户ID：${v2id}"
             tyblue "额外ID：0"
             tyblue "加密方式：一般情况推荐none;若使用了cdn，推荐auto"
             tyblue "传输协议：ws"
@@ -775,7 +781,7 @@ install_v2ray_ws_tls()
             tyblue "*************安装完成*************"
             tyblue "地址：${domain}"
             tyblue "端口：443"
-            tyblue "ID：${v2id}"
+            tyblue "用户ID：${v2id}"
             tyblue "额外ID：0"
             tyblue "加密方式：一般情况推荐none;若使用了cdn，推荐auto"
             tyblue "传输协议：ws"
@@ -1030,8 +1036,8 @@ start_menu()
     tyblue "  (会覆盖原有域名配置，配置过程中域名输错了造成V2Ray无法启动可以用此选项修复)"
     tyblue "5.添加域名(不同域名可以有不同的TLS配置)"
     tyblue "6.使用socks(5)作为底层传输协议(beta)"
-    tyblue "7.修改ID"
-    tyblue "8.修改路径(path)"
+    tyblue "7.查看/修改用户ID(id)"
+    tyblue "8.查看/修改路径(path)"
     tyblue "9.仅安装bbr(2)(plus)"
     tyblue "10.修改dns"
     tyblue "11.仅升级V2Ray"
