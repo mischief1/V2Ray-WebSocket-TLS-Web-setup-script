@@ -380,7 +380,7 @@ updateSystem()
             do-release-upgrade
             ;;
     esac
-    apt autoremove -y
+    apt autopurge -y
     apt clean
     yum clean all
 }
@@ -413,7 +413,7 @@ doupdate()
             read rubbish
             yum update -y
             apt dist-upgrade -y
-            apt autoremove -y
+            apt autopurge -y
             apt clean
             yum autoremove -y
             yum clean all
@@ -426,7 +426,7 @@ doupdate()
 uninstall_firewall()
 {
     ufw disable
-    apt remove iptables -y
+    apt purge iptables -y
     chkconfig iptables off
     systemctl disable firewalld
     yum remove firewalld -y
@@ -697,8 +697,24 @@ install_v2ray_ws_tls()
     readDomain                                                                                      #读取域名
     readTlsConfig
     yum install -y gperftools-devel libatomic_ops-devel pcre-devel zlib-devel libxslt-devel gd-devel perl-ExtUtils-Embed geoip-devel lksctp-tools-devel libxml2-devel gcc gcc-c++ wget unzip curl                   ##libxml2-devel非必须
-    apt install -y libgoogle-perftools-dev libatomic-ops-dev libperl-dev libxslt-dev zlib1g-dev libpcre3-dev libgeoip-dev libgd-dev libxml2-dev libsctp-dev g++ wget gcc unzip curl                                          ##libxml2-dev非必须
-    apt autoremove -y
+    apt install -y libgoogle-perftools-dev libatomic-ops-dev libperl-dev libxslt-dev zlib1g-dev libpcre3-dev libgeoip-dev libgd-dev libxml2-dev libsctp-dev wget unzip curl                                          ##libxml2-dev非必须
+    if cat /etc/issue | grep -qi "ubuntu" || cat /proc/version | grep -qi "ubuntu" ; then
+        if version_ge $systemVersion 20.04 ; then
+            apt -y purge gcc g++ gcc-9 g++-9 gcc-8 g++-8 gcc-7 g++-7
+            apt -y install gcc-10 g++-10
+            ln -s /usr/bin/gcc-10 /usr/bin/gcc
+            ln -s /usr/bin/gcc-10 /usr/bin/cc
+            ln -s /usr/bin/g++-10 /usr/bin/g++
+            ln -s /usr/bin/g++-10 /usr/bin/c++
+            ln -s /usr/bin/gcc-10 /usr/bin/x86_64-linux-gnu-gcc
+            ln -s /usr/bin/g++-10 /usr/bin/x86_64-linux-gnu-g++
+        else
+            apt -y install gcc g++
+        fi
+    else
+        apt -y install gcc g++
+    fi
+    apt autopurge -y
     yum autoremove -y
     apt clean
     yum clean all
