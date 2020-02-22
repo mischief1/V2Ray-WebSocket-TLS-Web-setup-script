@@ -257,9 +257,10 @@ cat >> /etc/nginx/conf.d/v2ray.conf<<EOF
 EOF
     fi
 cat >> /etc/nginx/conf.d/v2ray.conf<<EOF
-    location / {
-        return 403;
-    }
+    ssl_stapling on;
+    ssl_stapling_verify on;
+    ssl_trusted_certificate /etc/nginx/certs/$domain.cer;
+    add_header Strict-Transport-Security "max-age=63072000; includeSubdomains; preload" always;
     location $path {
         proxy_redirect off;
         proxy_pass http://127.0.0.1:$port;
@@ -301,9 +302,10 @@ cat >> /etc/nginx/conf.d/v2ray.conf<<EOF
 EOF
     fi
 cat >> /etc/nginx/conf.d/v2ray.conf<<EOF
-    location / {
-        return 403;
-    }
+    ssl_stapling on;
+    ssl_stapling_verify on;
+    ssl_trusted_certificate /etc/nginx/certs/$domain.cer;
+    add_header Strict-Transport-Security "max-age=63072000; includeSubdomains; preload" always;
     location $path {
         proxy_redirect off;
         proxy_pass http://127.0.0.1:$port;
@@ -450,7 +452,7 @@ remove_v2ray_nginx()
     /etc/nginx/sbin/nginx -s stop
     service v2ray stop
     #service v2ray disable
-    rm -rf /usr/bin/v2ray 
+    rm -rf /usr/bin/v2ray
     rm -rf /etc/v2ray
     rm -rf /etc/nginx
 }
@@ -669,10 +671,10 @@ get_certs()
     /etc/nginx/sbin/nginx
     case "$domainconfig" in
         1)
-            ~/.acme.sh/acme.sh --issue -d $domain -d www.$domain --webroot /etc/nginx/html -k ec-256
+            ~/.acme.sh/acme.sh --issue -d $domain -d www.$domain --webroot /etc/nginx/html -k ec-256 --ocsp
             ;;
         2)
-            ~/.acme.sh/acme.sh --issue -d $domain --webroot /etc/nginx/html -k ec-256
+            ~/.acme.sh/acme.sh --issue -d $domain --webroot /etc/nginx/html -k ec-256 --ocsp
             ;;
     esac
     ~/.acme.sh/acme.sh --installcert -d $domain --key-file /etc/nginx/certs/$domain.key --fullchain-file /etc/nginx/certs/$domain.cer --ecc
@@ -1035,12 +1037,7 @@ start_menu()
     tyblue "6.使用acme.sh自动申请域名证书"
     tyblue "官网：https://github.com/kirin10000/V2Ray-WebSocket-TLS-Web-setup-script"
     tyblue "***************************************************************************"
-    echo
-    tyblue "***************************************************************************"
-    red    "此脚本需要一个解析到本服务器的域名!!!!"
-    yellow "此脚本需要一个解析到本服务器的域名!!!!"
     tyblue "此脚本需要一个解析到本服务器的域名!!!!"
-    red    "全程建议不要使用小键盘"
     yellow "全程建议不要使用小键盘"
     tyblue "推荐服务器系统使用Ubuntu最新版"
     tyblue "***************************************************************************"
