@@ -101,7 +101,6 @@ events {
 http {
     include       mime.types;
     default_type  application/octet-stream;
-    include       /etc/nginx/conf.d/v2ray.conf;
 
     #log_format  main  '\$remote_addr - \$remote_user [\$time_local] "\$request" '
     #                  '\$status \$body_bytes_sent "\$http_referer" '
@@ -117,6 +116,7 @@ http {
 
     #gzip  on;
 
+    include       /etc/nginx/conf.d/v2ray.conf;
     #server {
         #listen       80;
         #server_name  localhost;
