@@ -261,6 +261,7 @@ cat >> /etc/nginx/conf.d/v2ray.conf<<EOF
     ssl_stapling_verify on;
     ssl_trusted_certificate /etc/nginx/certs/$domain.cer;
     add_header Strict-Transport-Security "max-age=63072000; includeSubdomains; preload" always;
+    root /etc/nginx/html/$domain;
     location $path {
         proxy_redirect off;
         proxy_pass http://127.0.0.1:$port;
@@ -306,6 +307,7 @@ cat >> /etc/nginx/conf.d/v2ray.conf<<EOF
     ssl_stapling_verify on;
     ssl_trusted_certificate /etc/nginx/certs/$domain.cer;
     add_header Strict-Transport-Security "max-age=63072000; includeSubdomains; preload" always;
+    root /etc/nginx/html/$domain;
     location $path {
         proxy_redirect off;
         proxy_pass http://127.0.0.1:$port;
@@ -705,6 +707,7 @@ install_v2ray_ws_tls()
     if cat /etc/issue | grep -qi "ubuntu" || cat /proc/version | grep -qi "ubuntu" ; then
         if version_ge $systemVersion 20.04 ; then
             apt -y purge gcc g++ gcc-9 g++-9 gcc-8 g++-8 gcc-7 g++-7
+            apt autopurge -y
             apt -y install gcc-10 g++-10
             ln -s /usr/bin/gcc-10 /usr/bin/gcc
             ln -s /usr/bin/gcc-10 /usr/bin/cc
