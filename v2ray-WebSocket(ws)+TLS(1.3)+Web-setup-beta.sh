@@ -443,6 +443,8 @@ uninstall_firewall()
     #rm -rf /usr/bin/networkd-dispatcher
     #pkill networkd
     rm -rf /etc/init.d/aegis
+    apt autopurge -y
+    yum autoremove -y
 }
 
 
