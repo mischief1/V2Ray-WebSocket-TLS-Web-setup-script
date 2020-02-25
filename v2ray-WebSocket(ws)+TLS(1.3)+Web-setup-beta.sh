@@ -212,7 +212,13 @@ cat > /etc/nginx/conf.d/v2ray.conf<<EOF
 server {
     listen 80 default_server;
     listen [::]:80 default_server;
-    return 301 https://$domain\$request_uri;
+EOF
+    if [ $domainconfig -eq 1 ]; then
+        echo "return 301 https://www.$domain\$request_uri;" >> /etc/nginx/conf.d/v2ray.conf
+    else
+        echo "return 301 https://$domain\$request_uri;" >> /etc/nginx/conf.d/v2ray.conf
+    fi
+cat > /etc/nginx/conf.d/v2ray.conf<<EOF
 }
 server {
     listen 80;
@@ -236,8 +242,12 @@ cat >> /etc/nginx/conf.d/v2ray.conf<<EOF
     ssl_protocols         TLSv1.3;
 EOF
     fi
+    if [ $domainconfig -eq 1 ]; then
+        echo "return 301 https://www.$domain\$request_uri;" >> /etc/nginx/conf.d/v2ray.conf
+    else
+        echo "return 301 https://$domain\$request_uri;" >> /etc/nginx/conf.d/v2ray.conf
+    fi
 cat >> /etc/nginx/conf.d/v2ray.conf<<EOF
-    return 301 https://$domain\$request_uri;
 }
 server {
     listen 443 ssl http2;
@@ -278,7 +288,7 @@ EOF
 }
 
 
-#配置新域名tls
+#添加新域名tls
 new_tls()
 {
     configtls_part
@@ -795,7 +805,7 @@ install_v2ray_ws_tls()
             yellow "注意事项：如重新启动服务器，请执行/etc/nginx/sbin/nginx"
             yellow "          或运行脚本，选择重启服务选项"
             echo
-            tyblue "脚本最后更新时间：2020.2.1"
+            tyblue "脚本最后更新时间：2020.2.25"
             echo
             red    "此脚本仅供交流学习使用，请勿使用此脚本行违法之事。网络非法外之地，行非法之事，必将接受法律制裁!!!!"
             tyblue "2019.11"
@@ -816,7 +826,7 @@ install_v2ray_ws_tls()
             yellow "注意事项：如重新启动服务器，请执行/etc/nginx/sbin/nginx"
             yellow "          或运行脚本，选择重启服务选项"
             echo
-            tyblue "脚本最后更新时间：2020.2.1"
+            tyblue "脚本最后更新时间：2020.2.25"
             echo
             red    "此脚本仅供交流学习使用，请勿使用此脚本行违法之事。网络非法外之地，行非法之事，必将接受法律制裁!!!!"
             tyblue "2019.11"
@@ -1032,7 +1042,7 @@ start_menu()
         exit 1
     fi
     clear
-    tyblue "************* V2Ray  WebSocket(ws)+TLS(1.3)+Web  搭建/管理脚本*************"
+    green  "************* V2Ray  WebSocket(ws)+TLS(1.3)+Web  搭建/管理脚本*************"
     tyblue "脚本特性："
     tyblue "1.集成多版本bbr安装选项"
     tyblue "2.支持多种系统(Ubuntu Centos Debian ...)"
@@ -1041,11 +1051,11 @@ start_menu()
     tyblue "5.使用nginx作为网站服务"
     tyblue "6.使用acme.sh自动申请域名证书"
     tyblue "官网：https://github.com/kirin10000/V2Ray-WebSocket-TLS-Web-setup-script"
-    tyblue "***************************************************************************"
-    tyblue "此脚本需要一个解析到本服务器的域名!!!!"
+    green  "***************************************************************************"
+    yellow "此脚本需要一个解析到本服务器的域名!!!!"
     yellow "全程建议不要使用小键盘"
     tyblue "推荐服务器系统使用Ubuntu最新版"
-    tyblue "***************************************************************************"
+    yellow "***************************************************************************"
     green  "1.安装V2Ray-WebSocket(ws)+TLS(1.3)+Web"
     green  "  (内含bbr安装选项/支持覆盖安装、升级，如要升级，先下载最新脚本再安装)"
     red    "2.删除V2Ray-WebSocket(ws)+TLS(1.3)+Web"
