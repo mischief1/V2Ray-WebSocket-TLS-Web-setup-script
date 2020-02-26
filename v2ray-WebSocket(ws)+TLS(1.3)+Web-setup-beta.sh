@@ -214,11 +214,11 @@ server {
     listen [::]:80 default_server;
 EOF
     if [ $domainconfig -eq 1 ]; then
-        echo "return 301 https://www.$domain\$request_uri;" >> /etc/nginx/conf.d/v2ray.conf
+        echo "    return 301 https://www.$domain\$request_uri;" >> /etc/nginx/conf.d/v2ray.conf
     else
-        echo "return 301 https://$domain\$request_uri;" >> /etc/nginx/conf.d/v2ray.conf
+        echo "    return 301 https://$domain\$request_uri;" >> /etc/nginx/conf.d/v2ray.conf
     fi
-cat > /etc/nginx/conf.d/v2ray.conf<<EOF
+cat >> /etc/nginx/conf.d/v2ray.conf<<EOF
 }
 server {
     listen 80;
@@ -243,9 +243,9 @@ cat >> /etc/nginx/conf.d/v2ray.conf<<EOF
 EOF
     fi
     if [ $domainconfig -eq 1 ]; then
-        echo "return 301 https://www.$domain\$request_uri;" >> /etc/nginx/conf.d/v2ray.conf
+        echo "    return 301 https://www.$domain\$request_uri;" >> /etc/nginx/conf.d/v2ray.conf
     else
-        echo "return 301 https://$domain\$request_uri;" >> /etc/nginx/conf.d/v2ray.conf
+        echo "    return 301 https://$domain\$request_uri;" >> /etc/nginx/conf.d/v2ray.conf
     fi
 cat >> /etc/nginx/conf.d/v2ray.conf<<EOF
 }
@@ -455,8 +455,6 @@ uninstall_firewall()
     #rm -rf /usr/bin/networkd-dispatcher
     #pkill networkd
     rm -rf /etc/init.d/aegis
-    apt autopurge -y
-    yum autoremove -y
 }
 
 
@@ -1063,7 +1061,7 @@ start_menu()
     tyblue "4.重置域名和TLS配置"
     tyblue "  (会覆盖原有域名配置，配置过程中域名输错了造成V2Ray无法启动可以用此选项修复)"
     tyblue "5.添加域名(不同域名可以有不同的TLS配置)"
-    tyblue "6.使用socks(5)作为底层传输协议(beta)"
+    tyblue "6.使用socks(5)作为底层传输协议(降低计算量、延迟)(beta)"
     tyblue "7.查看/修改用户ID(id)"
     tyblue "8.查看/修改路径(path)"
     tyblue "9.仅安装bbr(2)(plus)"
