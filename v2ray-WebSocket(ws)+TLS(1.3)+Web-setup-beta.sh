@@ -214,9 +214,9 @@ server {
     listen [::]:80 default_server;
 EOF
     if [ $domainconfig -eq 1 ]; then
-        echo "    return 301 https://www.$domain\$request_uri;" >> /etc/nginx/conf.d/v2ray.conf
+        echo "    return 301 https://www.$domain;" >> /etc/nginx/conf.d/v2ray.conf
     else
-        echo "    return 301 https://$domain\$request_uri;" >> /etc/nginx/conf.d/v2ray.conf
+        echo "    return 301 https://$domain;" >> /etc/nginx/conf.d/v2ray.conf
     fi
 cat >> /etc/nginx/conf.d/v2ray.conf<<EOF
 }
@@ -243,9 +243,9 @@ cat >> /etc/nginx/conf.d/v2ray.conf<<EOF
 EOF
     fi
     if [ $domainconfig -eq 1 ]; then
-        echo "    return 301 https://www.$domain\$request_uri;" >> /etc/nginx/conf.d/v2ray.conf
+        echo "    return 301 https://www.$domain;" >> /etc/nginx/conf.d/v2ray.conf
     else
-        echo "    return 301 https://$domain\$request_uri;" >> /etc/nginx/conf.d/v2ray.conf
+        echo "    return 301 https://$domain;" >> /etc/nginx/conf.d/v2ray.conf
     fi
 cat >> /etc/nginx/conf.d/v2ray.conf<<EOF
 }
