@@ -730,6 +730,7 @@ install_v2ray_ws_tls()
         apt -y install gcc g++
     fi
     apt autopurge -y
+    apt autoremove -y
     yum autoremove -y
     apt clean
     yum clean all
