@@ -212,7 +212,13 @@ cat > /etc/nginx/conf.d/v2ray.conf<<EOF
 server {
     listen 80 default_server;
     listen [::]:80 default_server;
-    return 301 https://$domain\$request_uri;
+EOF
+    if [ $domainconfig -eq 1 ]; then
+        echo "    return 301 https://www.$domain;" >> /etc/nginx/conf.d/v2ray.conf
+    else
+        echo "    return 301 https://$domain;" >> /etc/nginx/conf.d/v2ray.conf
+    fi
+cat >> /etc/nginx/conf.d/v2ray.conf<<EOF
 }
 server {
     listen 80;
@@ -236,8 +242,12 @@ cat >> /etc/nginx/conf.d/v2ray.conf<<EOF
     ssl_protocols         TLSv1.3;
 EOF
     fi
+    if [ $domainconfig -eq 1 ]; then
+        echo "    return 301 https://www.$domain;" >> /etc/nginx/conf.d/v2ray.conf
+    else
+        echo "    return 301 https://$domain;" >> /etc/nginx/conf.d/v2ray.conf
+    fi
 cat >> /etc/nginx/conf.d/v2ray.conf<<EOF
-    return 301 https://$domain\$request_uri;
 }
 server {
     listen 443 ssl http2;
@@ -257,9 +267,11 @@ cat >> /etc/nginx/conf.d/v2ray.conf<<EOF
 EOF
     fi
 cat >> /etc/nginx/conf.d/v2ray.conf<<EOF
-    location / {
-        return 403;
-    }
+    ssl_stapling on;
+    ssl_stapling_verify on;
+    ssl_trusted_certificate /etc/nginx/certs/$domain.cer;
+    add_header Strict-Transport-Security "max-age=63072000; includeSubdomains; preload" always;
+    root /etc/nginx/html/$domain;
     location $path {
         proxy_redirect off;
         proxy_pass http://127.0.0.1:$port;
@@ -276,7 +288,7 @@ EOF
 }
 
 
-#配置新域名tls
+#添加新域名tls
 new_tls()
 {
     configtls_part
@@ -301,9 +313,11 @@ cat >> /etc/nginx/conf.d/v2ray.conf<<EOF
 EOF
     fi
 cat >> /etc/nginx/conf.d/v2ray.conf<<EOF
-    location / {
-        return 403;
-    }
+    ssl_stapling on;
+    ssl_stapling_verify on;
+    ssl_trusted_certificate /etc/nginx/certs/$domain.cer;
+    add_header Strict-Transport-Security "max-age=63072000; includeSubdomains; preload" always;
+    root /etc/nginx/html/$domain;
     location $path {
         proxy_redirect off;
         proxy_pass http://127.0.0.1:$port;
@@ -380,7 +394,7 @@ updateSystem()
             do-release-upgrade
             ;;
     esac
-    apt autoremove -y
+    apt autopurge -y
     apt clean
     yum clean all
 }
@@ -413,7 +427,7 @@ doupdate()
             read rubbish
             yum update -y
             apt dist-upgrade -y
-            apt autoremove -y
+            apt autopurge -y
             apt clean
             yum autoremove -y
             yum clean all
@@ -426,7 +440,7 @@ doupdate()
 uninstall_firewall()
 {
     ufw disable
-    apt remove iptables -y
+    apt purge iptables -y
     chkconfig iptables off
     systemctl disable firewalld
     yum remove firewalld -y
@@ -450,7 +464,7 @@ remove_v2ray_nginx()
     /etc/nginx/sbin/nginx -s stop
     service v2ray stop
     #service v2ray disable
-    rm -rf /usr/bin/v2ray 
+    rm -rf /usr/bin/v2ray
     rm -rf /etc/v2ray
     rm -rf /etc/nginx
 }
@@ -669,10 +683,10 @@ get_certs()
     /etc/nginx/sbin/nginx
     case "$domainconfig" in
         1)
-            ~/.acme.sh/acme.sh --issue -d $domain -d www.$domain --webroot /etc/nginx/html -k ec-256
+            ~/.acme.sh/acme.sh --issue -d $domain -d www.$domain --webroot /etc/nginx/html -k ec-256 --ocsp
             ;;
         2)
-            ~/.acme.sh/acme.sh --issue -d $domain --webroot /etc/nginx/html -k ec-256
+            ~/.acme.sh/acme.sh --issue -d $domain --webroot /etc/nginx/html -k ec-256 --ocsp
             ;;
     esac
     ~/.acme.sh/acme.sh --installcert -d $domain --key-file /etc/nginx/certs/$domain.key --fullchain-file /etc/nginx/certs/$domain.cer --ecc
@@ -697,7 +711,25 @@ install_v2ray_ws_tls()
     readDomain                                                                                      #读取域名
     readTlsConfig
     yum install -y gperftools-devel libatomic_ops-devel pcre-devel zlib-devel libxslt-devel gd-devel perl-ExtUtils-Embed geoip-devel lksctp-tools-devel libxml2-devel gcc gcc-c++ wget unzip curl                   ##libxml2-devel非必须
-    apt install -y libgoogle-perftools-dev libatomic-ops-dev libperl-dev libxslt-dev zlib1g-dev libpcre3-dev libgeoip-dev libgd-dev libxml2-dev libsctp-dev g++ wget gcc unzip curl                                          ##libxml2-dev非必须
+    apt install -y libgoogle-perftools-dev libatomic-ops-dev libperl-dev libxslt-dev zlib1g-dev libpcre3-dev libgeoip-dev libgd-dev libxml2-dev libsctp-dev wget unzip curl                                          ##libxml2-dev非必须
+    if cat /etc/issue | grep -qi "ubuntu" || cat /proc/version | grep -qi "ubuntu" ; then
+        if version_ge $systemVersion 20.04 ; then
+            apt -y purge gcc g++ gcc-9 g++-9 gcc-8 g++-8 gcc-7 g++-7
+            apt autopurge -y
+            apt -y install gcc-10 g++-10
+            ln -s /usr/bin/gcc-10 /usr/bin/gcc
+            ln -s /usr/bin/gcc-10 /usr/bin/cc
+            ln -s /usr/bin/g++-10 /usr/bin/g++
+            ln -s /usr/bin/g++-10 /usr/bin/c++
+            ln -s /usr/bin/gcc-10 /usr/bin/x86_64-linux-gnu-gcc
+            ln -s /usr/bin/g++-10 /usr/bin/x86_64-linux-gnu-g++
+        else
+            apt -y install gcc g++
+        fi
+    else
+        apt -y install gcc g++
+    fi
+    apt autopurge -y
     apt autoremove -y
     yum autoremove -y
     apt clean
@@ -772,7 +804,7 @@ install_v2ray_ws_tls()
             yellow "注意事项：如重新启动服务器，请执行/etc/nginx/sbin/nginx"
             yellow "          或运行脚本，选择重启服务选项"
             echo
-            tyblue "脚本最后更新时间：2020.2.1"
+            tyblue "脚本最后更新时间：2020.2.25"
             echo
             red    "此脚本仅供交流学习使用，请勿使用此脚本行违法之事。网络非法外之地，行非法之事，必将接受法律制裁!!!!"
             tyblue "2019.11"
@@ -793,7 +825,7 @@ install_v2ray_ws_tls()
             yellow "注意事项：如重新启动服务器，请执行/etc/nginx/sbin/nginx"
             yellow "          或运行脚本，选择重启服务选项"
             echo
-            tyblue "脚本最后更新时间：2020.2.1"
+            tyblue "脚本最后更新时间：2020.2.25"
             echo
             red    "此脚本仅供交流学习使用，请勿使用此脚本行违法之事。网络非法外之地，行非法之事，必将接受法律制裁!!!!"
             tyblue "2019.11"
@@ -1009,7 +1041,7 @@ start_menu()
         exit 1
     fi
     clear
-    tyblue "************* V2Ray  WebSocket(ws)+TLS(1.3)+Web  搭建/管理脚本*************"
+    green  "************* V2Ray  WebSocket(ws)+TLS(1.3)+Web  搭建/管理脚本*************"
     tyblue "脚本特性："
     tyblue "1.集成多版本bbr安装选项"
     tyblue "2.支持多种系统(Ubuntu Centos Debian ...)"
@@ -1018,16 +1050,11 @@ start_menu()
     tyblue "5.使用nginx作为网站服务"
     tyblue "6.使用acme.sh自动申请域名证书"
     tyblue "官网：https://github.com/kirin10000/V2Ray-WebSocket-TLS-Web-setup-script"
-    tyblue "***************************************************************************"
-    echo
-    tyblue "***************************************************************************"
-    red    "此脚本需要一个解析到本服务器的域名!!!!"
+    green  "***************************************************************************"
     yellow "此脚本需要一个解析到本服务器的域名!!!!"
-    tyblue "此脚本需要一个解析到本服务器的域名!!!!"
-    red    "全程建议不要使用小键盘"
     yellow "全程建议不要使用小键盘"
     tyblue "推荐服务器系统使用Ubuntu最新版"
-    tyblue "***************************************************************************"
+    yellow "***************************************************************************"
     green  "1.安装V2Ray-WebSocket(ws)+TLS(1.3)+Web"
     green  "  (内含bbr安装选项/支持覆盖安装、升级，如要升级，先下载最新脚本再安装)"
     red    "2.删除V2Ray-WebSocket(ws)+TLS(1.3)+Web"
@@ -1035,7 +1062,7 @@ start_menu()
     tyblue "4.重置域名和TLS配置"
     tyblue "  (会覆盖原有域名配置，配置过程中域名输错了造成V2Ray无法启动可以用此选项修复)"
     tyblue "5.添加域名(不同域名可以有不同的TLS配置)"
-    tyblue "6.使用socks(5)作为底层传输协议(beta)"
+    tyblue "6.使用socks(5)作为底层传输协议(降低计算量、延迟)(beta)"
     tyblue "7.查看/修改用户ID(id)"
     tyblue "8.查看/修改路径(path)"
     tyblue "9.仅安装bbr(2)(plus)"
