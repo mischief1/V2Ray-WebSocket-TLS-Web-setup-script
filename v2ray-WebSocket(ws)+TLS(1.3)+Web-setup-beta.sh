@@ -84,7 +84,7 @@ configtls_part()
 cat > /etc/nginx/conf/nginx.conf <<EOF
 
 user  root root;
-worker_processes  4;
+worker_processes  8;
 
 #error_log  logs/error.log;
 #error_log  logs/error.log  notice;
