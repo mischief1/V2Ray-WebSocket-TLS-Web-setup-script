@@ -134,6 +134,7 @@ get_latest_version() {
             kernel=$kernel2
         fi
     fi
+    echo "latest_kernel_version=$kernel"
     #[ ${#latest_version[@]} -eq 0 ] && echo -e "${red}Error:${plain} Get latest kernel version failed." && exit 1
 
     #kernel_arr=()
@@ -224,16 +225,28 @@ check_bbr_status() {
         return 1
     fi
 }
-
+check_fake_version() {
+    local temp=${1##*.}
+    if [ ${temp} -eq 0 ] ; then
+        return 0
+    else
+        return 1
+    fi
+}
 check_kernel_version() {
     local kernel_version=$(uname -r | cut -d - -f 1)
-    if cat /etc/issue | grep -qi "ubuntu" || cat /proc/version | grep -qi "ubuntu" ; then
+    while check_fake_version ${kernel_version} ;
+    do
+        kernel_version=${kernel_version%.*}
+    done
+    if [[ x"${release}" == x"ubuntu" || x"${release}" == x"debian" ]] ; then
         rc_version=`uname -r | cut -d - -f 2`
         if [[ $rc_version =~ "rc" ]] ; then
             rc_version=${rc_version##*'rc'}
             kernel_version=${kernel_version}-rc${rc_version}
         fi
     fi
+    echo "your_kernel_version=${kernel_version}"
     if [[ $kernel_version =~ "rc" ]] ; then
         if ! [[ $kernel =~ "rc" ]] ; then
             return 1
