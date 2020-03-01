@@ -473,13 +473,26 @@ version_ge(){
     test "$(echo "$@" | tr " " "\n" | sort -rV | head -n 1)" == "$1"
 }
 
+check_fake_version() {
+    local temp=${1##*.}
+    if [ ${temp} -eq 0 ] ; then
+        return 0
+    else
+        return 1
+    fi
+}
+
 #安装bbr
 install_bbr()
 {
     kernel_version=`uname -r | cut -d - -f 1`
+    while check_fake_version ${kernel_version} ;
+    do
+        kernel_version=${kernel_version%.*}
+    done
     version=$(wget -qO- https://kernel.ubuntu.com/~kernel-ppa/mainline/ | awk -F'\"v' '/v[0-9]/{print $2}' | cut -d '"' -f1 | cut -d '/' -f1 | sort -rV)
     last_v=$(echo $version | cut -d ' ' -f 1)
-    if cat /etc/issue | grep -qi "ubuntu" || cat /proc/version | grep -qi "ubuntu" ; then
+    if cat /etc/issue | grep -qi "ubuntu" || cat /proc/version | grep -qi "ubuntu" || cat /etc/issue | grep -Eqi "debian" || cat /proc/version | grep -Eqi "debian" ; then
         rc_version=`uname -r | cut -d - -f 2`
         if [[ $rc_version =~ "rc" ]] ; then
             rc_version=${rc_version##*'rc'}
