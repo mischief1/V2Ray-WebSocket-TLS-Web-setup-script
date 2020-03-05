@@ -729,7 +729,7 @@ install_v2ray_ws_tls()
     apt install -y libgoogle-perftools-dev libatomic-ops-dev libperl-dev libxslt-dev zlib1g-dev libpcre3-dev libgeoip-dev libgd-dev libxml2-dev libsctp-dev wget unzip curl                                          ##libxml2-dev非必须
     if cat /etc/issue | grep -qi "ubuntu" || cat /proc/version | grep -qi "ubuntu" ; then
         if version_ge $systemVersion 20.04 ; then
-            apt -y purge gcc g++ gcc-9 g++-9 gcc-8 g++-8 gcc-7 g++-7
+            apt -y purge gcc g++ gcc-9 gcc-9-base gcc-8-base gcc-7-base g++-9 gcc-8 g++-8 gcc-7 g++-7
             apt autopurge -y
             apt -y install gcc-10 g++-10
             ln -s /usr/bin/gcc-10 /usr/bin/gcc
