@@ -1020,8 +1020,8 @@ get_info()
 #下载nextcloud模板，用于伪装
 get_web()
 {
+    rm -rf /etc/nginx/html/$domain
     if [ $pretend -eq 3 ]; then
-        rm -rf /etc/nginx/html/$domain
         mkdir /etc/nginx/html/$domain
         if ! wget -P /etc/nginx/html/$domain https://github.com/kirin10000/v2ray-WebSocket-TLS-Web-setup-script/raw/master/Website-Template.zip ; then
             red    "获取网站模板失败"
