@@ -1029,7 +1029,7 @@ get_web()
             yellow "按回车键继续或者按ctrl+c终止"
             read asfyerbsd
         fi
-        unzip -d /etc/nginx/html/$domain /etc/nginx/html/$domain/*.zip
+        unzip -d -q /etc/nginx/html/$domain /etc/nginx/html/$domain/*.zip
         rm -rf /etc/nginx/html/$domain/*.zip
     fi
 }
