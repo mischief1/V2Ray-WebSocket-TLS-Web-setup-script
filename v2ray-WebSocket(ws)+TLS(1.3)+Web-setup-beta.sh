@@ -868,6 +868,8 @@ install_v2ray_ws_tls()
 
     service v2ray restart
     /etc/nginx/sbin/nginx
+    curl --tcp-fastopen https://${domain} >> /dev/null 2>&1   #激活tcp_fast_open
+    curl --tcp-fastopen https://${domain} >> /dev/null 2>&1
     echo
     echo
     echo
