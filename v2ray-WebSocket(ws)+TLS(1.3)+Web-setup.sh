@@ -280,8 +280,16 @@ cat >> /etc/nginx/conf.d/v2ray.conf<<EOF
         proxy_set_header Connection "upgrade";
         proxy_set_header Host \$http_host;
     }
-}
 EOF
+    if [ $pretend -eq 2 ]; then
+cat >> /etc/nginx/conf.d/v2ray.conf<<EOF
+    location / {
+        proxy_pass https://v.qq.com;
+        proxy_set_header referer "https://v.qq.com";
+    }
+EOF
+    fi
+    echo '}' >> /etc/nginx/conf.d/v2ray.conf
     if [ $domainconfig -eq 1 ]; then
         sed -i "s/server_name $domain/& www.$domain/" /etc/nginx/conf.d/v2ray.conf
     fi
@@ -326,8 +334,16 @@ cat >> /etc/nginx/conf.d/v2ray.conf<<EOF
         proxy_set_header Connection "upgrade";
         proxy_set_header Host \$http_host;
     }
-}
 EOF
+    if [ $pretend -eq 2 ]; then
+cat >> /etc/nginx/conf.d/v2ray.conf<<EOF
+    location / {
+        proxy_pass https://v.qq.com;
+        proxy_set_header referer "https://v.qq.com";
+    }
+EOF
+    fi
+    echo '}' >> /etc/nginx/conf.d/v2ray.conf
     if [ $domainconfig -eq 1 ]; then
         sed -i "0,/$old_domain/s//$old_domain $domain www.$domain/" /etc/nginx/conf.d/v2ray.conf
         sed -i "s/server_name $domain/& www.$domain/" /etc/nginx/conf.d/v2ray.conf
@@ -710,6 +726,25 @@ get_certs()
     /etc/nginx/sbin/nginx -s stop
 }
 
+#关于网站伪装的信息收集
+web_pretend()
+{
+    tyblue "******************************请选择要伪装的网站页面******************************"
+    tyblue "1.404页面 (模拟网站后台)"
+    green  "说明：大型网站几乎都有使用网站后台，比如bilibili的每个视频都是由"
+    green  "另外一个域名提供的，直接访问那个域名的根目录将返回404或其他错误页面"
+    tyblue "2.镜像腾讯视频网站"
+    green  "说明：是真镜像站，非链接跳转，默认为腾讯视频，搭建完成后可以自己修改，可能构成侵权"
+    tyblue "3.nextcloud登陆页面"
+    green  "说明：nextclound是开源的私人网盘服务，假装你搭建了一个私人网盘(可以换成别的自定义网站)"
+    echo
+    pretend=""
+    while [[ x"$pretend" != x"1" && x"$pretend" != x"2" && x"$pretend" != x"3" ]]
+    do
+        read -p "您的选择是：" pretend
+    done
+}
+
 
 #安装程序主体
 install_v2ray_ws_tls()
@@ -736,6 +771,7 @@ install_v2ray_ws_tls()
     apt -y -f install
     readDomain                                                                                      #读取域名
     readTlsConfig
+    web_pretend
     yum install -y gperftools-devel libatomic_ops-devel pcre-devel zlib-devel libxslt-devel gd-devel perl-ExtUtils-Embed geoip-devel lksctp-tools-devel libxml2-devel gcc gcc-c++ wget unzip curl                   ##libxml2-devel非必须
     if cat /etc/issue | grep -qi "ubuntu" || cat /proc/version | grep -qi "ubuntu" ; then
         if version_ge $systemVersion 20.04 ; then
@@ -809,6 +845,8 @@ install_v2ray_ws_tls()
     configtls
 ##配置v2ray文件
     config_v2ray_vmess
+
+    get_web
 
 
     service v2ray restart
@@ -979,6 +1017,23 @@ get_info()
     fi
 }
 
+#下载nextcloud模板，用于伪装
+get_web()
+{
+    rm -rf /etc/nginx/html/$domain
+    if [ $pretend -eq 3 ]; then
+        mkdir /etc/nginx/html/$domain
+        if ! wget -P /etc/nginx/html/$domain https://github.com/kirin10000/v2ray-WebSocket-TLS-Web-setup-script/raw/master/Website-Template.zip ; then
+            red    "获取网站模板失败"
+            red    "你的服务器貌似没联网，或不支持ipv4"
+            yellow "按回车键继续或者按ctrl+c终止"
+            read asfyerbsd
+        fi
+        unzip -q -d /etc/nginx/html/$domain /etc/nginx/html/$domain/*.zip
+        rm -rf /etc/nginx/html/$domain/*.zip
+    fi
+}
+
 #使用socks作为底层协议
 turn_to_socks()
 {
@@ -1120,9 +1175,11 @@ start_menu()
         4)
             readDomain
             readTlsConfig
+            web_pretend
             get_certs
             get_info
             configtls
+            get_web
             /etc/nginx/sbin/nginx
             green "重置域名完成！！"
             case "$domainconfig" in
@@ -1137,9 +1194,11 @@ start_menu()
         5)
             readDomain
             readTlsConfig
+            web_pretend
             get_certs
             get_info
             new_tls
+            get_web
             /etc/nginx/sbin/nginx
             green "添加域名完成！！"
             case "$domainconfig" in
