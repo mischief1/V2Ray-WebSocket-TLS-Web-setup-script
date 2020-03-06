@@ -552,9 +552,11 @@ install_bbr()
             yellow "按回车键以继续。。。"
             read rubbish
             sed -i '/net.core.default_qdisc/d' /etc/sysctl.conf
+            sed -i '/net.ipv4.tcp_fastopen/d' /etc/sysctl.conf
             sed -i '/net.ipv4.tcp_congestion_control/d' /etc/sysctl.conf
             echo ' ' >> /etc/sysctl.conf
             echo 'net.core.default_qdisc = fq' >> /etc/sysctl.conf
+            echo 'net.ipv4.tcp_fastopen = 3' >> /etc/sysctl.conf
             echo 'net.ipv4.tcp_congestion_control = bbr' >> /etc/sysctl.conf
             sysctl -p
             rm -rf update-kernel.sh
@@ -578,9 +580,11 @@ install_bbr()
             ;;
         2)
             sed -i '/net.core.default_qdisc/d' /etc/sysctl.conf
+            sed -i '/net.ipv4.tcp_fastopen/d' /etc/sysctl.conf
             sed -i '/net.ipv4.tcp_congestion_control/d' /etc/sysctl.conf
             echo ' ' >> /etc/sysctl.conf
             echo 'net.core.default_qdisc = fq' >> /etc/sysctl.conf
+            echo 'net.ipv4.tcp_fastopen = 3' >> /etc/sysctl.conf
             echo 'net.ipv4.tcp_congestion_control = bbr' >> /etc/sysctl.conf
             sysctl -p
             sleep 1s
