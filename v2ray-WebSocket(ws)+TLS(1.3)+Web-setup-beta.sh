@@ -210,8 +210,8 @@ configtls()
     configtls_part
 cat > /etc/nginx/conf.d/v2ray.conf<<EOF
 server {
-    listen 80 default_server;
-    listen [::]:80 default_server;
+    listen 80 fastopen=100 reuseport default_server;
+    listen [::]:80 fastopen=100 reuseport default_server;
 EOF
     if [ $domainconfig -eq 1 ]; then
         echo "    return 301 https://www.$domain;" >> /etc/nginx/conf.d/v2ray.conf
