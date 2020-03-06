@@ -227,8 +227,8 @@ server {
     return 301 https://\$host\$request_uri;
 }
 server {
-    listen 443 ssl http2 default_server;
-    listen [::]:443 ssl http2 default_server;
+    listen 443 ssl http2 fastopen=100 reuseport default_server;
+    listen [::]:443 ssl http2 fastopen=100 reuseport default_server;
     ssl_certificate       /etc/nginx/certs/$domain.cer;
     ssl_certificate_key   /etc/nginx/certs/$domain.key;
 EOF
