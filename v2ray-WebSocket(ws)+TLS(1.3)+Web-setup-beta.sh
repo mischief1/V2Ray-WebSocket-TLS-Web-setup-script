@@ -739,7 +739,7 @@ web_pretend()
     green  "说明：nextclound是开源的私人网盘服务，假装你搭建了一个私人网盘(可以换成别的自定义网站)"
     echo
     pretend=""
-    while [[ x"$pretend" != x"1" || x"$pretend" != x"2" || x"$pretend" != x"3" ]]
+    while [[ x"$pretend" != x"1" && x"$pretend" != x"2" && x"$pretend" != x"3" ]]
     do
         read -p "您的选择是：" pretend
     done
