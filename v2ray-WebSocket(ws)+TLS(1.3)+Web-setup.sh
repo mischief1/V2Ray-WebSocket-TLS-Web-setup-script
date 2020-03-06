@@ -84,7 +84,7 @@ configtls_part()
 cat > /etc/nginx/conf/nginx.conf <<EOF
 
 user  root root;
-worker_processes  4;
+worker_processes  8;
 
 #error_log  logs/error.log;
 #error_log  logs/error.log  notice;
@@ -112,7 +112,7 @@ http {
     #tcp_nopush     on;
 
     #keepalive_timeout  0;
-    keepalive_timeout  65;
+    keepalive_timeout  1200s;
 
     #gzip  on;
 
@@ -210,8 +210,8 @@ configtls()
     configtls_part
 cat > /etc/nginx/conf.d/v2ray.conf<<EOF
 server {
-    listen 80 default_server;
-    listen [::]:80 default_server;
+    listen 80 reuseport default_server;
+    listen [::]:80 reuseport default_server;
 EOF
     if [ $domainconfig -eq 1 ]; then
         echo "    return 301 https://www.$domain;" >> /etc/nginx/conf.d/v2ray.conf
@@ -227,8 +227,8 @@ server {
     return 301 https://\$host\$request_uri;
 }
 server {
-    listen 443 ssl http2 default_server;
-    listen [::]:443 ssl http2 default_server;
+    listen 443 ssl http2 reuseport default_server;
+    listen [::]:443 ssl http2 reuseport default_server;
     ssl_certificate       /etc/nginx/certs/$domain.cer;
     ssl_certificate_key   /etc/nginx/certs/$domain.key;
 EOF
@@ -473,13 +473,26 @@ version_ge(){
     test "$(echo "$@" | tr " " "\n" | sort -rV | head -n 1)" == "$1"
 }
 
+check_fake_version() {
+    local temp=${1##*.}
+    if [ ${temp} -eq 0 ] ; then
+        return 0
+    else
+        return 1
+    fi
+}
+
 #安装bbr
 install_bbr()
 {
     kernel_version=`uname -r | cut -d - -f 1`
+    while check_fake_version ${kernel_version} ;
+    do
+        kernel_version=${kernel_version%.*}
+    done
     version=$(wget -qO- https://kernel.ubuntu.com/~kernel-ppa/mainline/ | awk -F'\"v' '/v[0-9]/{print $2}' | cut -d '"' -f1 | cut -d '/' -f1 | sort -rV)
     last_v=$(echo $version | cut -d ' ' -f 1)
-    if cat /etc/issue | grep -qi "ubuntu" || cat /proc/version | grep -qi "ubuntu" ; then
+    if cat /etc/issue | grep -qi "ubuntu" || cat /proc/version | grep -qi "ubuntu" || cat /etc/issue | grep -Eqi "debian" || cat /proc/version | grep -Eqi "debian" ; then
         rc_version=`uname -r | cut -d - -f 2`
         if [[ $rc_version =~ "rc" ]] ; then
             rc_version=${rc_version##*'rc'}
@@ -716,7 +729,7 @@ install_v2ray_ws_tls()
     apt install -y libgoogle-perftools-dev libatomic-ops-dev libperl-dev libxslt-dev zlib1g-dev libpcre3-dev libgeoip-dev libgd-dev libxml2-dev libsctp-dev wget unzip curl                                          ##libxml2-dev非必须
     if cat /etc/issue | grep -qi "ubuntu" || cat /proc/version | grep -qi "ubuntu" ; then
         if version_ge $systemVersion 20.04 ; then
-            apt -y purge gcc g++ gcc-9 g++-9 gcc-8 g++-8 gcc-7 g++-7
+            apt -y purge gcc g++ gcc-9 gcc-9-base gcc-8-base gcc-7-base g++-9 gcc-8 g++-8 gcc-7 g++-7
             apt autopurge -y
             apt -y install gcc-10 g++-10
             ln -s /usr/bin/gcc-10 /usr/bin/gcc
@@ -739,10 +752,10 @@ install_v2ray_ws_tls()
 
 
 ##安装nginx
-    rm -rf nginx-1.17.8.tar.gz
+    rm -rf nginx-1.17.9.tar.gz
     rm -rf openssl-1.1.1d.tar.gz
     rm -rf openssl-1.1.1d
-    rm -rf nginx-1.17.8
+    rm -rf nginx-1.17.9
     if ! wget https://www.openssl.org/source/openssl-1.1.1d.tar.gz ; then
         red    "获取openssl失败"
         red    "你的服务器貌似没有联网呢"
@@ -750,9 +763,9 @@ install_v2ray_ws_tls()
         read rubbish
     fi
     tar -zxf openssl-1.1.1d.tar.gz
-    wget https://nginx.org/download/nginx-1.17.8.tar.gz
-    tar -zxf nginx-1.17.8.tar.gz
-    cd nginx-1.17.8
+    wget https://nginx.org/download/nginx-1.17.9.tar.gz
+    tar -zxf nginx-1.17.9.tar.gz
+    cd nginx-1.17.9
     ./configure --prefix=/etc/nginx --with-openssl=../openssl-1.1.1d --with-openssl-opt="enable-tls1_3 enable-tls1_2 enable-tls1 enable-ssl enable-ssl2 enable-ssl3 enable-ec_nistp_64_gcc_128 shared threads zlib-dynamic sctp" --with-mail=dynamic --with-mail_ssl_module --with-stream=dynamic --with-stream_ssl_module --with-stream_realip_module --with-stream_geoip_module=dynamic --with-stream_ssl_preread_module --with-http_ssl_module --with-http_v2_module --with-http_realip_module --with-http_addition_module --with-http_xslt_module=dynamic --with-http_image_filter_module=dynamic --with-http_geoip_module=dynamic --with-http_sub_module --with-http_dav_module --with-http_flv_module --with-http_mp4_module --with-http_gunzip_module --with-http_gzip_static_module --with-http_auth_request_module --with-http_random_index_module --with-http_secure_link_module --with-http_degradation_module --with-http_slice_module --with-http_stub_status_module --with-http_perl_module=dynamic --with-pcre --with-libatomic --with-compat --with-cpp_test_module --with-google_perftools_module --with-file-aio --with-threads --with-poll_module --with-select_module --with-cc='cc -O3' --with-cc-opt=-O3
     sed -i 's# -g # #' objs/Makefile                                                  ##关闭调试
     sed -i 's#CFLAGS="\$CFLAGS -g"#CFLAGS="\$CFLAGS"#' auto/cc/*                      ##关闭调试
@@ -762,10 +775,10 @@ install_v2ray_ws_tls()
     mkdir /etc/nginx/certs
     mkdir /etc/nginx/conf.d
     cd ..
-    rm -rf nginx-1.17.8.tar.gz
+    rm -rf nginx-1.17.9.tar.gz
     rm -rf openssl-1.1.1d.tar.gz
     rm -rf openssl-1.1.1d
-    rm -rf nginx-1.17.8
+    rm -rf nginx-1.17.9
 ##安装nignx完成
 
 
@@ -1056,7 +1069,8 @@ start_menu()
     yellow "此脚本需要一个解析到本服务器的域名!!!!"
     yellow "全程建议不要使用小键盘"
     tyblue "推荐服务器系统使用Ubuntu最新版"
-    yellow "***************************************************************************"
+    green  "***************************************************************************"
+    echo
     green  "1.安装V2Ray-WebSocket(ws)+TLS(1.3)+Web"
     green  "  (内含bbr安装选项/支持覆盖安装、升级，如要升级，先下载最新脚本再安装)"
     red    "2.删除V2Ray-WebSocket(ws)+TLS(1.3)+Web"
