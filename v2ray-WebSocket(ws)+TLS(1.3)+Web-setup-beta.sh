@@ -342,9 +342,9 @@ updateSystem()
 {
     systemVersion=`lsb_release -r --short`
     tyblue "********************请选择升级系统版本********************"
-    tyblue "1.最新beta版(现在是20.04)(2020/02/01)"
-    tyblue "2.最新稳定版(现在是19.10)(2020/02/01)"
-    tyblue "3.最新LTS版(现在是18.04)(2020/02/01)"
+    tyblue "1.最新beta版(现在是20.04)(2020.03)"
+    tyblue "2.最新稳定版(现在是19.10)(2020.03)"
+    tyblue "3.最新LTS版(现在是18.04)(2020.03)"
     tyblue "*************************版本说明*************************"
     tyblue "beta版：就是测试版啦"
     tyblue "稳定版：就是稳定版啦"
@@ -485,6 +485,10 @@ check_fake_version() {
 #安装bbr
 install_bbr()
 {
+    if ! grep -q "#This file has been edited by v2ray-WebSocket-TLS-Web-setup-script" /etc/sysctl.conf ; then
+        echo ' ' >> /etc/sysctl.conf
+        echo "#This file has been edited by v2ray-WebSocket-TLS-Web-setup-script" >> /etc/sysctl.conf
+    fi
     kernel_version=`uname -r | cut -d - -f 1`
     while check_fake_version ${kernel_version} ;
     do
@@ -552,11 +556,8 @@ install_bbr()
             yellow "按回车键以继续。。。"
             read rubbish
             sed -i '/net.core.default_qdisc/d' /etc/sysctl.conf
-            sed -i '/net.ipv4.tcp_fastopen/d' /etc/sysctl.conf
             sed -i '/net.ipv4.tcp_congestion_control/d' /etc/sysctl.conf
-            echo ' ' >> /etc/sysctl.conf
             echo 'net.core.default_qdisc = fq' >> /etc/sysctl.conf
-            echo 'net.ipv4.tcp_fastopen = 3' >> /etc/sysctl.conf
             echo 'net.ipv4.tcp_congestion_control = bbr' >> /etc/sysctl.conf
             sysctl -p
             rm -rf update-kernel.sh
@@ -580,11 +581,8 @@ install_bbr()
             ;;
         2)
             sed -i '/net.core.default_qdisc/d' /etc/sysctl.conf
-            sed -i '/net.ipv4.tcp_fastopen/d' /etc/sysctl.conf
             sed -i '/net.ipv4.tcp_congestion_control/d' /etc/sysctl.conf
-            echo ' ' >> /etc/sysctl.conf
             echo 'net.core.default_qdisc = fq' >> /etc/sysctl.conf
-            echo 'net.ipv4.tcp_fastopen = 3' >> /etc/sysctl.conf
             echo 'net.ipv4.tcp_congestion_control = bbr' >> /etc/sysctl.conf
             sysctl -p
             sleep 1s
@@ -726,11 +724,15 @@ install_v2ray_ws_tls()
     doupdate
     uninstall_firewall
     install_bbr
+    if ! grep -q "net.ipv4.tcp_fastopen = 3" /etc/sysctl.conf || ! sysctl net.ipv4.tcp_fastopen | grep -q 3 ; then
+        sed -i '/net.ipv4.tcp_fastopen/d' /etc/sysctl.conf
+        echo 'net.ipv4.tcp_fastopen = 3' >> /etc/sysctl.conf
+        sysctl -p
+    fi
     apt -y -f install
     readDomain                                                                                      #读取域名
     readTlsConfig
     yum install -y gperftools-devel libatomic_ops-devel pcre-devel zlib-devel libxslt-devel gd-devel perl-ExtUtils-Embed geoip-devel lksctp-tools-devel libxml2-devel gcc gcc-c++ wget unzip curl                   ##libxml2-devel非必须
-    apt install -y libgoogle-perftools-dev libatomic-ops-dev libperl-dev libxslt-dev zlib1g-dev libpcre3-dev libgeoip-dev libgd-dev libxml2-dev libsctp-dev wget unzip curl                                          ##libxml2-dev非必须
     if cat /etc/issue | grep -qi "ubuntu" || cat /proc/version | grep -qi "ubuntu" ; then
         if version_ge $systemVersion 20.04 ; then
             apt -y purge gcc g++ gcc-9 gcc-9-base gcc-8-base gcc-7-base g++-9 gcc-8 g++-8 gcc-7 g++-7
@@ -748,6 +750,7 @@ install_v2ray_ws_tls()
     else
         apt -y install gcc g++
     fi
+    apt install -y libgoogle-perftools-dev libatomic-ops-dev libperl-dev libxslt-dev zlib1g-dev libpcre3-dev libgeoip-dev libgd-dev libxml2-dev libsctp-dev wget unzip curl                                          ##libxml2-dev非必须
     apt autopurge -y
     apt autoremove -y
     yum autoremove -y
@@ -823,7 +826,7 @@ install_v2ray_ws_tls()
             yellow "注意事项：如重新启动服务器，请执行/etc/nginx/sbin/nginx"
             yellow "          或运行脚本，选择重启服务选项"
             echo
-            tyblue "脚本最后更新时间：2020.2.25"
+            tyblue "脚本最后更新时间：2020.03.06"
             echo
             red    "此脚本仅供交流学习使用，请勿使用此脚本行违法之事。网络非法外之地，行非法之事，必将接受法律制裁!!!!"
             tyblue "2019.11"
@@ -844,7 +847,7 @@ install_v2ray_ws_tls()
             yellow "注意事项：如重新启动服务器，请执行/etc/nginx/sbin/nginx"
             yellow "          或运行脚本，选择重启服务选项"
             echo
-            tyblue "脚本最后更新时间：2020.2.25"
+            tyblue "脚本最后更新时间：2020.03.06"
             echo
             red    "此脚本仅供交流学习使用，请勿使用此脚本行违法之事。网络非法外之地，行非法之事，必将接受法律制裁!!!!"
             tyblue "2019.11"
