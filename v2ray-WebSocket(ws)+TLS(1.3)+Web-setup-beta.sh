@@ -723,12 +723,16 @@ install_v2ray_ws_tls()
     uninstall_firewall
     doupdate
     uninstall_firewall
-    install_bbr
+    if ! grep -q "#This file has been edited by v2ray-WebSocket-TLS-Web-setup-script" /etc/sysctl.conf ; then
+        echo ' ' >> /etc/sysctl.conf
+        echo "#This file has been edited by v2ray-WebSocket-TLS-Web-setup-script" >> /etc/sysctl.conf
+    fi
     if ! grep -q "net.ipv4.tcp_fastopen = 3" /etc/sysctl.conf || ! sysctl net.ipv4.tcp_fastopen | grep -q 3 ; then
         sed -i '/net.ipv4.tcp_fastopen/d' /etc/sysctl.conf
         echo 'net.ipv4.tcp_fastopen = 3' >> /etc/sysctl.conf
         sysctl -p
     fi
+    install_bbr
     apt -y -f install
     readDomain                                                                                      #读取域名
     readTlsConfig
