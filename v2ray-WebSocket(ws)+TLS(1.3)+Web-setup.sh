@@ -871,50 +871,35 @@ install_v2ray_ws_tls()
     echo
     echo
     echo
-    case "$domainconfig" in
-        1)
-            tyblue "*************安装完成*************"
-            tyblue "地址：www.${domain}或${domain}"
-            tyblue "端口：443"
-            tyblue "用户ID：${v2id}"
-            tyblue "额外ID：0"
-            tyblue "加密方式：一般情况推荐none;若使用了cdn，推荐auto"
-            tyblue "传输协议：ws"
-            tyblue "伪装类型：none"
-            tyblue "伪装域名：空"
-            tyblue "路径：${path}"
-            tyblue "底层传输安全：tls"
-            tyblue "**********************************"
-            yellow "注意事项：如重新启动服务器，请执行/etc/nginx/sbin/nginx"
-            yellow "          或运行脚本，选择重启服务选项"
-            echo
-            tyblue "脚本最后更新时间：2020.03.06"
-            echo
-            red    "此脚本仅供交流学习使用，请勿使用此脚本行违法之事。网络非法外之地，行非法之事，必将接受法律制裁!!!!"
-            tyblue "2019.11"
-            ;;
-        2)
-            tyblue "*************安装完成*************"
-            tyblue "地址：${domain}"
-            tyblue "端口：443"
-            tyblue "用户ID：${v2id}"
-            tyblue "额外ID：0"
-            tyblue "加密方式：一般情况推荐none;若使用了cdn，推荐auto"
-            tyblue "传输协议：ws"
-            tyblue "伪装类型：none"
-            tyblue "伪装域名：空"
-            tyblue "路径：${path}"
-            tyblue "底层传输安全：tls"
-            tyblue "**********************************"
-            yellow "注意事项：如重新启动服务器，请执行/etc/nginx/sbin/nginx"
-            yellow "          或运行脚本，选择重启服务选项"
-            echo
-            tyblue "脚本最后更新时间：2020.03.06"
-            echo
-            red    "此脚本仅供交流学习使用，请勿使用此脚本行违法之事。网络非法外之地，行非法之事，必将接受法律制裁!!!!"
-            tyblue "2019.11"
-            ;;
-    esac
+    tyblue "*************安装完成*************"
+    if [ $domainconfig -eq 1  ]; then
+        tyblue "地址：www.${domain}或${domain}"
+    else
+        tyblue "地址：${domain}"
+    fi
+    tyblue "端口：443"
+    tyblue "用户ID：${v2id}"
+    tyblue "额外ID：0"
+    tyblue "加密方式：一般情况推荐none;若使用了cdn，推荐auto"
+    tyblue "传输协议：ws"
+    tyblue "伪装类型：none"
+    tyblue "伪装域名：空"
+    tyblue "路径：${path}"
+    tyblue "底层传输安全：tls"
+    tyblue "**********************************"
+    yellow "注意事项：如重新启动服务器，请执行/etc/nginx/sbin/nginx"
+    yellow "          或运行脚本，选择重启服务选项"
+    echo
+    if [ $pretend -eq 2 ]; then
+        tyblue "如果要更换被镜像的网站"
+        tyblue "修改/etc/nginx/conf.d/v2ray.conf"
+        tyblue "将v.qq.com修改为你要镜像的网站"
+    fi
+    echo
+    tyblue "脚本最后更新时间：2020.03.06"
+    echo
+    red    "此脚本仅供交流学习使用，请勿使用此脚本行违法之事。网络非法外之地，行非法之事，必将接受法律制裁!!!!"
+    tyblue "2019.11"
 }
 
 #配置v2ray_vmess
@@ -1210,6 +1195,12 @@ start_menu()
                     green "服务器地址请填写$domain"
                     ;;
             esac
+            echo
+            if [ $pretend -eq 2 ]; then
+                tyblue "如果要更换被镜像的网站"
+                tyblue "修改/etc/nginx/conf.d/v2ray.conf"
+                tyblue "将v.qq.com修改为你要镜像的网站"
+            fi
             ;;
         5)
             readDomain
@@ -1229,6 +1220,12 @@ start_menu()
                     green "现在服务器地址可以填写原来的域名和${domain}"
                     ;;
             esac
+            echo
+            if [ $pretend -eq 2 ]; then
+                tyblue "如果要更换被镜像的网站"
+                tyblue "修改/etc/nginx/conf.d/v2ray.conf"
+                tyblue "将v.qq.com修改为你要镜像的网站"
+            fi
             ;;
         6)
             turn_to_socks
