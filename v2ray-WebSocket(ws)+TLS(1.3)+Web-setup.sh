@@ -1176,8 +1176,9 @@ start_menu()
             curl --tcp-fastopen https://127.0.0.1 >> /dev/null 2>&1   #激活tcp_fast_open
             curl --tcp-fastopen https://127.0.0.1 >> /dev/null 2>&1
             /etc/nginx/sbin/nginx -s stop
+            service v2ray stop
             sleep 1s
-            service v2ray restart
+            service v2ray start
             /etc/nginx/sbin/nginx
             curl --tcp-fastopen https://127.0.0.1 >> /dev/null 2>&1   #激活tcp_fast_open
             curl --tcp-fastopen https://127.0.0.1 >> /dev/null 2>&1
