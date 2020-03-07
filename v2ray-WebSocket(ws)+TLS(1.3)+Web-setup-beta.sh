@@ -868,8 +868,8 @@ install_v2ray_ws_tls()
 
     service v2ray restart
     /etc/nginx/sbin/nginx
-    curl --tcp-fastopen https://${domain} >> /dev/null 2>&1   #激活tcp_fast_open
-    curl --tcp-fastopen https://${domain} >> /dev/null 2>&1
+    curl --tcp-fastopen https://127.0.0.1 >> /dev/null 2>&1   #激活tcp_fast_open
+    curl --tcp-fastopen https://127.0.0.1 >> /dev/null 2>&1
     echo
     echo
     echo
@@ -1173,10 +1173,14 @@ start_menu()
             green  "v2ray-WebSocket(ws)+TLS(1.3)+Web已删除"
             ;;
         3)
+            curl --tcp-fastopen https://127.0.0.1 >> /dev/null 2>&1   #激活tcp_fast_open
+            curl --tcp-fastopen https://127.0.0.1 >> /dev/null 2>&1
             /etc/nginx/sbin/nginx -s stop
             sleep 1s
             service v2ray restart
             /etc/nginx/sbin/nginx
+            curl --tcp-fastopen https://127.0.0.1 >> /dev/null 2>&1   #激活tcp_fast_open
+            curl --tcp-fastopen https://127.0.0.1 >> /dev/null 2>&1
             green  "重启完成"
             ;;
         4)
