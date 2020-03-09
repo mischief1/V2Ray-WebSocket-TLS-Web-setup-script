@@ -1141,14 +1141,14 @@ start_menu()
     green  "***************************************************************************"
     yellow "此脚本需要一个解析到本服务器的域名!!!!"
     tyblue "推荐服务器系统使用Ubuntu最新版"
-    tyblue "部分ssh工具会出现退格键无法使用问题，建议先保证退格键正常，再安装"
-    tyblue "测试退格键正常方法：按一下退格键，不会出现^H即为正常"
-    tyblue "若出现^H，可以选择2选项修复"
+    yellow "部分ssh工具会出现退格键无法使用问题，建议先保证退格键正常，再安装"
+    yellow "测试退格键正常方法：按一下退格键，不会出现奇怪的字符即为正常"
+    yellow "若退格键异常可以选择选项2修复"
     green  "***************************************************************************"
     echo
     green  "1.安装V2Ray-WebSocket(ws)+TLS(1.3)+Web"
     green  "  (内含bbr安装选项/支持覆盖安装、升级，如要升级，先下载最新脚本再安装)"
-    tyblue "2.修复退格键无法使用的问题"
+    tyblue "2.尝试修复退格键无法使用的问题"
     red    "3.删除V2Ray-WebSocket(ws)+TLS(1.3)+Web"
     tyblue "4.重启/启动V2Ray-WebSocket(ws)+TLS(1.3)+Web服务(对于玄学断连/掉速有奇效)"
     tyblue "5.重置域名和TLS配置"
@@ -1172,9 +1172,28 @@ start_menu()
             install_v2ray_ws_tls
             ;;
         2)
-            stty erase '^H'
+            echo
+            yellow "尝试修复退格键异常问题，退格键正常请不要修复"
+            yellow "按回车键继续或按Ctrl+c退出"
+            read -s rubbish
+            if stty -a | grep -q 'erase = ^?' ; then
+                stty erase '^H'
+            elif stty -a | grep -q 'erase = ^H' ; then
+                stty erase '^?'
+            fi
+            green "修复完成！！"
+            sleep 1s
+            start_menu
             ;;
         3)
+            while [ "$if_remove" != "y" -a "$if_remove" != "n" ]
+            do
+                tyblue "删除V2Ray-WebSocket(ws)+TLS(1.3)+Web?(y/n)"
+                read if_remove
+            done
+            if [ "$if_remove" == "n" ]; then
+                exit 0
+            fi
             remove_v2ray_nginx
             green  "v2ray-WebSocket(ws)+TLS(1.3)+Web已删除"
             ;;
