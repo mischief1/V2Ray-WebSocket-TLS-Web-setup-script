@@ -868,8 +868,8 @@ install_v2ray_ws_tls()
 
     service v2ray restart
     /etc/nginx/sbin/nginx
-    curl --tcp-fastopen https://127.0.0.1 >> /dev/null 2>&1   #激活tcp_fast_open
-    curl --tcp-fastopen https://127.0.0.1 >> /dev/null 2>&1
+    curl --tcp-fastopen https://${domain} >> /dev/null 2>&1   #激活tcp_fast_open
+    curl --tcp-fastopen https://${domain} >> /dev/null 2>&1
     echo
     echo
     echo
@@ -1123,11 +1123,12 @@ EOF
 #开始菜单
 start_menu()
 {
-    stty erase '^H'
-    stty erase '^?'
     if [ "$EUID" != "0" ]; then
         red "请用root用户运行此脚本！！"
         exit 1
+    fi
+    if who am i | grep "root" ; then
+        stty erase '^H'
     fi
     clear
     green  "************* V2Ray  WebSocket(ws)+TLS(1.3)+Web  搭建/管理脚本*************"
@@ -1174,15 +1175,10 @@ start_menu()
             green  "v2ray-WebSocket(ws)+TLS(1.3)+Web已删除"
             ;;
         3)
-            curl --tcp-fastopen https://127.0.0.1 >> /dev/null 2>&1   #激活tcp_fast_open
-            curl --tcp-fastopen https://127.0.0.1 >> /dev/null 2>&1
             /etc/nginx/sbin/nginx -s stop
-            service v2ray stop
             sleep 1s
-            service v2ray start
+            service v2ray restart
             /etc/nginx/sbin/nginx
-            curl --tcp-fastopen https://127.0.0.1 >> /dev/null 2>&1   #激活tcp_fast_open
-            curl --tcp-fastopen https://127.0.0.1 >> /dev/null 2>&1
             green  "重启完成"
             ;;
         4)
