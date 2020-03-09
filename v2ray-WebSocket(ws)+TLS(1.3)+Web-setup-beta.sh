@@ -855,6 +855,7 @@ install_v2ray_ws_tls()
         yellow "按回车键继续或者按ctrl+c终止"
         read rubbish
     fi
+    service v2ray stop
 
 
 ##获取端口、id和path
@@ -866,10 +867,10 @@ install_v2ray_ws_tls()
 
     get_web
 
-    service v2ray restart
+    service v2ray start
     /etc/nginx/sbin/nginx
-    curl --tcp-fastopen https://${domain} >> /dev/null 2>&1   #激活tcp_fast_open
-    curl --tcp-fastopen https://${domain} >> /dev/null 2>&1
+    curl --tcp-fastopen https://127.0.0.1 >> /dev/null 2>&1   #激活tcp_fast_open
+    curl --tcp-fastopen https://127.0.0.1 >> /dev/null 2>&1
     echo
     echo
     echo
@@ -1030,7 +1031,7 @@ get_web()
     rm -rf /etc/nginx/html/$domain
     if [ $pretend -eq 3 ]; then
         mkdir /etc/nginx/html/$domain
-        if ! wget -P /etc/nginx/html/$domain https://github.com/kirin10000/v2ray-WebSocket-TLS-Web-setup-script/raw/master/Website-Template.zip ; then
+        if ! wget -P /etc/nginx/html/$domain https://github.com/kirin10000/V2ray-WebSocket-TLS-Web-setup-script/raw/master/Website-Template.zip ; then
             red    "获取网站模板失败"
             red    "你的服务器貌似没联网，或不支持ipv4"
             yellow "按回车键继续或者按ctrl+c终止"
@@ -1176,9 +1177,12 @@ start_menu()
             ;;
         3)
             /etc/nginx/sbin/nginx -s stop
+            service v2ray stop
             sleep 1s
-            service v2ray restart
+            service v2ray start
             /etc/nginx/sbin/nginx
+            curl --tcp-fastopen https://127.0.0.1 >> /dev/null 2>&1   #激活tcp_fast_open
+            curl --tcp-fastopen https://127.0.0.1 >> /dev/null 2>&1
             green  "重启完成"
             ;;
         4)
