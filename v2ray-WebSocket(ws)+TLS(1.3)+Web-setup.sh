@@ -1123,7 +1123,6 @@ EOF
 #开始菜单
 start_menu()
 {
-    stty erase '^H'
     if [ "$EUID" != "0" ]; then
         red "请用root用户运行此脚本！！"
         exit 1
