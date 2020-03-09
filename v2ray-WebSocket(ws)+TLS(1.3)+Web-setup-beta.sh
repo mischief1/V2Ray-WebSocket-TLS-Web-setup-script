@@ -1188,7 +1188,7 @@ start_menu()
         3)
             while [ "$if_remove" != "y" -a "$if_remove" != "n" ]
             do
-                tyblue "删除V2Ray-WebSocket(ws)+TLS(1.3)+Web?(y/n)"
+                yellow "删除V2Ray-WebSocket(ws)+TLS(1.3)+Web?(y/n)"
                 read if_remove
             done
             if [ "$if_remove" == "n" ]; then
