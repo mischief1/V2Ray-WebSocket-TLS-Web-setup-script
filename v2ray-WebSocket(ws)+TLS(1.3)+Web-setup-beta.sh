@@ -1128,11 +1128,8 @@ start_menu()
         red "请用root用户运行此脚本！！"
         exit 1
     fi
-    if who am i | grep "root" ; then
-        stty erase '^H'
-    fi
     clear
-    green  "************* V2Ray  WebSocket(ws)+TLS(1.3)+Web  搭建/管理脚本*************"
+    echo " ************* V2Ray  WebSocket(ws)+TLS(1.3)+Web  搭建/管理脚本*************"
     tyblue "脚本特性："
     tyblue "1.集成多版本bbr安装选项"
     tyblue "2.支持多种系统(Ubuntu Centos Debian ...)"
@@ -1143,27 +1140,30 @@ start_menu()
     tyblue "官网：https://github.com/kirin10000/V2Ray-WebSocket-TLS-Web-setup-script"
     green  "***************************************************************************"
     yellow "此脚本需要一个解析到本服务器的域名!!!!"
-    yellow "全程建议不要使用小键盘"
     tyblue "推荐服务器系统使用Ubuntu最新版"
+    tyblue "部分ssh工具会出现退格键无法使用问题，建议先保证退格键正常，再安装"
+    tyblue "测试退格键正常方法：按一下退格键，不会出现^H即为正常"
+    tyblue "若出现^H，可以选择2选项修复"
     green  "***************************************************************************"
     echo
     green  "1.安装V2Ray-WebSocket(ws)+TLS(1.3)+Web"
     green  "  (内含bbr安装选项/支持覆盖安装、升级，如要升级，先下载最新脚本再安装)"
-    red    "2.删除V2Ray-WebSocket(ws)+TLS(1.3)+Web"
-    tyblue "3.重启/启动V2Ray-WebSocket(ws)+TLS(1.3)+Web服务(对于玄学断连/掉速有奇效)"
-    tyblue "4.重置域名和TLS配置"
+    tyblue "2.修复退格键无法使用的问题"
+    red    "3.删除V2Ray-WebSocket(ws)+TLS(1.3)+Web"
+    tyblue "4.重启/启动V2Ray-WebSocket(ws)+TLS(1.3)+Web服务(对于玄学断连/掉速有奇效)"
+    tyblue "5.重置域名和TLS配置"
     tyblue "  (会覆盖原有域名配置，配置过程中域名输错了造成V2Ray无法启动可以用此选项修复)"
-    tyblue "5.添加域名(不同域名可以有不同的TLS配置)"
-    tyblue "6.使用socks(5)作为底层传输协议(降低计算量、延迟)(beta)"
-    tyblue "7.查看/修改用户ID(id)"
-    tyblue "8.查看/修改路径(path)"
-    tyblue "9.仅安装bbr(2)(plus)"
-    tyblue "10.修改dns"
-    tyblue "11.仅升级V2Ray"
-    yellow "12.退出脚本"
+    tyblue "6.添加域名(不同域名可以有不同的TLS配置)"
+    tyblue "7.使用socks(5)作为底层传输协议(降低计算量、延迟)(beta)"
+    tyblue "8.查看/修改用户ID(id)"
+    tyblue "9.查看/修改路径(path)"
+    tyblue "10.仅安装bbr(2)(plus)"
+    tyblue "11.修改dns"
+    tyblue "12.仅升级V2Ray"
+    yellow "13.退出脚本"
     echo
     menu="3345"
-    while [ "$menu" != "1" -a "$menu" != "2" -a "$menu" != "3" -a "$menu" != "4" -a "$menu" != "5" -a "$menu" != "6" -a "$menu" != "7" -a "$menu" != "8" -a "$menu" != "9" -a "$menu" != "10" -a "$menu" != "11" -a "$menu" != "12" ]
+    while [ "$menu" != "1" -a "$menu" != "2" -a "$menu" != "3" -a "$menu" != "4" -a "$menu" != "5" -a "$menu" != "6" -a "$menu" != "7" -a "$menu" != "8" -a "$menu" != "9" -a "$menu" != "10" -a "$menu" != "11" -a "$menu" != "12" -a "$menu" != "13" ]
     do
         read -p "您的选择是：" menu
     done
@@ -1172,10 +1172,13 @@ start_menu()
             install_v2ray_ws_tls
             ;;
         2)
+            stty erase '^H'
+            ;;
+        3)
             remove_v2ray_nginx
             green  "v2ray-WebSocket(ws)+TLS(1.3)+Web已删除"
             ;;
-        3)
+        4)
             /etc/nginx/sbin/nginx -s stop
             service v2ray stop
             sleep 1s
@@ -1185,7 +1188,7 @@ start_menu()
             curl --tcp-fastopen https://127.0.0.1 >> /dev/null 2>&1
             green  "重启完成"
             ;;
-        4)
+        5)
             readDomain
             readTlsConfig
             web_pretend
@@ -1210,7 +1213,7 @@ start_menu()
                 tyblue "将v.qq.com修改为你要镜像的网站"
             fi
             ;;
-        5)
+        6)
             readDomain
             readTlsConfig
             web_pretend
@@ -1235,10 +1238,10 @@ start_menu()
                 tyblue "将v.qq.com修改为你要镜像的网站"
             fi
             ;;
-        6)
+        7)
             turn_to_socks
             ;;
-        7)
+        8)
             if [ ! -e /etc/v2ray/config.json ] ; then
                 red "请先安装V2Ray-WebSocket(ws)+TLS(1.3)+Web！！"
                 exit 1;
@@ -1265,7 +1268,7 @@ start_menu()
             green "更换成功！！"
             green "新ID：$new_v2id"
             ;;
-        8)
+        9)
             if [ ! -e /etc/v2ray/config.json ] || [ ! -e /etc/nginx ] ; then
                 red "请先安装V2Ray-WebSocket(ws)+TLS(1.3)+Web！！"
                 exit 1;
@@ -1292,14 +1295,14 @@ start_menu()
             green "更换成功！！"
             green "新path：$new_path"
             ;;
-        9)
+        10)
             apt -y -f install
             install_bbr
             ;;
-        10)
+        11)
             change_dns
             ;;
-        11)
+        12)
             if ! bash <(curl -L -s https://install.direct/go.sh) ; then
                 red    "你的服务器貌似没联网，或不支持ipv4，请检查网络连接"
                 yellow "v2ray更新失败"
