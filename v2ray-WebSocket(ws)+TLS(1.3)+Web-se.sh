@@ -821,7 +821,7 @@ install_v2ray_ws_tls()
     rm -rf openssl-1.1.1d.tar.gz
     rm -rf openssl-1.1.1d
     rm -rf nginx-1.17.9
-    if ! wget https://www.openssl.org/source/openssl-1.1.1d.tar.gz ; then
+    if ! wget https://ftp.openssl.org/source/old/1.1.1/openssl-1.1.1d.tar.gz ; then
         red    "获取openssl失败"
         red    "你的服务器貌似没有联网呢"
         yellow "按回车键继续或者按ctrl+c终止"
